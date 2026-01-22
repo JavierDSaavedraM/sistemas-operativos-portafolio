@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio Sistemas Operativos</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="profile">
+                <div class="avatar">SO</div>
+                <h2>Javier Djorkaef Saavedra Mendiola</h2>
+                <p>Estudiante de Ingeniería en Tecnologias Computacionales</p>
+                <p>4to Semestre</p>
+            </div>
+            
+            <nav class="menu">
+                <button class="menu-btn active" onclick="openTab(event, 'inicio')">
+                    <i class="fas fa-home"></i> Inicio
+                </button>
+                <button class="menu-btn" onclick="openTab(event, 'parcial1')">
+                    <i class="fas fa-folder"></i> Parcial 1
+                </button>
+                <button class="menu-btn" onclick="openTab(event, 'parcial2')">
+                    <i class="fas fa-folder-open"></i> Parcial 2
+                </button>
+                <button class="menu-btn" onclick="openTab(event, 'parcial3')">
+                    <i class="fas fa-network-wired"></i> Parcial 3
+                </button>
+                <button class="menu-btn" onclick="openTab(event, 'proyecto')">
+                    <i class="fas fa-microchip"></i> Proyecto Final
+                </button>
+            </nav>
+
+            <div class="footer-info">
+                <p>&copy; 2026 Sistemas Op.</p>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            
+            <section id="inicio" class="tab-content active-tab">
+                <header class="top-header">
+                    <h1>Sistemas Operativos</h1>
+                    <span class="status-badge">Online</span>
+                </header>
+                <div class="hero">
+                    <h2>Bienvenido al Portafolio de Evidencias</h2>
+                    <p>Este portafolio contiene la documentación, prácticas y laboratorios realizados durante el curso.</p>
+                </div>
+            </section>
+
+            <section id="parcial1" class="tab-content">
+                <header class="top-header">
+                    <h1>Parcial 1: Fundamentos</h1>
+                </header>
+                <div class="grid-container">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-terminal"></i></div>
+                        <h3>Ejercicio Guiado 1</h3>
+                        <p>Gestion de Variables de Entorno (PATH) en Windows </p>
+                        <a href="./reportes/parcial1/ejercicio_guiado_1.html" class="btn-open">Ver Documento</a>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-terminal"></i></div>
+                        <h3>Ejercicio Guiado 2</h3>
+                        <p>Comandos básicos de BASH y scripts.</p>
+                        <a href="#" class="btn-open">Ver Código</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parcial2" class="tab-content">
+                <header class="top-header">
+                    <h1>Parcial 2: Concurrencia</h1>
+                </header>
+                <div class="grid-container">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-lock"></i></div>
+                        <h3>Semáforos y Mutex</h3>
+                        <p>Solución al problema de productores y consumidores.</p>
+                        <a href="#" class="btn-open">Ver Práctica</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="parcial3" class="tab-content">
+                <header class="top-header">
+                    <h1>Parcial 3: Memoria</h1>
+                </header>
+                <div class="grid-container">
+                    <div class="card">
+                        <div class="card-icon"><i class="fas fa-memory"></i></div>
+                        <h3>Paginación</h3>
+                        <p>Simulación de algoritmos de reemplazo de página.</p>
+                        <a href="#" class="btn-open">Ver Reporte</a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="proyecto" class="tab-content">
+                <header class="top-header">
+                    <h1>Proyecto Final</h1>
+                </header>
+                <div class="project-view">
+                    <h2>Kernel Personalizado / Simulación</h2>
+                    <p>Documentación completa del desarrollo final del curso.</p>
+                    <br>
+                    <div class="grid-container">
+                        <div class="card highlight">
+                            <h3>Documentación PDF</h3>
+                            <a href="#" class="btn-open">Descargar</a>
+                        </div>
+                        <div class="card highlight">
+                            <h3>Repositorio GitHub</h3>
+                            <a href="#" class="btn-open">Ir al Repo</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>

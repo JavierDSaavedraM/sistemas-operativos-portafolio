@@ -1,0 +1,199 @@
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --bg-dark: #1e1e2f;       /* Fondo principal */
+    --bg-sidebar: #171725;    /* Fondo barra lateral */
+    --accent: #00d4ff;        /* Color principal (Cyan) */
+    --text-main: #ffffff;
+    --text-muted: #a0a0b0;
+    --card-bg: #27293d;       /* Fondo de tarjetas */
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+}
+
+/* LAYOUT PRINCIPAL */
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    background-color: var(--bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-right: 1px solid #333;
+    position: sticky; 
+    top: 0;
+    height: 100vh;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--accent), #0059ff);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+.profile h2 { font-size: 1.2rem; margin-bottom: 5px; }
+.profile p { font-size: 0.8rem; color: var(--text-muted); }
+
+/* MENÚ DE NAVEGACIÓN */
+.menu {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.menu-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    padding: 12px 15px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+}
+
+.menu-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+.menu-btn.active {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.1), transparent);
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+}
+
+/* ÁREA DE CONTENIDO */
+.content-area {
+    flex: 1;
+    padding: 30px;
+    background-color: var(--bg-dark);
+}
+
+/* OCULTAR/MOSTRAR SECCIONES */
+.tab-content {
+    display: none; /* Por defecto oculto */
+    animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active-tab {
+    display: block; /* Solo se muestra si tiene esta clase */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ENCABEZADOS */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+.top-header h1 {
+    font-family: 'Courier New', Courier, monospace; /* Estilo terminal */
+    color: var(--accent);
+}
+
+.status-badge {
+    background-color: #00c853;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* GRID DE TARJETAS (Tareas/Reportes) */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    padding: 20px;
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border-color: var(--accent);
+}
+
+.card-icon {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 15px;
+}
+
+.card h3 { margin-bottom: 10px; font-size: 1.1rem; }
+.card p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.4; }
+
+.btn-open {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.btn-open:hover {
+    background-color: var(--accent);
+    color: #000;
+}
+
+/* RESPONSIVE 
+@media (max-width: 768px) {
+    .app-container { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; flex-direction: row; align-items: center; padding: 10px; }
+    .profile { display: none; } /* Ocultamos perfil en móvil para espacio 
+    .menu { flex-direction: row; overflow-x: auto; }
+    .menu-btn { white-space: nowrap; }
+}
+*/
