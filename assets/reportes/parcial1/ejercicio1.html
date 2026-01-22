@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Ejercicio Guiado 1: PATH en Windows</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+   <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Ejercicio Guiado #1</span>
+            <h1>Implementacion de Variables de Entorno (PATH) en Windows</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 12 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Windows y PATH </p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Comprender la gestion de variables de entorno en windows y modificacion del PATH. Se busca configurar
+                  el sistema para que ejecute un programa situado en el desde cualquier ubicación en el sistema. </p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Crear un ejecutable ubicado en el Desktop.</li>
+               <li><i class="fas fa-check-circle"></i> Añadir el directorio a las variables de entorno</li>
+               <li><i class="fas fa-check-circle"></i> Llamar el ejecutable desde la root del disco <code>C:</code></li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Para este ejercicio es necesario enter el concepto de una <strong>variable de entorno.</strong> Según
+               Wikipedia una variable de ambiente es un valor dinamico que ayuda a los programas y proces tengan la
+               informacion sobre el entorno de su ejecución.</p>
+
+            <p>Las variables se puede dividir en variables locales y globales. Al ser una variable global, esta afecta
+               al sistem entero. Mientras que una variable local solamente afecta el ambiente del usuario trabajando</p>
+
+            <p>Un ejemplo bastante claro es la variable PATH. Esta guarda una lista de carpetas y le dice al sistema
+               donde buscar programas ejecutables.</p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <p>Para demostrar la utilidad del PATH, creamos un ejecutable simple llamado <code>sisop.exe</code> ubicado
+               en el Escritorio.</p>
+            <div class="code-snippet">
+               <pre><code><span class="comment">// Código C++ simple compilado como sisop.exe</span>
+#include <iostream>
+int main() {
+   std::cout << "Esto es mi programa" << std::endl;
+    return 0;
+}</code></pre>
+            </div>
+
+            <p>Inicialmente, al intentar ejecutarlo desde <code>C:\</code>, el sistema arroja un error. Procedimos a
+               editar las Variables de Entorno de Windows agregando la ruta:</p>
+            <p class="code-snippet"><code>C:\Users\djjav\Desktop</code></p>
+
+            <p>Una vez aplicada la configuración, el sistema operativo es capaz de resolver la ubicación del ejecutable
+               independientemente del directorio de trabajo actual.</p>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <p>Primero ejecutamos el archivo desde el escritorio:</p>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Salida exitosa mostrando la ejecucion del archivo.</figcaption>
+            </figure>
+
+            <p>A continuación, una captura de la ejecución desde la root sin agregar <code>C:\Users\djjav\Desktop</code>
+               al PATH:</p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Salida fallida mostrando como no encuentra el archivo.</figcaption>
+            </figure>
+            <p>Finalmente una ves que se agrego el directorio al <code>PATH</code>: </p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Salida exitosa al reconocer el archivo de la lista de ejecutables.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Se logro correctamente modificar la variable de entorno del <code>PATH</code> para usar un ejecutable
+               ubicado en el Desktop del usuario, en todo el sistema.</p>
+            <p><strong>Trabajo Futuro:</strong> Investigar como modificar las variables de ambiente en otros sistemas
+               operativos como Linux o MacOS.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+
+               <a href="https://en.wikipedia.org/wiki/Environment_variable" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-wikipedia-w"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">Wikipedia</span>
+                     <h4>Environment variable</h4>
+                     <p>Árticulo hablando acerca de las variables de entorno en windows y linux.</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+               <a href="https://www.geeksforgeeks.org/linux-unix/environment-variables-in-linux-unix/" target="_blank"
+                  class="ref-card">
+                  <div class="ref-icon"><i class="fas fa-book"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">GeeksForGeeks</span>
+                     <h4> Environment Variables in Linux/Unix</h4>
+                     <p>Explicación de como funciona el PATH en Linux</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="../../../index.html" class="nav-btn prev">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Home</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./ejercicio2.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Ejercicio 2: Mapeo de unidades virtuales con SUBST</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+</body>
+
+</html>
