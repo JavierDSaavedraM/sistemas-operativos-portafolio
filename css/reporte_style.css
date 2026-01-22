@@ -12,7 +12,6 @@ body {
     color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, sans-serif;
     line-height: 1.6;
-
 }
 
 /* ESTRUCTURA */
@@ -52,6 +51,13 @@ body {
 
 /* CONTENIDO PRINCIPAL */
 .report-content { flex: 1; max-width: 850px; }
+
+.report-content p{
+    margin-bottom: 24px;
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
 
 /* HEADER */
 .report-header .entry-type {
