@@ -58,7 +58,6 @@ body {
     font-size: 1.05rem;
 }
 
-
 /* HEADER */
 .report-header .entry-type {
     background-color: var(--accent);
@@ -76,7 +75,11 @@ body {
 
 .divider { border: 0; border-top: 1px solid var(--border-color); margin: 30px 0; }
 
-h2 { color: var(--accent); border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 50px; }
+h2 { 
+    color: var(--accent); 
+    border-bottom: 1px solid #333; 
+    padding-bottom: 10px; 
+    margin-top: 20px; }
 h3 { color: #fff; margin-top: 25px; }
 
 /* OBJETIVOS */
@@ -249,6 +252,97 @@ h3 { color: #fff; margin-top: 25px; }
 .ref-card:hover .ref-arrow {
     color: var(--accent); /* La flechita se ilumina al pasar el mouse */
 }
+
+/* --- NAVEGACIÓN ENTRE POSTS --- */
+
+.post-navigation {
+    display: flex;
+    justify-content: space-between; /* Uno a la izq, uno a la der */
+    align-items: center;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color); /* Línea divisoria arriba */
+    gap: 20px;
+}
+
+.nav-btn {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    width: 48%; /* Ocupan casi la mitad cada uno */
+    max-width: 300px;
+}
+
+/* Alineación específica para Anterior (Izq) y Siguiente (Der) */
+.nav-btn.prev { text-align: left; }
+.nav-btn.next { text-align: right; justify-content: flex-end; }
+
+/* Efecto Hover */
+.nav-btn:hover {
+    background-color: rgba(0, 212, 255, 0.05); /* Fondo azul muy sutil */
+    border-color: var(--accent); /* Borde Cyan */
+    transform: translateY(-2px); /* Pequeño salto hacia arriba */
+}
+
+/* Iconos de flechas */
+.nav-btn i {
+    font-size: 1.2rem;
+    color: var(--accent);
+    transition: transform 0.3s;
+}
+
+.nav-btn.prev i { margin-right: 15px; }
+.nav-btn.next i { margin-left: 15px; }
+
+/* Animación de las flechas al hacer hover */
+.nav-btn.prev:hover i { transform: translateX(-5px); }
+.nav-btn.next:hover i { transform: translateX(5px); }
+
+/* Textos dentro del botón */
+.nav-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-text span {
+    font-size: 0.75rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+}
+
+.nav-text strong {
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+    .post-navigation {
+        flex-direction: column; /* Uno encima del otro en celular */
+        gap: 15px;
+    }
+    .nav-btn {
+        width: 100%; /* Ocupan todo el ancho */
+        max-width: none;
+        justify-content: space-between; /* Separa texto e icono */
+    }
+}
+
+code {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0.2rem 0.8rem;
+    font-style: italic;
+    border-radius: 10px;
+}
+
+
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
