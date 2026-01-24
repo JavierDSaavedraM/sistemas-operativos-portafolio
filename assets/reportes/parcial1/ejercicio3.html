@@ -11,9 +11,7 @@
 </head>
 
 <body>
-
    <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
-
    <div class="report-container">
 
       <aside class="toc-sidebar">
@@ -52,10 +50,9 @@
 
             <h3>Objetivos Específicos</h3>
             <ul class="check-list">
-               <li><i class="fas fa-check-circle"></i> Descargar extension ssh shell</li>
+               <li><i class="fas fa-check-circle"></i> Descargar extension ssh shell.</li>
                <li><i class="fas fa-check-circle"></i> Conectarse a Ubiquitous</li>
-               <li><i class="fas fa-check-circle"></i> Crear un dir html y darle los permisos necesarios con chmod y
-                  chcon para que sea un web-server</li>
+               <li><i class="fas fa-check-circle"></i> Crear un dir html y darle los permisos necesarios con chmod y chcon para que sea un web-server</li>
                <li><i class="fas fa-check-circle"></i> Configurar Cyberduck para poder subir archivos</li>
             </ul>
          </section>
@@ -114,12 +111,14 @@
 
             <p>Finalmente <strong>others</strong> hace referencia a todos los usuarios del sistema que no sean el <em>dueño</em> del archivo o no esten en grupo especifico. Este se representa con la letra o.</p>
 
-            <p>Los permisos son mostrados en una cadena de 10 caracteres cuando se ejecuta el comando <code> ls -l</code>:</p> 
+            <p>Los permisos son mostrados en una cadena de 10 caracteres cuando se ejecuta el comando <code> ls -l</code>. En la Figura 1 se muestran los posibles valores que puede obtener la cadena.</p> 
+
             <figure class="screenshot-container">
                <img src="../../img/ev3_img2.png" alt="Ejecución del programa" >
                <figcaption>Fig #. Representación sencilla de permisos.</figcaption>
             </figure>
             <p>Este se divide en 4 secciones. El inicio de la cadena le dice al usuario si el archivo es un directorio o un archivo. Después se divide en caracteres de 3. El primer conjunto representa los permisos del usuario, el segundo los permisos del grupo y el ultimo los restantes.</p>
+            <p>Los permisos son representados mediante las letras r, w, x; para las operaciones leer, escribir y ejecutar respectivamente. </p>
             <h3>Chcon</h3>
             <p>Un ejemplo bastante claro es la variable PATH. Esta guarda una lista de carpetas y le dice al sistema donde buscar programas ejecutables.</p>
          </section>
