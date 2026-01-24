@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #3: Configurar Ubiquitous</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+   <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #3</span>
+            <h1>Configuración de Ubiquitous y portafolio</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 19 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Linux y web-servers</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Entrar al servidor de Ubiquitous y configurar lo necesario para tener un servidor web con un
+                  portafolio de evidencias como pagina web.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Descargar extension ssh shell</li>
+               <li><i class="fas fa-check-circle"></i> Conectarse a Ubiquitous</li>
+               <li><i class="fas fa-check-circle"></i> Crear un dir html y darle los permisos necesarios con chmod y
+                  chcon para que sea un web-server</li>
+               <li><i class="fas fa-check-circle"></i> Configurar Cyberduck para poder subir archivos</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Dentro de esta practica se usaron muchos concepto, algunos comandos básicos de Linux, conexiones por la red ssh y como funcionan los web-server.</p>
+            <h3>SSH</h3>
+            <p>SSH es un protocolo de transferencia</p>
+            <h3>Comandos Usados</h3>
+            <p>A continuación se describen los comandos y argumentos utilizados durante la práctica:</p>
+            <div class="table-wrapper">
+               <table class="tech-table">
+                  <thead>
+                     <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr>
+                        <td><code>ls</code></td>
+                        <td>Lista todos los archivos y carpetas en un directorio. Se le pueden poner flags como <code>-la</code> para mostrar archivos ocultos y mostrarlos los permisos.</td>
+                     </tr>
+                     <tr>
+                        <td><code>mdkir</code></td>
+                        <td>Permite crear un directorio</td>
+                     </tr>
+                     <tr>
+                        <td><code>touch</code></td>
+                        <td>Permite crear un documento vacio</td>
+                     </tr>
+                     <tr>
+                        <td><code>who</code></td>
+                        <td>Permite ver los usuarios conectados</td>
+                     </tr>
+                     <tr>
+                        <td><code>whoami</code></td>
+                        <td>Permite ver la identidad del usuario actual</td>
+                     </tr>
+                     <tr>
+                        <td><code>chmod</code></td>
+                        <td>Administra los permisos del directorio.</td>
+                     </tr>
+                     <tr>
+                        <td><code>chcon</code></td>
+                        <td>Permite cambiar el contexto de un directorio.</td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+            <h3>Chmod</h3>
+            <p>Este comando te permite administrar los permisos básicos en Linux.  Los permisos estan organizados en los diferentes roles que pueden interactuar con el archivo o directorio (<em>Ejecutar</em>, <em>Leer</em> y <em>Escribir</em>). Estos roles estan dividos en: <strong>Users</strong>, <strong>Group</strong> y <strong>Others</strong>. </p> 
+            <p>El <em>User</em>─o usuario en español─es el dueño del archivo, se representa con la letra u. Normalmente es la persona que creo el archivo por primera vez; aunque, este puede cambiar de <em>ownership</em> con el comando <code>chown</code>. Este rol toma la prioridad más alta al interactuar con el archivo.</p>
+            <p>Los grupos (<strong>Group</strong>) son un conjunto de usuarios especificos, este se representa con g. Esto permite que varios usuarios puedan pertenecer al mismo grupo y compartir los archivos sin hacerlos publicos. Comandos como <code>groups</code> o <code>groupadd</code> permiten interactuar con Para que un grupo pueda tener acceso en un directorio el super usuario tiene que hacer que un directorio sea propiedad del grupo.</p>
+
+            <p>Finalmente <strong>others</strong> hace referencia a todos los usuarios del sistema que no sean el <em>dueño</em> del archivo o no esten en grupo especifico. Este se representa con la letra o.</p>
+
+            <p>Los permisos son mostrados en una cadena de 10 caracteres cuando se ejecuta el comando <code> ls -l</code>:</p> 
+            <figure class="screenshot-container">
+               <img src="../../img/ev3_img2.png" alt="Ejecución del programa" >
+               <figcaption>Fig #. Representación sencilla de permisos.</figcaption>
+            </figure>
+            <p>Este se divide en 4 secciones. El inicio de la cadena le dice al usuario si el archivo es un directorio o un archivo. Después se divide en caracteres de 3. El primer conjunto representa los permisos del usuario, el segundo los permisos del grupo y el ultimo los restantes.</p>
+            <h3>Chcon</h3>
+            <p>Un ejemplo bastante claro es la variable PATH. Esta guarda una lista de carpetas y le dice al sistema donde buscar programas ejecutables.</p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <p>Para poderte conectar al servidor se necesitan las herramientas necesarias.</p>
+            <h3>Paso 1. Instalar la extension de ssh-shell en chrome</h3>
+            <p>Esta extension funciona como un cliente ssh que te sirve para conectarse con un servidor.</p>
+
+            <h3>Paso 2. Conectase al servidor de Ubiquitous</h3>
+            <p>Para conectarse al servidor se necesita validar el usuario dado por el profesor y acceder a la liga de
+               <code>https://ubiquitous.udem.edu/</code>.</p>
+
+            <p>Dentro del servidor vimos algunos comandos básicos como <code>whoami</code>, <code>who</code>y
+               <code>ls -l</code></p>
+
+            <h3>Paso 2. Crear directorio html y darle los permisos necesarios</h3>
+            <p>Dentro del servidor se creo una dir <code>html</code> donde se subiran todas las evidencias del semestre
+               en forma de página web. Para eso es necesario que esta tengo los permisos suficientes. con
+               <code>chmod</code> y <code>chcon</code></p>
+            <h3>Paso 3. Estructurar directorio con</h3>
+
+            <h3>Paso 2. Crear directorio html y darle los permisos necesarios</h3>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <p>Primero ejecutamos el archivo desde el escritorio:</p>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Salida exitosa mostrando la ejecucion del archivo.</figcaption>
+            </figure>
+
+            <p>A continuación, una captura de la ejecución desde la root sin agregar <code>C:\Users\djjav\Desktop</code>
+               al PATH:</p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Salida fallida mostrando como no encuentra el archivo.</figcaption>
+            </figure>
+            <p>Finalmente una ves que se agrego el directorio al <code>PATH</code>: </p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev1_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Salida exitosa al reconocer el archivo de la lista de ejecutables.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Se logro correctamente modificar la variable de entorno del <code>PATH</code> para usar un ejecutable
+               ubicado en el Desktop del usuario, en todo el sistema.</p>
+            <p><strong>Trabajo Futuro:</strong> Investigar como modificar las variables de ambiente en otros sistemas
+               operativos como Linux o MacOS.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+
+               <a href="https://en.wikipedia.org/wiki/Environment_variable" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-wikipedia-w"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">Wikipedia</span>
+                     <h4>Environment variable</h4>
+                     <p>Árticulo hablando acerca de las variables de entorno en windows y linux.</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+               <a href="https://www.geeksforgeeks.org/linux-unix/environment-variables-in-linux-unix/" target="_blank"
+                  class="ref-card">
+                  <div class="ref-icon"><i class="fas fa-book"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">GeeksForGeeks</span>
+                     <h4> Environment Variables in Linux/Unix</h4>
+                     <p>Explicación de como funciona el PATH en Linux</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="../../../index.html" class="nav-btn prev">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Home</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./ejercicio2.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Laboratorio 2: Mapeo de unidades virtuales con SUBST</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+</body>
+
+</html>
