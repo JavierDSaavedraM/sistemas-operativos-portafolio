@@ -94,9 +94,9 @@
                   <span class="title">djjav@Windows-11:~/</span>
                </div>
                <div class="terminal-body">
-                  <p class="cmd">tasklist /FI "IMAGENAME eq chrome.exe"</p>
-                  <p class="cmd">tasklist /FO CSV</p>
-                  <p class="cmd">tasklist /FI "MEMUSAGE gt 100000"</p>
+                  <p class="cmd">tasklist | find "chrome"</p>
+                  <p class="cmd">tasklist /FO CSV sort > Desktop\procesos.csv</p>
+                  <p class="cmd">tasklist /F0 list | more </p>
                </div>
             </div>
 
@@ -107,18 +107,18 @@
             <p>Creamos el enlace con la etiqueta</p>
 
             <figure class="screenshot-container">
-               <img src="../../img/ev2_img1.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Salida exitosa de la creacion de la unidad logica</figcaption>
+               <img src="../../img/ev4_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecucion de comando tasklist</figcaption>
             </figure>
 
             <figure class="screenshot-container">
-               <img src="../../img/ev2_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 2. Salida exitosa con la creacion de la unidad virtual</figcaption>
+               <img src="../../img/ev4_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Muestra la salida de systeminfo</figcaption>
             </figure>
             <p>Finalmente la eliminacion de la unidad logica </p>
             <figure class="screenshot-container">
-               <img src="../../img/ev2_img3.png" alt="Ejecución del programa">
-               <figcaption>Fig 3. Eliminación de la unidad virtual</figcaption>
+               <img src="../../img/ev4_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Listado de la informacion dentro de un csv despues de redirigir la lista.</figcaption>
             </figure>
          </section>
 
