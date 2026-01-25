@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Tarea 01 - Reporte Web Comandos Web</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Tarea #1</span>
+            <h1>Comandos CMD</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 20 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CMD y Windows</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Familiarizarse con la CMD de Windows para poder navegar, crear estructuras, directorios y gestionar la información del sistema.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Practicar el uso de comandos básicos de la consola CMD en Windows 11.</li>
+               <li><i class="fas fa-check-circle"></i> Aplicar comandos para navegar, crear estructuras de directorios y gestionar información del sistema.</li>
+               <li><i class="fas fa-check-circle"></i>Aplicar comandos para navegar, crear estructuras de directorios y gestionar información del sistema.</li>
+               <li><i class="fas fa-check-circle"></i>Generar un reporte técnico en formato web listo para publicación en el sitio del curso.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+
+            <h3>Paso 1. Preparación del entorno.</h3>
+            <p>Dentro de la terminal se utilizaron comandos para conocer la información del sistema: Version de Windows, Nombre del Usuario y Directorio del Usuarios. Para eso se ejectuaron los comandos de <code>ver</code>, <code>echo %USERNAME%</code> y <code>echo %USERPROFILE%</code>. El output se puede apreciar en la Figura 1.</p>
+            <p>Los comandos de <code>echo</code> utiliza las variables de entorno del sistema para poder desplegar esa información.</p>
+            <h3>Paso 2. Creación de estructura de directorios.</h3> 
+            <p>Mediante el comando de md, se creo la carpeta <code>SO_Lab1</code>; Ubicada dentro del Escritorio. Usando igualmente md se pueden crear varias carpetas y subcarpetas en una sola linea. Para eso las subcarpetas deben ser escritas de manera continua con el <code>\</code> separando.</p>
+
+            <p>Como se puede observar en la Figura 2, las carpetas dentro de Hardware son escritas al repetir <code>Hardware\Procesadores</code> <code>Hardware\Memoria</code> y <code>Hardware\Expansion</code>.</p>
+
+            <p>Finalmente se utiliza el comando <code>tree /f</code>. Esto muestra una vista del directorio en forma de arbol y al tener la bandera <code>/f</code> si existieran algunos archivos dentro igualmente se mostrarian.</p>
+
+            <h3>Paso 3. Navegación y exploración</h3>
+            <p>La Figura 3 muestra como dentro de la carpeta de <code>.\Procesadores\</code>, se busco retroceder dos nivele y acceder a la carpeta de <code>Reportes</code>. Al ejectura <code>cd ..\..\</code> le dices al sistema que retroceda dos nivels y entonces te encontrarias en <code>SO_LAB1</code> entonces puedes acceder a reportes.</p>
+
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img4.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img5.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>En esta sesion se vieron algunos de los comandos y conceptos básicos del sistema de linux. Dentro de estos temas se vieron por ejemplo como son las conexiones SSH y la trasnferencia de archivos mediante la red. Y la verdad se me hicieron conceptos super interesantes y utilices. Algo nuevo que aprendí era como poner representar los permiso de los archivos en forma númerica.</p>
+            <p><strong>Trabajo Futuro:</strong> Me gustaría explorar un poco más en otras formas de poder transferir archivos. Cyberduck es un cliente GUI que te permite transferir archivos, pero quisiera explorar más opciones.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+
+               <a href="https://youtu.be/oxuRxtrO2Ag?si=2HW3UXeRTpcaQLF3" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-youtube"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">YouTube</span>
+                     <h4>Beginner's Guide to the Bash Termina</h4>
+                     <p>Video de YouTube que muestra una introducción básica a la terminal bash y Linux.</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+               <a href="https://www.cloudflare.com/es-es/learning/access-management/what-is-ssh/" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fas fa-book"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">CloudFare</span>
+                     <h4>¿Qué es SSH? | Protocolo Secure Shell (SSH)</h4>
+                     <p>Artículo que habla sobre el SSH</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-02.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio 2: Mapeo de unidades virtuales con SUBST</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-04.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Reporte web 2: Mapeo de unidades virtuales con SUBST</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+</body>
+
+</html>
