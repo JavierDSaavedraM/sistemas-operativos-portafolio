@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio #4: Información del sistema y tasklist</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en clase #4</span>
+            <h1>Tasklist y proceso en Windows 11</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 22 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Windows y tasklist </p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Comprender la utilidad del takslist y familiarisarse con los procesoe</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Utilizar el comando de systeminfor para poder obtener información basica del sistema.</li>
+               <li><i class="fas fa-check-circle"></i> Explorar el comando find y ver como pasar parametros de busqueda.
+               <li><i class="fas fa-check-circle"></i>Utilizar el comando tasklist para ver los procesos corriendo en el sistema y como identificarlos.</li>
+               <li><i class="fas fa-check-circle"></i>Utilizar el comando tasklist para ver los procesos corriendo en el sistema y como identificarlos.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>El sistem operativo ofrece diferentes abstracciónes para que el usuario pueda interactuar con el sistema. Esto facilita que el usuario no tenga que interactuar directametne con el hardware. Dentro de estas funcionalidades se encuentra el <code>tasklist</code>. Este permite que el usuario pueda ver los procesos que estan corriendo en el sistema de manera entendible para el ojo humano. </p>
+            <p>El sistema hace una lista de todos los procesos y muestra información como su nombre, identificar, memoria y recursos utilizados. Con la información presentada se pueden identificar los procesos que más estan consumiendo recursos y poder eliminarlos. De igual manera se puede identificar los procesos que tengan intenciónes maliciosas.</p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <p>Durante la clase se hablo de diferentes temas relaciondos a los sistemas operativos. Por esa razón se mostraron los comandos básicos para identificar la información del hardware instalado</p>
+            <h3>Paso 1. Obtener información del sistema</h3>
+            <p>Dentro de consola de comandos se puede utilizar <code>systeminfo</code> el cual obtiene la información directa de las especificaciónes de la maquina. Este ofrece información como: sistema opreativo; cantidad de espacio disponible y memoria RAM; arquitectura del CPU e información de los drivers. En la Figura 1 se muestra la información de mi sistema. Dentro de esto algo que el profe recalco mucho es la arquitectura del CPU. Aunque dentro de las especificaiones diga que es un Inel, la architectura real es de un AMD. Principalmente por ser computadoras portatiles de gamma media.</p>
+
+            <h3>Paso 2. Obtener la información de los proceso corriendo en el sistema.</h3>
+            <p> Con el comando <code>tasklist</code> se muestran todas las aplicaciones corriendo en el sistema. El comando puede tener diferentes parametros para obtener la información. Por ejemplo se pued combinar con /fi para filtrar los resultados a ciertos nombres, identifcadores, o cantidad de memoria. E incluso se puede hacer un sort de los resultados.</p>
+
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">djjav@Windows-11:~/</span>
+               </div>
+               <div class="terminal-body">
+                  <p class="cmd">tasklist /FI "IMAGENAME eq chrome.exe"</p>
+                  <p class="cmd">tasklist /FO CSV</p>
+                  <p class="cmd">tasklist /FI "MEMUSAGE gt 100000"</p>
+               </div>
+            </div>
+            <h3>Paso 3. Combinación de comandos.</h3>
+            <p> Todos estos comandos se pueden combinar de diferentes manera para obtener los resultados. Se puede combinar con <code>more</code>, <code>less</code> y <code>find</code>. Para facilitar la lectura del usuario.</p>
+            <p>El comando more hace que puedas ver una página a la vez. Mientras que el comando less te permite manejar el archivo. Usar las teclas y poder navegar por los resutlados de manera más sencilla.</p>
+            <p>Finalmente el comando find te ayuda a filtrar los resultados de cualquier comando. Al darle un string puede filtrar todo el text. La principal diferencia de este y el parametro /fi ya incluido en tasklist es que este te permite ignorar la capitalización de la cadena. </p>
+
+            <p>También cabe recalcar que se puede combinar con el operador redireccionador para poder guardarlo en un archivo.</p>
+
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">djjav@Windows-11:~/</span>
+               </div>
+               <div class="terminal-body">
+                  <p class="cmd">tasklist /FI "IMAGENAME eq chrome.exe"</p>
+                  <p class="cmd">tasklist /FO CSV</p>
+                  <p class="cmd">tasklist /FI "MEMUSAGE gt 100000"</p>
+               </div>
+            </div>
+
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <p>Creamos el enlace con la etiqueta</p>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev2_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Salida exitosa de la creacion de la unidad logica</figcaption>
+            </figure>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev2_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Salida exitosa con la creacion de la unidad virtual</figcaption>
+            </figure>
+            <p>Finalmente la eliminacion de la unidad logica </p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev2_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Eliminación de la unidad virtual</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>En esta sesion se hablo de los componentes básicos de una maquina además de varios comandos útiles en la terminal. Entre ellos se vio el comando de tasklist y como poder combinarlo con otros comando para su fácil lectura. Es impresionante lo sofisticado que son estas maquinas, y las funcionalidades que se le da al usuario. Una persona con conocimiento de la funcionalidad de la maquina tiene posibilidades infinitas.</p>
+            <p><strong>Trabajo Futuro:</strong> Me gustaría explorar como se puede eliminar procesos. Que otros comandos que te den acceso al sistema hay. Y principalmente ver las diferencias de arquitectura con los Android y Linux.</p>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./tarea-01.html" class="nav-btn prev">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio 1: Implementacion de Variables de Entorno (PATH) en Windows</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-05.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Laboratorio 3: Configuración de Ubiquitous y Portafolio de Evidencias</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+</body>
+
+</html>
