@@ -58,6 +58,10 @@
 
          <section id="marco">
             <h2>2. Investigación y Marco Conceptual</h2>
+            <p>El comando <code>md</code> significa <em>"create directory"</em> en ingles. Este como su nombre lo menciona crea un directorio o carpeta en una ubicación especifica. El comando puede crear n numero de directorios vacios si le pasas una ruta valida como parametro.</p>
+
+            <p>El operador <code>></code> permite poner un input y redireccionarlo a otro archivo. Igualmente cuando se usa <code><</code> permite leer un archivo y redireccionarlo. Este operador es muy útil al combinarlo con otros comandos. </p>
+            
          </section>
 
          <section id="desarrollo">
@@ -75,6 +79,10 @@
 
             <h3>Paso 3. Navegación y exploración</h3>
             <p>La Figura 3 muestra como dentro de la carpeta de <code>.\Procesadores\</code>, se busco retroceder dos nivele y acceder a la carpeta de <code>Reportes</code>. Al ejectura <code>cd ..\..\</code> le dices al sistema que retroceda dos nivels y entonces te encontrarias en <code>SO_LAB1</code> entonces puedes acceder a reportes.</p>
+            <h3>Paso 4. Documentación del sistema</h3>
+            <p>Finalmente se exploro la combinación de comandos <code>echo</code> y <code>where</code> con el operador de redirección <code>> </code>. Con esto se hacer que en un archivo se guardaran la información del sistem <code>.txt</code>. Es importante recalcar la diferencia entre entre solo usar un operador y dos. El segundo siendo una forma de poder agregar más contenido a un archivo en ves de recrearlo.</p>
+            <h3>Paso 6. Unidad virtual para simplificar acceso</h3>
+            <p> Este ejercicio es similar a <a href="./lab-02.html" style="color:#00d4ff;">Laboratorio 2</a> donde se habla más de las unidades virtuales y su funcionalidad. En la Figura 5 se puede apreciar la creación de una con la letra X: asignada. Igualmente se muestra como se elimina la unidad. Algo importante recalcar aquí también, es que la unidad existe solor por sesión. Cuando la maquina se reincia esta unidad virtual se pierde. </p>
 
          </section>
 
@@ -87,52 +95,42 @@
             </figure>
             <figure class="screenshot-container">
                <img src="../../img/tarea1_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+               <figcaption>Fig 2. Comando md para crear directorios y tree para mostrarlos.</figcaption>
             </figure>
             <figure class="screenshot-container">
                <img src="../../img/tarea1_img3.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+               <figcaption>Fig 3. Comando cd y parametro la navegación en el sistema. </figcaption>
             </figure>
             <figure class="screenshot-container">
                <img src="../../img/tarea1_img4.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+               <figcaption>Fig 4. Redirección de salida mediante los comandos echo y >.</figcaption>
             </figure>
             <figure class="screenshot-container">
                <img src="../../img/tarea1_img5.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+               <figcaption>Fig 5. Creación y uso de las unidades virtuales.</figcaption>
             </figure>
          </section>
 
          <section id="conclusiones">
             <h2>5. Conclusiones y Trabajo Futuro</h2>
-            <p>En esta sesion se vieron algunos de los comandos y conceptos básicos del sistema de linux. Dentro de estos temas se vieron por ejemplo como son las conexiones SSH y la trasnferencia de archivos mediante la red. Y la verdad se me hicieron conceptos super interesantes y utilices. Algo nuevo que aprendí era como poner representar los permiso de los archivos en forma númerica.</p>
-            <p><strong>Trabajo Futuro:</strong> Me gustaría explorar un poco más en otras formas de poder transferir archivos. Cyberduck es un cliente GUI que te permite transferir archivos, pero quisiera explorar más opciones.</p>
+            <p>En esta practica se exploraron comandos como md, tree, echo y el operador direcciónal. Mediante estos comando se familiarizo con como Windows interactua con el sistema.</p>
+            <p>Con esto en mente se pudo llegar a la conclusión que el sistema operativo funciona como un link entre el usuario y los componentes fisicos de la computadora. A través de comandos como dir, cd y md, el sistema operativo ofrece un metodo que facilitan la manipulación de la maquina sin que el usuario interactúe directamente con el hardware. El usuario no tiene que leer directamente  la memoria del dispositivo y traducir 1 y 0 para descubrir que el archivo "hola.txt" contiene un hola.</p> 
+            <p><strong>Trabajo Futuro:</strong> Para este proyecto me gustaría explorar más comandos que vengan incluidos en la terminal de Windows. La documentación ofical ofrece información muy interesante e útil acerca de todas las funciones que viene incluidas.</p>
          </section>
          <section id="referencias">
             <h2>6. Bibliografía</h2>
 
             <div class="references-grid">
 
-               <a href="https://youtu.be/oxuRxtrO2Ag?si=2HW3UXeRTpcaQLF3" target="_blank" class="ref-card">
-                  <div class="ref-icon"><i class="fa-brands fa-youtube"></i></div>
+               <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/md" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-microsoft"></i></div>
                   <div class="ref-content">
-                     <span class="ref-type">YouTube</span>
-                     <h4>Beginner's Guide to the Bash Termina</h4>
-                     <p>Video de YouTube que muestra una introducción básica a la terminal bash y Linux.</p>
+                     <span class="ref-type">Microsoft</span>
+                     <h4>Microsoft - Md Guide</h4>
+                     <p>Documentación oficial por parte de Microsoft</p>
                   </div>
                   <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
                </a>
-
-               <a href="https://www.cloudflare.com/es-es/learning/access-management/what-is-ssh/" target="_blank" class="ref-card">
-                  <div class="ref-icon"><i class="fas fa-book"></i></div>
-                  <div class="ref-content">
-                     <span class="ref-type">CloudFare</span>
-                     <h4>¿Qué es SSH? | Protocolo Secure Shell (SSH)</h4>
-                     <p>Artículo que habla sobre el SSH</p>
-                  </div>
-                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
-               </a>
-
             </div>
          </section>
 
