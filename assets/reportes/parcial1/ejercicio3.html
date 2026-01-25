@@ -44,8 +44,7 @@
             <h2>1. Objetivos</h2>
             <div class="objective-box">
                <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
-               <p>Entrar al servidor de Ubiquitous y configurar lo necesario para tener un servidor web con un
-                  portafolio de evidencias como pagina web.</p>
+               <p>Entrar al servidor de Ubiquitous y configurar lo necesario para tener un servidor web con un portafolio de evidencias como pagina web.</p>
             </div>
 
             <h3>Objetivos Específicos</h3>
@@ -61,7 +60,7 @@
             <h2>2. Investigación y Marco Conceptual</h2>
             <p>Dentro de esta practica se usaron muchos concepto, algunos comandos básicos de Linux, conexiones por la red ssh y como funcionan los web-server.</p>
             <h3>SSH</h3>
-            <p>SSH es un protocolo de transferencia</p>
+            <p>SSH es un protocolo de transferencia para enviar comandos de forma segura a un dispositivo conectado. El protocolo es una extension del protocolo TPC/IP el cual transfiere paquetes de datos. El puerto default de que utiliza SSH es el 22.</p>
             <h3>Comandos Usados</h3>
             <p>A continuación se describen los comandos y argumentos utilizados durante la práctica:</p>
             <div class="table-wrapper">
@@ -108,9 +107,7 @@
             <p>Este comando te permite administrar los permisos básicos en Linux.  Los permisos estan organizados en los diferentes roles que pueden interactuar con el archivo o directorio (<em>Ejecutar</em>, <em>Leer</em> y <em>Escribir</em>). Estos roles estan dividos en: <strong>Users</strong>, <strong>Group</strong> y <strong>Others</strong>. </p> 
             <p>El <em>User</em>─o usuario en español─es el dueño del archivo, se representa con la letra u. Normalmente es la persona que creo el archivo por primera vez; aunque, este puede cambiar de <em>ownership</em> con el comando <code>chown</code>. Este rol toma la prioridad más alta al interactuar con el archivo.</p>
             <p>Los grupos (<strong>Group</strong>) son un conjunto de usuarios especificos, este se representa con g. Esto permite que varios usuarios puedan pertenecer al mismo grupo y compartir los archivos sin hacerlos publicos. Comandos como <code>groups</code> o <code>groupadd</code> permiten interactuar con Para que un grupo pueda tener acceso en un directorio el super usuario tiene que hacer que un directorio sea propiedad del grupo.</p>
-
             <p>Finalmente <strong>others</strong> hace referencia a todos los usuarios del sistema que no sean el <em>dueño</em> del archivo o no esten en grupo especifico. Este se representa con la letra o.</p>
-
             <p>Los permisos son mostrados en una cadena de 10 caracteres cuando se ejecuta el comando <code> ls -l</code>. En la Figura 1 se muestran los posibles valores que puede obtener la cadena.</p> 
 
             <figure class="screenshot-container">
@@ -118,9 +115,25 @@
                <figcaption>Fig #. Representación sencilla de permisos.</figcaption>
             </figure>
             <p>Este se divide en 4 secciones. El inicio de la cadena le dice al usuario si el archivo es un directorio o un archivo. Después se divide en caracteres de 3. El primer conjunto representa los permisos del usuario, el segundo los permisos del grupo y el ultimo los restantes.</p>
-            <p>Los permisos son representados mediante las letras r, w, x; para las operaciones leer, escribir y ejecutar respectivamente. </p>
+            <p>Los permisos son representados mediante las letras r, w, x; para las operaciones leer, escribir y ejecutar respectivamente. Para poder cambiar se utiliza el siguiente comando.</p>
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">624198_users@fedora:~/</span>
+               </div>
+               <div class="terminal-body">
+                  <p class="cmd">$ chmod g+w html</p>
+               </div>
+            </div>
+            <p>El primer parametro es el rol al que va el permiso. Siguiente es un + o un - representando otorgar o revocar y finalmente al archivo o carpeta. Para poder darle más permisos a otros roles.</p>
+            <p>De igual manera se puede representar los permisos de manera númerica.Como se puede observar en la Figura. Para poder combinarlos se suman; Por ejemplo al escribir <code>> chmod 755 file.txt</code>; Hace que el el rol de owner pueda ejectura, leer y escribir, mientras que los grupos y los demas puedan solamente verlo y ejecturalo.</p> 
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev3_img3.png" alt="Ejecución del programa" width="250">
+               <figcaption>Fig #. Representacion númerica de los permisos.</figcaption>
+            </figure>
+
             <h3>Chcon</h3>
-            <p>Un ejemplo bastante claro es la variable PATH. Esta guarda una lista de carpetas y le dice al sistema donde buscar programas ejecutables.</p>
+            <p>Este comando te permite cambiar el contexto de la segurida de un archivo. Dentro de un ambiente SELinux (Ambiente de seguridad), cada archivo tiene una label que describe los archivos como objetos. Cada objeto tien une un user, rol, typo y nivel. Por lo que para poder cambiar.</p>
          </section>
 
          <section id="desarrollo">
@@ -133,16 +146,19 @@
             <p>Para conectarse al servidor se necesita validar el usuario dado por el profesor y acceder a la liga de
                <code>https://ubiquitous.udem.edu/</code>.</p>
 
-            <p>Dentro del servidor vimos algunos comandos básicos como <code>whoami</code>, <code>who</code>y
-               <code>ls -l</code></p>
+            <p>Dentro del servidor vimos algunos comandos básicos como <code>whoami</code>, <code>who</code>y <code>ls -l</code></p>
 
             <h3>Paso 2. Crear directorio html y darle los permisos necesarios</h3>
-            <p>Dentro del servidor se creo una dir <code>html</code> donde se subiran todas las evidencias del semestre
-               en forma de página web. Para eso es necesario que esta tengo los permisos suficientes. con
-               <code>chmod</code> y <code>chcon</code></p>
-            <h3>Paso 3. Estructurar directorio con</h3>
+            <p>Dentro del servidor se creo una dir <code>html</code> donde se subiran todas las evidencias del semestre en forma de página web. Para eso es necesario que esta tengo los permisos suficientes. con <code>chmod</code> y <code>chcon</code></p>
+            <h3>Paso 3. Estructurar directorio para pagina-web</h3>
+            <p>Para poder realizar esta página web se utilizo ayuda de la inteligencia artificial de Gemini.</p>
+            
+            <div class="code-snippet"> 
+               <p>"Crea una página web personal con un menú con diferentes secciones. El diseño profesional de mi pagina web debe de permitirme poder publicar mis reportes, tareas y ejercicios guiados en forma de páginas web, por lo que debe de tener secciones: parcial1 , parcial2, parcial3 y proyecto final en el menu. Separá mi sitio web en archivos independientes html, css y js"</p>
+            </div>
 
-            <h3>Paso 2. Crear directorio html y darle los permisos necesarios</h3>
+            <h3>Paso 4. Usar Cyberduck para poder transferir archivos.</h3>
+            <p>Usando el cliente Cyberduck podemos conectarnos al servidor y transferir los archivos.</p>
          </section>
 
          <section id="evidencia">
@@ -169,33 +185,30 @@
 
          <section id="conclusiones">
             <h2>5. Conclusiones y Trabajo Futuro</h2>
-            <p>Se logro correctamente modificar la variable de entorno del <code>PATH</code> para usar un ejecutable
-               ubicado en el Desktop del usuario, en todo el sistema.</p>
-            <p><strong>Trabajo Futuro:</strong> Investigar como modificar las variables de ambiente en otros sistemas
-               operativos como Linux o MacOS.</p>
+            <p>En esta sesion se vieron algunos de los comandos y conceptos básicos del sistema de linux. Dentro de estos temas se vieron por ejemplo como son las conexiones SSH y la trasnferencia de archivos mediante la red. Y la verdad se me hicieron conceptos super interesantes y utilices. Algo nuevo que aprendí era como poner representar los permiso de los archivos en forma númerica.</p>
+            <p><strong>Trabajo Futuro:</strong> Me gustaría explorar un poco más en otras formas de poder transferir archivos. Cyberduck es un cliente GUI que te permite transferir archivos, pero quisiera explorar más opciones.</p>
          </section>
          <section id="referencias">
             <h2>6. Bibliografía</h2>
 
             <div class="references-grid">
 
-               <a href="https://en.wikipedia.org/wiki/Environment_variable" target="_blank" class="ref-card">
-                  <div class="ref-icon"><i class="fa-brands fa-wikipedia-w"></i></div>
+               <a href="https://youtu.be/oxuRxtrO2Ag?si=2HW3UXeRTpcaQLF3" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-youtube"></i></div>
                   <div class="ref-content">
-                     <span class="ref-type">Wikipedia</span>
-                     <h4>Environment variable</h4>
-                     <p>Árticulo hablando acerca de las variables de entorno en windows y linux.</p>
+                     <span class="ref-type">YouTube</span>
+                     <h4>Beginner's Guide to the Bash Termina</h4>
+                     <p>Video de YouTube que muestra una introducción básica a la terminal bash y Linux.</p>
                   </div>
                   <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
                </a>
 
-               <a href="https://www.geeksforgeeks.org/linux-unix/environment-variables-in-linux-unix/" target="_blank"
-                  class="ref-card">
+               <a href="https://www.cloudflare.com/es-es/learning/access-management/what-is-ssh/" target="_blank" class="ref-card">
                   <div class="ref-icon"><i class="fas fa-book"></i></div>
                   <div class="ref-content">
-                     <span class="ref-type">GeeksForGeeks</span>
-                     <h4> Environment Variables in Linux/Unix</h4>
-                     <p>Explicación de como funciona el PATH en Linux</p>
+                     <span class="ref-type">CloudFare</span>
+                     <h4>¿Qué es SSH? | Protocolo Secure Shell (SSH)</h4>
+                     <p>Artículo que habla sobre el SSH</p>
                   </div>
                   <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
                </a>
