@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,8 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
 
+<body>
     <div class="app-container">
         <aside class="sidebar">
             <div class="profile">
@@ -16,21 +17,25 @@
                 <h2>Javier Djorkaef Saavedra Mendiola</h2>
                 <p>ITC - 4to Semestre</p>
             </div>
-            
+
             <nav class="menu">
-                <button class="menu-btn active" onclick="openTab(event, 'inicio')">
+                <button class="menu-btn active" onclick="filtrarSeccion('todo')">
                     <i class="fas fa-home"></i> Inicio
                 </button>
-                <button class="menu-btn" onclick="openTab(event, 'parcial1')">
+
+                <button class="menu-btn" onclick="filtrarSeccion('parcial1')">
                     <i class="fas fa-folder"></i> Parcial 1
                 </button>
-                <button class="menu-btn" onclick="openTab(event, 'parcial2')">
-                    <i class="fas fa-folder-open"></i> Parcial 2
+
+                <button class="menu-btn" onclick="filtrarSeccion('parcial2')">
+                    <i class="fas fa-folder"></i> Parcial 2
                 </button>
-                <button class="menu-btn" onclick="openTab(event, 'parcial3')">
-                    <i class="fas fa-network-wired"></i> Parcial 3
+
+                <button class="menu-btn" onclick="filtrarSeccion('parcial3')">
+                    <i class="fas fa-folder"></i> Parcial 3
                 </button>
-                <button class="menu-btn" onclick="openTab(event, 'proyecto')">
+
+                <button class="menu-btn" onclick="filtrarSeccion('proyecto')">
                     <i class="fas fa-microchip"></i> Proyecto Final
                 </button>
             </nav>
@@ -41,21 +46,25 @@
         </aside>
 
         <main class="content-area">
-            
-            <section id="inicio" class="tab-content active-tab">
+
+            <section id="inicio" class="seccion-contenido">
                 <header class="top-header">
                     <h1>Sistemas Operativos</h1>
                     <span class="status-badge">Online</span>
                 </header>
                 <div class="hero">
                     <h2>Bienvenido al Portafolio de Evidencias</h2>
-                    <p>Este portafolio contiene la documentación, prácticas y laboratorios realizados durante el curso.</p>
-                    <p> <strong>Nombre</strong>: Javier Djorkaef Saavedra Mendiola</p>
-                    <p> <strong>Matricula</strong>: 624198</p>
+                    <p>Este portafolio contiene la documentación, prácticas y laboratorios realizados durante el curso.
+                    </p>
+                    <br>
+                    <p><strong>Nombre:</strong> Javier Djorkaef Saavedra Mendiola</p>
+                    <p><strong>Matricula:</strong> 624198</p>
                 </div>
             </section>
 
-            <section id="parcial1" class="tab-content">
+            <hr class="divider">
+
+            <section id="parcial1" class="seccion-contenido">
                 <header class="top-header">
                     <h1>Parcial 1: Fundamentos</h1>
                 </header>
@@ -63,22 +72,15 @@
                     <div class="card">
                         <div class="card-icon"><i class="fas fa-terminal"></i></div>
                         <h3>Laboratorio 1</h3>
-                        <p>Gestion de Variables de Entorno (PATH) en Windows </p>
+                        <p>Gestion de Variables de Entorno (PATH) en Windows</p>
                         <a href="./assets/reportes/parcial1/lab-01.html" class="btn-open">Ver Documento</a>
                     </div>
-                    
+
                     <div class="card">
                         <div class="card-icon"><i class="fas fa-terminal"></i></div>
                         <h3>Laboratorio 2</h3>
                         <p>Mapeo de unidades virtuales con SUBST</p>
                         <a href="./assets/reportes/parcial1/lab-02.html" class="btn-open">Ver Documento</a>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-icon"><i class="fas fa-terminal"></i></div>
-                        <h3>Laboratorio 3</h3>
-                        <p>Configuracion de Ubiquitous y Portafolio</p>
-                        <a href="./assets/reportes/parcial1/lab-03.html" class="btn-open">Ver Documento</a>
                     </div>
                     <div class="card">
                         <div class="card-icon"><i class="fas fa-book"></i></div>
@@ -89,13 +91,15 @@
                     <div class="card">
                         <div class="card-icon"><i class="fas fa-terminal"></i></div>
                         <h3>Laboratorio 4</h3>
-                        <p>Tasklist y procesos actuales.</p>
-                        <a href="./assets/reportes/parcial1/lab-03.html" class="btn-open">Ver Documento</a>
+                        <p>Tasklist y procesos de la maquina</p>
+                        <a href="./assets/reportes/parcial1/lab-04.html" class="btn-open">Ver Documento</a>
                     </div>
                 </div>
             </section>
 
-            <section id="parcial2" class="tab-content">
+            <hr class="divider">
+
+            <section id="parcial2" class="seccion-contenido">
                 <header class="top-header">
                     <h1>Parcial 2: Concurrencia</h1>
                 </header>
@@ -109,7 +113,9 @@
                 </div>
             </section>
 
-            <section id="parcial3" class="tab-content">
+            <hr class="divider">
+
+            <section id="parcial3" class="seccion-contenido">
                 <header class="top-header">
                     <h1>Parcial 3: Memoria</h1>
                 </header>
@@ -123,7 +129,9 @@
                 </div>
             </section>
 
-            <section id="proyecto" class="tab-content">
+            <hr class="divider">
+
+            <section id="proyecto" class="seccion-contenido">
                 <header class="top-header">
                     <h1>Proyecto Final</h1>
                 </header>
@@ -136,10 +144,6 @@
                             <h3>Documentación PDF</h3>
                             <a href="#" class="btn-open">Descargar</a>
                         </div>
-                        <div class="card highlight">
-                            <h3>Repositorio GitHub</h3>
-                            <a href="#" class="btn-open">Ir al Repo</a>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -149,4 +153,5 @@
 
     <script src="./js/script.js"></script>
 </body>
+
 </html>

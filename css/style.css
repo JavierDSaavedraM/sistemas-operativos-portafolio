@@ -61,6 +61,13 @@ body {
 .profile h2 { font-size: 1.2rem; margin-bottom: 5px; }
 .profile p { font-size: 0.8rem; color: var(--text-muted); }
 
+.footer-info {
+    margin-top: auto;
+    font-size: 0.7rem;
+    color: #555;
+    text-align: center;
+}
+
 /* MENÚ DE NAVEGACIÓN */
 .menu {
     flex: 1;
@@ -78,8 +85,11 @@ body {
     cursor: pointer;
     border-radius: 8px;
     transition: all 0.3s ease;
+    
+    /* MODIFICACIÓN: Para ocupar todo el ancho */
     display: flex;
     align-items: center;
+    width: 100%;
     gap: 10px;
     font-size: 1rem;
 }
@@ -102,14 +112,30 @@ body {
     background-color: var(--bg-dark);
 }
 
-/* OCULTAR/MOSTRAR SECCIONES */
-.tab-content {
-    display: none; /* Por defecto oculto */
-    animation: fadeIn 0.4s ease;
+/* --- LOGICA DE VISIBILIDAD DE SECCIONES --- */
+
+.seccion-contenido {
+    display: block; /* Por defecto visible */
+    margin-bottom: 60px; /* Espacio entre secciones */
+    animation: fadeIn 0.5s ease;
 }
 
-.tab-content.active-tab {
-    display: block; /* Solo se muestra si tiene esta clase */
+/* Clase para ocultar secciones (JS la activa) */
+.hidden {
+    display: none !important;
+}
+
+/* Divisor visual entre secciones */
+.divider {
+    border: 0;
+    height: 1px;
+    background: #333;
+    margin: 40px 0;
+}
+
+/* Si una sección está oculta, el divisor adyacente también debería ocultarse (truco avanzado de CSS) */
+.seccion-contenido.hidden + .divider {
+    display: none;
 }
 
 @keyframes fadeIn {
@@ -128,7 +154,7 @@ body {
 }
 
 .top-header h1 {
-    font-family: 'Courier New', Courier, monospace; /* Estilo terminal */
+    font-family: 'Courier New', Courier, monospace; 
     color: var(--accent);
 }
 
@@ -141,7 +167,7 @@ body {
     font-weight: bold;
 }
 
-/* GRID DE TARJETAS (Tareas/Reportes) */
+/* GRID DE TARJETAS */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -188,12 +214,15 @@ body {
     color: #000;
 }
 
-/* RESPONSIVE 
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .app-container { flex-direction: column; }
-    .sidebar { width: 100%; height: auto; flex-direction: row; align-items: center; padding: 10px; }
-    .profile { display: none; } /* Ocultamos perfil en móvil para espacio 
-    .menu { flex-direction: row; overflow-x: auto; }
-    .menu-btn { white-space: nowrap; }
+    .sidebar { width: 100%; height: auto; padding: 10px; position: relative;}
+    .profile { display: none; } 
+    .menu { flex-direction: row; overflow-x: auto; padding-bottom: 10px;}
+    .menu-btn { white-space: nowrap; width: auto; }
+
+    .menu::-webkit-scrollbar{
+        display: none;
+    }
 }
-*/

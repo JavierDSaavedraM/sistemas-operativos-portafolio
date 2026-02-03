@@ -1,18 +1,55 @@
-function openTab(evt, tabName) {
-    // 1. Ocultar todos los elementos con la clase "tab-content"
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].classList.remove("active-tab"); // Usamos clases CSS para controlar la visibilidad
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Recuperar el filtro guardado al cargar la página
+    // Si no hay nada guardado, usamos 'todo' por defecto
+    const filtroGuardado = localStorage.getItem('filtroActual') || 'todo';
+    
+    // 2. Aplicar el filtro
+    filtrarSeccion(filtroGuardado);
+});
 
-    // 2. Quitar la clase "active" de todos los botones del menú
-    tablinks = document.getElementsByClassName("menu-btn");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].classList.remove("active");
-    }
+function filtrarSeccion(filtro) {
+    const secciones = document.querySelectorAll('.seccion-contenido');
+    const divisores = document.querySelectorAll('.divider');
+    const botones = document.querySelectorAll('.menu-btn');
 
-    // 3. Mostrar la pestaña actual y añadir la clase "active" al botón que se clickeó
-    document.getElementById(tabName).classList.add("active-tab");
-    evt.currentTarget.classList.add("active");
+    // --- LÓGICA DE VISIBILIDAD ---
+    secciones.forEach(seccion => {
+        if (filtro === 'todo') {
+            // Si el filtro es "todo", quitamos la clase hidden a todos
+            seccion.classList.remove('hidden');
+        } else {
+            // Si es un filtro específico (ej. 'parcial1')
+            if (seccion.id === filtro) {
+                seccion.classList.remove('hidden');
+            } else {
+                seccion.classList.add('hidden');
+            }
+        }
+    });
+
+    // Controlar los separadores (dividers)
+    // Si estamos en modo "todo", mostramos los divisores. Si no, los ocultamos.
+    divisores.forEach(div => {
+        if (filtro === 'todo') {
+            div.style.display = 'block';
+        } else {
+            div.style.display = 'none';
+        }
+    });
+
+    // --- ACTUALIZAR BOTONES DEL MENÚ ---
+    botones.forEach(btn => {
+        btn.classList.remove('active');
+        // Verificamos si el onclick del botón contiene el filtro actual
+        const onclickTexto = btn.getAttribute('onclick');
+        if (onclickTexto && onclickTexto.includes(`'${filtro}'`)) {
+            btn.classList.add('active');
+        }
+    });
+
+    // --- GUARDAR ESTADO ---
+    localStorage.setItem('filtroActual', filtro);
+    
+    // Scroll arriba suavemente
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
