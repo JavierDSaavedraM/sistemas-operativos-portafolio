@@ -1,10 +1,26 @@
-/* Heredamos variables básicas, redefinimos para el reporte */
+/* =========================================
+   1. VARIABLES Y CONFIGURACIÓN BASE
+   ========================================= */
 :root {
     --bg-report: #1e1e2f;
+    --bg-header: #171725;     /* Nuevo: Fondo para la barra de navegación */
     --text-color: #e0e0e0;
     --accent: #00d4ff;
     --code-bg: #101015;
     --border-color: #333;
+}
+
+/* --- UTILIDAD: OCULTAR SCROLLBARS (Tu petición principal) --- */
+/* Esto oculta la barra gris pero permite seguir deslizando */
+html, body, .app-menu, .table-wrapper {
+    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;  /* IE/Edge */
+}
+
+::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+    width: 0px;
+    background: transparent;
 }
 
 body {
@@ -12,9 +28,88 @@ body {
     color: var(--text-color);
     font-family: 'Segoe UI', Tahoma, sans-serif;
     line-height: 1.6;
+    margin: 0; /* Asegurar que no haya bordes blancos */
 }
 
-/* ESTRUCTURA */
+/* =========================================
+   2. NUEVO HEADER (APP STYLE - NAV SUPERIOR)
+   ========================================= */
+/* Renombrado a .app-header para no chocar con .report-header */
+.app-header {
+    background-color: var(--bg-header);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: sticky; /* Se pega al techo */
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.app-branding {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.mini-avatar {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(45deg, var(--accent), #0059ff);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+.brand-text h3 { font-size: 0.95rem; color: #fff; margin: 0; }
+.brand-text p { font-size: 0.7rem; color: #aaa; margin: 0; }
+
+/* Menú deslizable horizontal */
+.app-menu {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    white-space: nowrap;
+}
+
+.app-btn {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #aaa;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+}
+
+.app-btn:hover { background-color: rgba(255, 255, 255, 0.1); color: #fff; }
+
+.app-btn.active {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15), transparent);
+    color: var(--accent);
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+/* Ajuste Desktop para el Header */
+@media (min-width: 769px) {
+    .app-header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 40px;
+    }
+    .app-menu { padding-bottom: 0; overflow-x: visible; }
+}
+
+/* =========================================
+   3. ESTRUCTURA DEL REPORTE (Tu CSS original)
+   ========================================= */
 .report-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -35,7 +130,7 @@ body {
 .toc-sidebar {
     width: 250px;
     position: sticky;
-    top: 20px;
+    top: 100px; /* Ajustado porque ahora tenemos el header fijo arriba */
     height: fit-content;
     background: rgba(255, 255, 255, 0.03);
     padding: 20px;
@@ -58,7 +153,7 @@ body {
     font-size: 1.05rem;
 }
 
-/* HEADER */
+/* HEADER DEL ARTÍCULO (Título, fecha, etc.) */
 .report-header .entry-type {
     background-color: var(--accent);
     color: #000;
@@ -142,7 +237,7 @@ h3 { color: #fff; margin-top: 25px; }
     font-size: 0.9rem;
 }
 
-/* BLOQUES DE CÓDIGO (Syntax highlight simulado) */
+/* BLOQUES DE CÓDIGO */
 .code-snippet {
     background-color: var(--code-bg);
     padding: 20px;
@@ -180,11 +275,10 @@ h3 { color: #fff; margin-top: 25px; }
 }
 .dl-btn:hover { background-color: #fff; }
 
-/* ESTILOS PARA LA SECCIÓN DE REFERENCIAS */
-
+/* REFERENCIAS */
 .references-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsivo automático */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     margin-top: 25px;
 }
@@ -192,19 +286,19 @@ h3 { color: #fff; margin-top: 25px; }
 .ref-card {
     display: flex;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.03); /* Fondo sutil */
+    background-color: rgba(255, 255, 255, 0.03);
     border: 1px solid #333;
     border-radius: 8px;
     padding: 15px;
     text-decoration: none;
     transition: all 0.3s ease;
-    border-left: 3px solid transparent; /* Borde izquierdo invisible por defecto */
+    border-left: 3px solid transparent;
 }
 
 .ref-card:hover {
     background-color: rgba(255, 255, 255, 0.08);
-    transform: translateY(-3px); /* Efecto de elevación */
-    border-left: 3px solid var(--accent); /* Aparece el color cyan al pasar el mouse */
+    transform: translateY(-3px);
+    border-left: 3px solid var(--accent);
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
@@ -216,10 +310,7 @@ h3 { color: #fff; margin-top: 25px; }
     text-align: center;
 }
 
-.ref-content {
-    flex: 1; /* Ocupa el espacio central */
-}
-
+.ref-content { flex: 1; }
 .ref-type {
     display: block;
     font-size: 0.7rem;
@@ -229,40 +320,19 @@ h3 { color: #fff; margin-top: 25px; }
     margin-bottom: 3px;
     font-weight: bold;
 }
+.ref-content h4 { margin: 0; color: #fff; font-size: 1rem; font-weight: 600; }
+.ref-content p { margin: 5px 0 0 0; color: #aaa; font-size: 0.85rem; line-height: 1.3; }
+.ref-arrow { margin-left: 15px; color: #555; transition: 0.3s; }
+.ref-card:hover .ref-arrow { color: var(--accent); }
 
-.ref-content h4 {
-    margin: 0;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 600;
-}
-
-.ref-content p {
-    margin: 5px 0 0 0;
-    color: #aaa;
-    font-size: 0.85rem;
-    line-height: 1.3;
-}
-
-.ref-arrow {
-    margin-left: 15px;
-    color: #555;
-    transition: 0.3s;
-}
-
-.ref-card:hover .ref-arrow {
-    color: var(--accent); /* La flechita se ilumina al pasar el mouse */
-}
-
-/* --- NAVEGACIÓN ENTRE POSTS --- */
-
+/* NAVEGACIÓN ENTRE POSTS */
 .post-navigation {
     display: flex;
-    justify-content: space-between; /* Uno a la izq, uno a la der */
+    justify-content: space-between;
     align-items: center;
     margin-top: 60px;
     padding-top: 30px;
-    border-top: 1px solid var(--border-color); /* Línea divisoria arriba */
+    border-top: 1px solid var(--border-color);
     gap: 20px;
 }
 
@@ -275,67 +345,28 @@ h3 { color: #fff; margin-top: 25px; }
     border-radius: 8px;
     border: 1px solid #333;
     transition: all 0.3s ease;
-    width: 48%; /* Ocupan casi la mitad cada uno */
+    width: 48%;
     max-width: 300px;
 }
-
-/* Alineación específica para Anterior (Izq) y Siguiente (Der) */
 .nav-btn.prev { text-align: left; }
 .nav-btn.next { text-align: right; justify-content: flex-end; }
 
-/* Efecto Hover */
 .nav-btn:hover {
-    background-color: rgba(0, 212, 255, 0.05); /* Fondo azul muy sutil */
-    border-color: var(--accent); /* Borde Cyan */
-    transform: translateY(-2px); /* Pequeño salto hacia arriba */
+    background-color: rgba(0, 212, 255, 0.05);
+    border-color: var(--accent);
+    transform: translateY(-2px);
 }
-
-/* Iconos de flechas */
-.nav-btn i {
-    font-size: 1.2rem;
-    color: var(--accent);
-    transition: transform 0.3s;
-}
-
+.nav-btn i { font-size: 1.2rem; color: var(--accent); transition: transform 0.3s; }
 .nav-btn.prev i { margin-right: 15px; }
 .nav-btn.next i { margin-left: 15px; }
-
-/* Animación de las flechas al hacer hover */
 .nav-btn.prev:hover i { transform: translateX(-5px); }
 .nav-btn.next:hover i { transform: translateX(5px); }
 
-/* Textos dentro del botón */
-.nav-text {
-    display: flex;
-    flex-direction: column;
-}
+.nav-text { display: flex; flex-direction: column; }
+.nav-text span { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 3px; }
+.nav-text strong { color: #fff; font-size: 0.95rem; }
 
-.nav-text span {
-    font-size: 0.75rem;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 3px;
-}
-
-.nav-text strong {
-    color: #fff;
-    font-size: 0.95rem;
-}
-
-/* RESPONSIVE */
-@media (max-width: 600px) {
-    .post-navigation {
-        flex-direction: column; /* Uno encima del otro en celular */
-        gap: 15px;
-    }
-    .nav-btn {
-        width: 100%; /* Ocupan todo el ancho */
-        max-width: none;
-        justify-content: space-between; /* Separa texto e icono */
-    }
-}
-
+/* EXTRAS: Code inline y Tablas */
 code {
     background-color: rgba(0, 0, 0, 0.3);
     border: 1px solid #444;
@@ -344,7 +375,6 @@ code {
     border-radius: 10px;
 }
 
-/* Contenedor para scroll horizontal en móviles */
 .table-wrapper {
     overflow-x: auto;
     margin-top: 20px;
@@ -355,57 +385,23 @@ code {
 
 .tech-table {
     width: 100%;
-    border-collapse: collapse; /* Elimina espacios entre celdas */
-    min-width: 600px; /* Asegura que no se aplaste demasiado en móvil */
+    border-collapse: collapse;
+    min-width: 600px;
     font-size: 0.95rem;
 }
-
-/* Encabezados */
-.tech-table thead tr {
-    background-color: rgba(255, 255, 255, 0.05);
-    border-bottom: 2px solid var(--accent); /* Línea Cyan abajo del header */
-}
-
-.tech-table th {
-    padding: 15px;
-    color: var(--accent);
-    font-weight: 600;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-}
-
-/* Celdas del cuerpo */
-.tech-table td {
-    padding: 15px;
-    border-bottom: 1px solid #333;
-    color: #ccc;
-    vertical-align: middle;
-}
-
-.tech-table td:nth-child(2){
-    font-style: italic;
-}
-
-/* Efecto cebra (filas alternadas) muy sutil */
-.tech-table tbody tr:nth-of-type(even) {
-    background-color: rgba(255, 255, 255, 0.01);
-}
-
-/* Efecto Hover (Ilumina la fila al pasar el mouse) */
-.tech-table tbody tr:hover {
-    background-color: rgba(0, 212, 255, 0.05); /* Cyan muy transparente */
-}
-
-/* Estilo para los comandos dentro de la tabla (burbujita negra) */
-.tech-table code {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-family: 'Cascadian Mono', monospace;
-}
+.tech-table thead tr { background-color: rgba(255, 255, 255, 0.05); border-bottom: 2px solid var(--accent); }
+.tech-table th { padding: 15px; color: var(--accent); font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+.tech-table td { padding: 15px; border-bottom: 1px solid #333; color: #ccc; vertical-align: middle; }
+.tech-table td:nth-child(2){ font-style: italic; }
+.tech-table tbody tr:nth-of-type(even) { background-color: rgba(255, 255, 255, 0.01); }
+.tech-table tbody tr:hover { background-color: rgba(0, 212, 255, 0.05); }
+.tech-table code { padding: 4px 8px; border-radius: 4px; font-family: 'Cascadian Mono', monospace; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .report-container { flex-direction: column; }
-    .toc-sidebar { width: 100%; position: relative; border-left: none; border-top: 2px solid var(--accent); }
+    .toc-sidebar { width: 100%; position: relative; border-left: none; border-top: 2px solid var(--accent); top: 0; }
+    
+    .post-navigation { flex-direction: column; gap: 15px; }
+    .nav-btn { width: 100%; max-width: none; justify-content: space-between; }
 }

@@ -11,7 +11,38 @@
 </head>
 
 <body>
-   <a href="../../../index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Volver al Portafolio</a>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
 
    <div class="report-container">
 
@@ -151,6 +182,11 @@
 
       </main>
    </div>
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
 </body>
 
 </html>
