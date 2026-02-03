@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #5: Introducción a Bat Scripting</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #4</span>
+            <h1>Introducción Básica a Bat Scripting</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 26 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CMD y Windows</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Familiarizarse con el uso de Batch Scripting en Windows, comprendiendo sus fundamentos básicos y reconociendo los beneficios que ofrece para la automatización de tareas, la optimización de procesos y la mejora de la eficiencia en entornos de trabajo.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Entender el uso de rutas relativas y variables dentro de la cmd.</li>
+               <li><i class="fas fa-check-circle"></i> Comprender las instrucciones básicas del Batch Scripting en Windows y su sintaxis general.</li>
+               <li><i class="fas fa-check-circle"></i> Analizar el uso de la instrucción @echo off y su importancia en la ejecución limpia de scripts.>
+               <li><i class="fas fa-check-circle"></i> Comprender el uso de variables dentro de un script y su ejecucion en un script.</li>
+               <li><i class="fas fa-check-circle"></i> Identificar y aplicar mecanismos de input dentro de un script.</li>
+               <li><i class="fas fa-check-circle"></i> Conocer y utilizar estructuras de control básicas (condicionales y bucles) dentro de los script.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Bat Scripting en Windows es la forma más simple de automatizar tareas repetitivas. Con unos cuantos comandos puedes ejecutar procesos, gestionar archivos y ahorrar tiempo directamente desde la línea de comandos. Pequeño en código, grande en productividad. Existe también BASH scripting, el cual se ejecuta en terminales basades en UNIX (Linux y MAC)</p>
+            <p>Un archivo <code>.BAT</code> es un archivo de programación básica donde se va ejecutando linea por linea el script. No existen a diferencia de programas como C++ o Python, el script no tiene un interprete que revise si la syntaxis es correcta o si existe algunas fallas de lógica. Dentro de un archivo BAT se pueden </p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+
+            <h3>Paso 1. Preparación del entorno.</h3>
+            <p>Dentro de la terminal se utilizaron comandos para conocer la información del sistema: Version de Windows, Nombre del Usuario y Directorio del Usuarios. Para eso se ejectuaron los comandos de <code>ver</code>, <code>echo %USERNAME%</code> y <code>echo %USERPROFILE%</code>. El output se puede apreciar en la Figura 1.</p>
+            <p>Los comandos de <code>echo</code> utiliza las variables de entorno del sistema para poder desplegar esa información.</p>
+            <h3>Paso 2. Creación de estructura de directorios.</h3> 
+            <p>Mediante el comando de md, se creo la carpeta <code>SO_Lab1</code>; Ubicada dentro del Escritorio. Usando igualmente md se pueden crear varias carpetas y subcarpetas en una sola linea. Para eso las subcarpetas deben ser escritas de manera continua con el <code>\</code> separando.</p>
+
+            <p>Como se puede observar en la Figura 2, las carpetas dentro de Hardware son escritas al repetir <code>Hardware\Procesadores</code> <code>Hardware\Memoria</code> y <code>Hardware\Expansion</code>.</p>
+
+            <p>Finalmente se utiliza el comando <code>tree /f</code>. Esto muestra una vista del directorio en forma de arbol y al tener la bandera <code>/f</code> si existieran algunos archivos dentro igualmente se mostrarian.</p>
+
+            <h3>Paso 3. Navegación y exploración</h3>
+            <p>La Figura 3 muestra como dentro de la carpeta de <code>.\Procesadores\</code>, se busco retroceder dos nivele y acceder a la carpeta de <code>Reportes</code>. Al ejectura <code>cd ..\..\</code> le dices al sistema que retroceda dos nivels y entonces te encontrarias en <code>SO_LAB1</code> entonces puedes acceder a reportes.</p>
+            <h3>Paso 4. Documentación del sistema</h3>
+            <p>Finalmente se exploro la combinación de comandos <code>echo</code> y <code>where</code> con el operador de redirección <code>> </code>. Con esto se hacer que en un archivo se guardaran la información del sistem <code>.txt</code>. Es importante recalcar la diferencia entre entre solo usar un operador y dos. El segundo siendo una forma de poder agregar más contenido a un archivo en ves de recrearlo.</p>
+            <h3>Paso 6. Unidad virtual para simplificar acceso</h3>
+            <p> Este ejercicio es similar a <a href="./lab-02.html" style="color:#00d4ff;">Laboratorio 2</a> donde se habla más de las unidades virtuales y su funcionalidad. En la Figura 5 se puede apreciar la creación de una con la letra X: asignada. Igualmente se muestra como se elimina la unidad. Algo importante recalcar aquí también, es que la unidad existe solor por sesión. Cuando la maquina se reincia esta unidad virtual se pierde. </p>
+
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Comando md para crear directorios y tree para mostrarlos.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Comando cd y parametro la navegación en el sistema. </figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img4.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Redirección de salida mediante los comandos echo y >.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/tarea1_img5.png" alt="Ejecución del programa">
+               <figcaption>Fig 5. Creación y uso de las unidades virtuales.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>En esta practica se exploraron comandos como md, tree, echo y el operador direcciónal. Mediante estos comando se familiarizo con como Windows interactua con el sistema.</p>
+            <p>Con esto en mente se pudo llegar a la conclusión que el sistema operativo funciona como un link entre el usuario y los componentes fisicos de la computadora. A través de comandos como dir, cd y md, el sistema operativo ofrece un metodo que facilitan la manipulación de la maquina sin que el usuario interactúe directamente con el hardware. El usuario no tiene que leer directamente  la memoria del dispositivo y traducir 1 y 0 para descubrir que el archivo "hola.txt" contiene un hola.</p> 
+            <p><strong>Trabajo Futuro:</strong> Para este proyecto me gustaría explorar más comandos que vengan incluidos en la terminal de Windows. La documentación ofical ofrece información muy interesante e útil acerca de todas las funciones que viene incluidas.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+
+               <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/md" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-microsoft"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">Microsoft</span>
+                     <h4>Microsoft - Md Guide</h4>
+                     <p>Documentación oficial por parte de Microsoft</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-03.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio 3: Configurar Ubiquitous y sistema Linux.</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-04.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Laboratorio 4: Tasklist y procesos</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
