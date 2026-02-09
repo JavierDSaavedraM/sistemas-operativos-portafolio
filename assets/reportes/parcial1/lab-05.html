@@ -54,6 +54,7 @@
             <li><a href="#desarrollo">Desarrollo Técnico</a></li>
             <li><a href="#evidencia">Evidencia de Ejecución</a></li>
             <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#descargas">Descargar archivos</a></li>
             <li><a href="#referencias">Fuentes y Enlaces</a></li>
          </ul>
       </aside>
@@ -98,67 +99,62 @@
          <section id="desarrollo">
             <h2>3. Desarrollo Técnico</h2>
 
-            <h3>Paso 1. Preparación del entorno.</h3>
-            <p>Dentro de la terminal se utilizaron comandos para conocer la información del sistema: Version de Windows, Nombre del Usuario y Directorio del Usuarios. Para eso se ejectuaron los comandos de <code>ver</code>, <code>echo %USERNAME%</code> y <code>echo %USERPROFILE%</code>. El output se puede apreciar en la Figura 1.</p>
-            <p>Los comandos de <code>echo</code> utiliza las variables de entorno del sistema para poder desplegar esa información.</p>
-            <h3>Paso 2. Creación de estructura de directorios.</h3> 
-            <p>Mediante el comando de md, se creo la carpeta <code>SO_Lab1</code>; Ubicada dentro del Escritorio. Usando igualmente md se pueden crear varias carpetas y subcarpetas en una sola linea. Para eso las subcarpetas deben ser escritas de manera continua con el <code>\</code> separando.</p>
+            <h3>Paso 1. Preparación del entorno y bases en comandos.</h3>
+            <p>Para estas practicas se creo una carpeta llamada <span style="font-style: italic;">ejemplos</span> dentro de <code>%USERPROFILE%\Desktop\</code>. Dentro de esta carpeta se crearan los archivos <code>.bat</code> para su ejecución. Para esta primer script se explora los comandos de <code>@echo off</code> y como hacer algunos comentarios. </p>
 
-            <p>Como se puede observar en la Figura 2, las carpetas dentro de Hardware son escritas al repetir <code>Hardware\Procesadores</code> <code>Hardware\Memoria</code> y <code>Hardware\Expansion</code>.</p>
+            <p>Dentro de un archivo bat se pueden declarar comentario de dos formas posibles: mediante la palabra clave de <code>REM</code> y al colocar dos puntos al inicio de la linea.<code>::</code>. Con esto en mente se creo el script <span style="font-style: italic;"> ejemplos01.bat</span></p>
 
-            <p>Finalmente se utiliza el comando <code>tree /f</code>. Esto muestra una vista del directorio en forma de arbol y al tener la bandera <code>/f</code> si existieran algunos archivos dentro igualmente se mostrarian.</p>
+            <p>Como cada instruccion se ejecuta por linea, este se imprime en la console al tiempo de ejecucion; Sin embargo, se puede desactivar esta opción con <code>@echo off</code>. Además de eso, el comando <code>echo</code> permite al usuario imprimir un string a la pantalla y imprimir una linea vacia.</p>
 
-            <h3>Paso 3. Navegación y exploración</h3>
-            <p>La Figura 3 muestra como dentro de la carpeta de <code>.\Procesadores\</code>, se busco retroceder dos nivele y acceder a la carpeta de <code>Reportes</code>. Al ejectura <code>cd ..\..\</code> le dices al sistema que retroceda dos nivels y entonces te encontrarias en <code>SO_LAB1</code> entonces puedes acceder a reportes.</p>
-            <h3>Paso 4. Documentación del sistema</h3>
-            <p>Finalmente se exploro la combinación de comandos <code>echo</code> y <code>where</code> con el operador de redirección <code>> </code>. Con esto se hacer que en un archivo se guardaran la información del sistem <code>.txt</code>. Es importante recalcar la diferencia entre entre solo usar un operador y dos. El segundo siendo una forma de poder agregar más contenido a un archivo en ves de recrearlo.</p>
-            <h3>Paso 6. Unidad virtual para simplificar acceso</h3>
-            <p> Este ejercicio es similar a <a href="./lab-02.html" style="color:#00d4ff;">Laboratorio 2</a> donde se habla más de las unidades virtuales y su funcionalidad. En la Figura 5 se puede apreciar la creación de una con la letra X: asignada. Igualmente se muestra como se elimina la unidad. Algo importante recalcar aquí también, es que la unidad existe solor por sesión. Cuando la maquina se reincia esta unidad virtual se pierde. </p>
+            <h3>Paso 2. Variables locales y variables del sistema.</h3> 
+            <p>Dentro de un archivo se puede declarar variables con la instruccion <code>set</code>. Para imprimir cualquier variable se debe escribir en conjunto con <code>%%</code>. Estas variables son strings que se pueden utilizar en conjunto con paths para declarar la instalación de aplicaciones o copiar información entre directorio. Por ejemplo se puede utilizar la variable <code>%USERPROFILE%</code> para acceder al root del usuario y de ahí poder acceder a otros directorios. Con esta idea se realiza el programa <tag style="font-style: italic;">ejemplo02.bat</tag> y <tag style="font-style: italic;">ejemplo03.bat</tag>donde mediante el path relativo se crea una carpeta y se le asigna una letra para una unidad virutal.</p>
 
+            <h3>Paso 3. Entrada del usuario</h3>
+            <p>Siguiendo con el comando <code>set</code> se puede utilizar para pedir datos al usuario</p>
+            <p>Si a una instrucción se le coloca <code>set /p</code> y depués una prompt como string.</p>
+
+            <p>De igual manera se puede utilizar el commando <code>pause</code>para hacer una pausa en el codigo y esperar un enter por parte del usuario.</p>
          </section>
 
          <section id="evidencia">
             <h2>4. Evidencia de Ejecución</h2>
 
             <figure class="screenshot-container">
-               <img src="../../img/tarea1_img1.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Comandos para obtener información del sistema.</figcaption>
+               <img src="../../img/ev5_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecucion de bat 02 imprimir el directorio y cd a otro.</figcaption>
             </figure>
             <figure class="screenshot-container">
-               <img src="../../img/tarea1_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 2. Comando md para crear directorios y tree para mostrarlos.</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/tarea1_img3.png" alt="Ejecución del programa">
-               <figcaption>Fig 3. Comando cd y parametro la navegación en el sistema. </figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/tarea1_img4.png" alt="Ejecución del programa">
-               <figcaption>Fig 4. Redirección de salida mediante los comandos echo y >.</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/tarea1_img5.png" alt="Ejecución del programa">
-               <figcaption>Fig 5. Creación y uso de las unidades virtuales.</figcaption>
-            </figure>
+               <img src="../../img/ev5_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Comando que busca el input del usuario.</figcaption>
          </section>
 
          <section id="conclusiones">
             <h2>5. Conclusiones y Trabajo Futuro</h2>
-            <p>En esta practica se exploraron comandos como md, tree, echo y el operador direcciónal. Mediante estos comando se familiarizo con como Windows interactua con el sistema.</p>
-            <p>Con esto en mente se pudo llegar a la conclusión que el sistema operativo funciona como un link entre el usuario y los componentes fisicos de la computadora. A través de comandos como dir, cd y md, el sistema operativo ofrece un metodo que facilitan la manipulación de la maquina sin que el usuario interactúe directamente con el hardware. El usuario no tiene que leer directamente  la memoria del dispositivo y traducir 1 y 0 para descubrir que el archivo "hola.txt" contiene un hola.</p> 
-            <p><strong>Trabajo Futuro:</strong> Para este proyecto me gustaría explorar más comandos que vengan incluidos en la terminal de Windows. La documentación ofical ofrece información muy interesante e útil acerca de todas las funciones que viene incluidas.</p>
+            <p>En esta ejercicio en clase se aprendio de las bases de bat scripting. Una herramienta muy util que permite que los desarrolladores automatizar tareas simples dentro de la cmd. Estos scripts toman los comandos del sistema con un objetivo en especifico. A diferencia de los lenguajes de programación, estos se van ejecutando linea por linea.</p>
+            <p>Con esto en mente, se puede ver mucho la utilidad de las variables del sistema para acceder a rutas relativas, sin importar la ubicación del bat.</p> 
+            <p><strong>Trabajo Futuro:</strong> Falta explorar la alternativa a Batch scripting la cual sería Bash para Linux y MAC. Igualmente explorar más en las funciones de Batch Scripting como puede ser algunas estructuras básicas de control como condicionales y ciclos.</p>
+         </section>
+         <section id="descargas">
+            <h2>6. Archivos Fuente</h2>
+            <div class="download-box">
+               <div class="icon"><i class="fas fa-file-archive"></i></div>
+               <div class="info">
+                  <h4>ejemplos_batch.zip</h4>
+                  <p>Contiene: ejemplo01.bat ejemplo02.bat ejemplo03.bat y ejemplo04.bat</p>
+               </div>
+               <a href="../../zipFiles/ejemplos_batch.zip" class="dl-btn">Descargar .ZIP</a>
+            </div>
          </section>
          <section id="referencias">
-            <h2>6. Bibliografía</h2>
+            <h2>7. Bibliografía</h2>
 
             <div class="references-grid">
-
-               <a href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/md" target="_blank" class="ref-card">
+               <a href="https://www.tutorialspoint.com/batch_script/index.htm" target="_blank" class="ref-card">
                   <div class="ref-icon"><i class="fa-brands fa-microsoft"></i></div>
                   <div class="ref-content">
-                     <span class="ref-type">Microsoft</span>
-                     <h4>Microsoft - Md Guide</h4>
-                     <p>Documentación oficial por parte de Microsoft</p>
+                     <span class="ref-type">Tutorial's point</span>
+                     <h4>Tutorial's Point - Tutorial de Batch</h4>
+                     <p>Documentación que muestra los comandos básicos de batch</p>
                   </div>
                   <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
                </a>
@@ -166,11 +162,11 @@
          </section>
 
          <nav class="post-navigation">
-            <a href="./lab-03.html" class="nav-btn next">
+            <a href="./lab-04.html" class="nav-btn next">
                <i class="fas fa-chevron-left"></i>
                <div class="nav-text">
                   <span>Anterior</span>
-                  <strong>Laboratorio 3: Configurar Ubiquitous y sistema Linux.</strong>
+                  <strong>Laboratorio #4: Información del sistema y tasklist</strong>
                </div>
             </a>
 
@@ -179,7 +175,7 @@
             <a href="./lab-04.html" class="nav-btn next">
                <div class="nav-text">
                   <span>Siguiente</span>
-                  <strong>Laboratorio 4: Tasklist y procesos</strong>
+                  <strong>Laboratorio 6: Continuación Batch Scripting</strong>
                </div>
                <i class="fas fa-chevron-right"></i>
             </a>
