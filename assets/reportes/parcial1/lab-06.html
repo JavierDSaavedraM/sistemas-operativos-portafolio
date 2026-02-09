@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #6: Estructuras de control en Bat Scripting</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#descargas">Descargar archivos</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #6</span>
+            <h1> Estructuras de control en Bat Scripting</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 29 de Enero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CMD y Windows</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Utilizar estructuras de control dentro de Batch Scripting para crear programas simples, conocer las subrutinas y formas de mantener variables locales.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Conocer y utilizar estructuras de control básicas (condicionales y bucles) dentro de los script.</li>
+               <li><i class="fas fa-check-circle"></i> Implementar subrutinas y formas de crear funciones internas.</li>
+               <li><i class="fas fa-check-circle"></i> Explorar funcionalidades extras modificar variables locales en ciclos.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Las estructuras de control en Batch Scripting permiten decidir qué instrucciones se ejecutan y en qué orden dentro de un archivo .bat. Gracias a ellas, un script puede tomar decisiones, repetir acciones y responder a distintas condiciones, en lugar de ejecutar comandos de forma lineal.</p>
+            <p>Entre las más importantes se encuentran <code>IF</code>, que evalúa condiciones; <code>FOR</code>, que permite recorrer archivos, valores o resultados; y <code>GOTO</code> / <code>CALL</code>, que controlan el flujo del programa y el uso de subrutinas. Estas estructuras son la base para crear scripts más organizados, reutilizables y eficientes en el entorno de Windows.</p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Estructuras básicas de control.</h3>
+            <p>Para el primer programa se utilizó la estructura <code>IF</code> al igual que un input del usuario para poder escoger una opción.</p>
+
+            <p>Todas los datos de entradas que sean obtenidos mediante <code>SET</code> se reciben como string, por lo cual para aceptar valores enteros se debe modificar las opciones.</p>
+            <p>La estructura del <code>IF</code> sigue un estandar básico en donde tiene un <code>ELSE IF</code> y <code>ELSE</code> dependiendo del resultado.</p>
+
+            <h3>Paso 2. Estructura de ciclos.</h3> 
+            <p>En BATCH existen varios tipos de ciclos que permiten al programa iterar archivos, números, texto o incluso resultados de comandos.</p>
+
+            <p>Los diferentes ciclos <code>FOR</code>: <code>FOR IN (VALORES)</code>, <code>FOR /F</code> y <code>FOR /L</code>. Cada uno tiene sus diferentes funciones, con la bandera <code>/F</code> el ciclo puede iterar texto dentro de otros archivos y resultados de comandos.</p>
+
+            <p>Si la instrucción <code>FOR</code> se utiliza sin ninguna bandera, esta simplemente itera en una lista de valores dados. Por ejemplo (1 2 3 4), itera los valores dados dentro del paréntesis.</p>
+
+            <p>Para iterar sobre valores númericos se debe utilizar la bandera <code>/l</code> después de una parentesis con tres valores, (valor inicia, incremento, valor final).</p>
+
+            <p>Algo más importante a recalcar es que a diferencia del uso de las variables normales, en los ciclos se utiliza <code>%%f</code> dos signos de porcentaje para representar la variable iteradora.</p>
+
+            <p>En el <span style="font-style: italic;">ejemplo06</span> se representa un loop normal y un loop utilizando valores númericos.</p>
+
+            <h3>Paso 3. Estructuras GOTO</h3>
+            <p>Dentro de los archivos .bat se pueden crear subrutinas que permiten controlar el flujo del script. Para eso primero se deben crear etiquetas o labels en inglés que permiten identidicar un subconjunto de instrucciones.</p>
+
+            <p>Dentro se encuentran dos comandos <code>GOTO</code> y <code>CALL</code>. Ambos cumplen una función similar pero con diferentes propósitos</p>
+
+            <p>El comando <code>GOTO</code> permite que el script salte directamente a una subrutina o etiqueta específica, pero no regresa al punto desde el que fue llamado. Por esta razón, dentro de la subrutina se debe redirigir explícitamente el flujo del programa, ya sea hacia el final del script o hacia otra etiqueta, para evitar ejecuciones inesperadas.</p>
+
+            <p>En cambio, <code>CALL</code> permite ejecutar una subrutina de instrucciones y, una vez finalizada, regresar automáticamente al punto desde donde fue invocada, continuando con la ejecución normal del script.</p>
+
+            <p>Para probar estos conceptos se realizaron 3 programas <span style="font-style: italic;"> ejmplos07~ejemplo09</span>. En el primer programa se exploró el manejo básico de <code>CALL</code>, donde siguiendo el flujo del script se hizo un salto a una eqtiqueta para luego regresar y continuar la ejecución normal. Una ves que se termino el programa se hizo un salto al final de archivo para finalizar su ejecución.</p>
+
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img9.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecución de ejemplo05 ejemplo de estructura IF</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img7.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Ejecución de ejemplo06 con ejemplo de for loop de valores.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img8.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. ejemplo07.bat con subrutinas en CALL.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img6.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Ejecucion de bat 08 opcion 1.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img5.png" alt="Ejecución del programa">
+               <figcaption>Fig 5. Ejecucion de bat 08 opcion 2.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img4.png" alt="Ejecución del programa">
+               <figcaption>Fig 6. Ejecucion de bat 08 opcion 3.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 7. Ejecución bat 09 opcion menu 1.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 8. Ejecución bat 09 opcion menu 2.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev6_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 9. Ejecución bat 09 opcion menu 4.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Complementando a las bases de Batch scripting, se puede observar lo útil que es el bash scripting. Aunque sea un lenguaje bastante simple y limitado este ofrece las herramientas suficientes para automatizar lo necesario. Se pueden crear menus, iterar por los archivos y más importante hacer subrutinas de código que se pueden reutilizar.</p>
+            <p><strong>Trabajo Futuro:</strong> Explorar más el lenguaje de bash scripting y además de explorara los diferentes extensiones que se le pueden poner al script.</p>
+         </section>
+         <section id="descargas">
+            <h2>6. Archivos Fuente</h2>
+            <div class="download-box">
+               <div class="icon"><i class="fas fa-file-archive"></i></div>
+               <div class="info">
+                  <h4>ejemplos_batch2.zip</h4>
+                  <p>Contiene: ejemplo05.bat ejemplo06.bat ejemplo07.bat, ejemplo08.bat y ejemplo09.bat</p>
+               </div>
+               <a href="../../zipFiles/ejemplos_batch2.zip" class="dl-btn">Descargar .ZIP</a>
+            </div>
+         </section>
+         <section id="referencias">
+            <h2>7. Bibliografía</h2>
+
+            <div class="references-grid">
+               <a href="https://www.tutorialspoint.com/batch_script/index.htm" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-microsoft"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">Tutorial's point</span>
+                     <h4>Tutorial's Point - Tutorial de Batch</h4>
+                     <p>Documentación que muestra los comandos básicos de batch</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-04.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #5: Introducción a Bat Scripting</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-04.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>Laboratorio 6: Continuación Batch Scripting</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
