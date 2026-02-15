@@ -1,0 +1,302 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #7: Interrupciones y BASH Scripting en Linux</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #7</span>
+            <h1> Interrupciones y BASH scripting</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 5 de Febrero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Linux y Windows</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Conocer los como funcionan las interrupciones en Linux y como interactuar con los procesos.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Identificar procesos corriendo en Linux</li>
+               <li><i class="fas fa-check-circle"></i> Crear un script en batch que interactue con CTRL-C</li>
+               <li><i class="fas fa-check-circle"></i> Crear un script en BASH Linux básico</li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa en BASH que interactue con las señales</li>
+               <li><i class="fas fa-check-circle"></i> Crear un progama en C que haga lo mismo que el BASH</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Interrupciones, traps y excepciones son mecanismos utilizados para manejar eventos inesperados, errores o solicitudes del sistema.</p>
+            <h3>Interrupciones y Procesos</h3>
+            <p>Una interrupcion es una señal generada por el sistema generada cuando un proceso necesita la atencion del procesador. Este mecanismo hace que se detenga temporalmente la ejecucion normal de un proceso y soliciya al CPU salte a una rutina de manejo especifica. Las señales generadas por el hardware o el software enviandos dos códigos númericos que representan el estado de cualquier comando ejecutado.</p>
+            <ul>
+               <li> 0: Representa la ejecución correcta del programa</li>
+               <li> 1 >= : Cualquier numero mayor a 1 representa un error dentro del sistema</li>
+            </ul>
+            <p>Tanto en windows como en Linux existe la señal <code>CTRL-C</code> la cual manda una señal <code>SIGINT</code> en Linux (<code>kill 2</code>) y una señal <code>CTRL_C_EVENT</code> en Windows el cual interrumpe el proceso actual. </p>
+
+            <p> Dentro de un sistema operativo UNIX un proceso es cualquier aplicacion o servicio que se inicie. Un proceso puede tener diferentes estados: </p>
+
+            <ul>
+               <li>Running - R : Un proceso corriendo</li>
+               <li>Sleeping - S/D (Interrumpible y no Interrumpuble): Un proceso que esta esperando algo</li>
+               <li>Stopped - T: Un proceso que esta detenido o pausado <code>CRTL-Z</code> ; <code>kill -19</code> <code>SIGSTOP</code></li>
+               <li>Zombie - Z: Un proceso terminado que el sistema no ha eliminado al 100%</li>
+               <li>Dead - X: Un proceso que el termino y se elimino del sistema</li>
+            </ul>
+            <h3>Ejecucion de procesos</h3>
+            <p>Existe dos formas en las que un proceso puede ejecutarse: foreground y background</p>
+
+            <p>Mientras que un proceso corriendo background corre independientemente de la terminal siendo un proceso que se ejecuta en silencio en el fondo. Al agregar un <code>&</code> al final de un comando este se ejecuta directamente en el fondo.</p>
+            
+            <p>Se puede iniciar un proceso, luego apretar <code>CRTL-Z</code> para pausar su ejecucion y luego utilizando el comando <code>bg [job]</code> para hacerlo background o <code>fg [job]</code> para traerlo al foreground.</p>
+
+            <p>El comando <code>kill</code> se encarga de mandar las diferentes señales e interrupciones al programa. Al ejecutar el comando <code>kill -l</code> se muestran todkas las señales que se pueden mandar. Por default el sistema manda la señal 15 o <code>SIGTERM</code> la cual le pide al proceso de manera habla que se termine de ejecutar. En cambio si le mandamos la señal 9 <code>SIGKILL</code> obliga a que le programa se termine y muera.</p>
+            
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Crear un script en batch que interactue con CTRL-C.</h3>
+            <p>Dentro de windows se puede utilzar los visto en BATCH para hacer un script que finalice cuando se reciba el evento de CTRL-C</p>
+            <div class="code-snippet">
+               <pre>
+<span class="keyword">@echo</span> off
+<span class="keyword">REM</span> uso de Interrupciones tipo señal de consola CTRL-C / CTRL-break
+<span class="keyword">set</span> local EnableExtension EnableDelayedExpansion
+
+<span class="keyword">echo</span> Iniciando ciclo. Presiona CTRL-C para interrumpir proceso
+<span class="keyword">echo</span>.
+
+:ciclo
+<span class="keyword">echo</span> [%date% %time% trabajando.....]
+timeout /t 2 /nobreak > nul
+goto ciclo
+</pre>
+            </div>
+            <h3>Paso 2. Identificar procesos corriendo en Linux.</h3>
+            <p>Dentro de linux se puede utilizar el comando <code>ps</code> para identificar los procesos actuales.Se puede poner las banderas de <code>ps -aux</code> o <code>ps -ef </code> para que se imprima todos los procesos actuales, ya sea por memoria o jerarquia. Como se puede ver en la Figura 1.</p>
+
+            <h3>Paso 3. Crear un script en BASH Linux básico.</h3>
+
+            <p>En Linux se utiliza el lenguaje de scripting de BASH. Es muy similar al de windows en varios aspectos.</p>
+            <p>Dentro del siguiente script se imprime un simple mensaje para imprimir el directorio y los procesos actuales del usuario</p>
+
+            <div class="code-snippet">
+               <pre>
+<span class="comment">#!/usr/bin/bash</span>
+<span class="keyword">clear</span>
+<span class="keyword">echo</span> <span class="string">"Bienvenido a la programacion Bash"</span>
+<span class="keyword">echo</span>
+<span class="keyword">ls</span> -l
+<span class="keyword">ps</span> -ef | grep javier
+whoami
+</pre>
+            </div>
+            <h3>Paso 4.  Crear un programa en BASH que interactue con las señales.</h3>
+            <p>Con el siguiente script se puede obtener</p>
+            <div class="code-snippet">
+               <pre>
+<span class="comment">#!/usr/bin/bash</span>
+<span class="keyword">echo</span> <span class="string">"Iniciando ciclo.Presiona CTRL-C para interrumpir proceso"</span> 
+<span class="keyword">echo</span>
+ 
+
+<span class="keyword">while</span> true; do <span class="keyword">echo</span> <span class="string">"[$(date)] trabajando ....."</span>
+   <span class="keyword">sleep</span> 2
+<span class="keyword">done</span>
+
+</pre>
+            </div>
+
+            <h3>Paso 5. Crear un progama en C que haga lo mismo que el BASH.</h3>
+            <p>Finalmente, como BASH y BATCH no son lenguajes de programacion, tiene ciertos limites. Por eso se utiliza el lenguaje de programación en C para interactuar con el sistema operativo.</p>
+            <p>El siguiente programa se encarga de recibir una señal de interrupcion y manejar de manera especifica la forma en que se termina el programa.</p>
+<div class="code-snippet"> <pre> <code>
+<span class="keyword">#include</span> <span class="string">"stdio.h"</span>
+<span class="keyword">#include</span> <span class="string">"signal.h"</span>
+<span class="keyword">#include</span> <span class="string">"unistd.h"</span>
+<span class="keyword">#include</span> <span class="string">"stdlib.h"</span>
+<span class="keyword">#include</span> <span class="string">"time.h"</span>
+
+<span class="keyword">void</span> manager(<span class="keyword">int</span> sig){
+    printf(<span class="string">"\n\n[INTERRUPCION] senial recibida (CTRL-C)"</span>);
+    printf(<span class="string">"Liberando recursos...."</span>);
+    printf(<span class="string">"Terminando proceso en tiempo y forma\n"</span>);
+    exit(0); 
+}
+
+<span class="keyword">int</span> main(){
+    signal(SIGINT, manager);
+    printf(<span class="string">"Iniciando ciclo, Presiona CTRL-C para interrumpir"</span>);
+    
+    <span class="keyword">while</span>(1){
+        time_t now = time(NULL);
+        printf(<span class="string">"[%s] trabajando..\n"</span>, ctime(&amp;now)); 
+        sleep(2);
+    }
+    <span class="keyword">return</span> 0;
+}</code></pre>
+</div>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev7_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecución de archivo BATCH en Windows</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev7_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Ejecución de BASH en Linux.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev7_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3.Ejecucion de BASH en Linux.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev7_img4.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Ejecucion de bat 08 opcion 1.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Dentro de ese clase se aprendio de las interrupciones y las diferentes formas con las que se puede iteractuar con los prosesos en Linux. Existen varios comandos que permiten manejar interrupciones, detener un programa o pausar su ejecución.</p>
+            <p><strong>Trabajo Futuro:</strong> Explorar más el lenguaje de programacion de C, ver los diferentes comandos que pueden interactuar con los procesos.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+               <a href="https://youtu.be/83M5-NPDeWs?si=LA0qr6-e9RebM8xp" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-brands fa-youtube"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">YouTube</span>
+                     <h4>Envío y manejo de señales en C (kill, signal, sigaction) - Jacob Sorber</h4>
+                     <p>Video de YouTube que habla de las diferentes señales que sirven para interactuar con los procesos.</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+            </div>
+            <div class="references-grid">
+               <a href="https://www.geeksforgeeks.org/operating-systems/interrupts/" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-solid fa-book"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">GeeksforGeeks</span>
+                     <h4>GeeksforGeeks - Interrupt In Operating System</h4>
+                     <p>Articulo que habla de las diferentes interrupciones que hay en el sistema operativo de Linux.</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+            </div>
+            <div class="references-grid">
+               <a href="https://www.geeksforgeeks.org/linux-unix/processes-in-linuxunix/" target="_blank" class="ref-card">
+                  <div class="ref-icon"><i class="fa-solid fa-book"></i></div>
+                  <div class="ref-content">
+                     <span class="ref-type">GeeksforGeeks</span>
+                     <h4>GeeksforGeeks - Processes in Linux</h4>
+                     <p>Articulo que habla de los procesos en Linux, como detenerlos, pausarlos y reanudar su ejecución</p>
+                  </div>
+                  <div class="ref-arrow"><i class="fas fa-external-link-alt"></i></div>
+               </a>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-06.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #6: Estructuras de control en Bat Scripting</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-08.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong></strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+
+         </nav>
+
+      </main>
+   </div>
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>

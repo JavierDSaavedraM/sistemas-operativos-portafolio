@@ -152,6 +152,10 @@ body {
     line-height: 1.8;
     font-size: 1.05rem;
 }
+.report-content ul {
+    padding-left: 20px;
+    margin-bottom: 24px;
+}
 
 /* HEADER DEL ARTÍCULO (Título, fecha, etc.) */
 .report-header .entry-type {
@@ -247,6 +251,11 @@ h3 { color: #fff; margin-top: 25px; }
     font-family: 'Courier New', monospace;
     margin-bottom: 20px;
 }
+
+.code-snippet code {
+    border: none;
+}
+
 .keyword { color: #ff79c6; }
 .comment { color: #6272a4; }
 .string { color: #f1fa8c; }
