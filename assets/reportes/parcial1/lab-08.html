@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #8: Instalacion de WebServer en Fedora</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #8</span>
+            <h1>Instalacion de WebServer en Fedora</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 9 de Febrero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Linux y web-server</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Instalar el servidor Apache en la maquina virtual para crear un web-server</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Revisar el comandos para revisar el espacio disponible</li>
+               <li><i class="fas fa-check-circle"></i> Instalar el servicio de HTTP (Apache)</li>
+               <li><i class="fas fa-check-circle"></i> Inicializar el servicio</li>
+               <li><i class="fas fa-check-circle"></i> Hacer que el servicio se inicie automaticamente al iniciar la maquina.</li>
+               <li><i class="fas fa-check-circle"></i> Abrir el puerto 80 para que las personas puedan conectarse al servidor</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <p>Apache es un servidor web que permite que una computadora entregue páginas web a los navegadores a través de internet. Cuando alguien escribe una dirección web, Apache recibe la solicitud y responde enviando el contenido del sitio, como textos, imágenes o archivos.</p>
+            <h3>Protocolo HTTPD</h3>
+            <p>El protocolo HTTP (HyperText Transfer Protocol) es el conjunto de reglas que permite la comunicación entre un navegador web y un servidor web. Gracias a HTTP, un usuario puede solicitar una página web y recibirla como respuesta junto con sus recursos, como imágenes, estilos o scripts.</p>
+
+            <p>HTTP funciona sobre un sistema de puertos, que son como “puertas de entrada” usadas para identificar el tipo de servicio que se está ofreciendo en un servidor:</p>
+            <ul>
+               <li>Puerto 80: Puerto estándar de HTTP (sin cifrado)</li>
+               <li>Puerto 443: Puerto estándar de HTTPS (HTTP seguro con cifrado SSL/TLS)</li>
+            </ul>
+            <h3>Servicio en Linux</h3>
+            <p>En Linux, los servicios son programas que se ejecutan en segundo plano (también llamados daemons) y que cumplen una función específica para el sistema o para los usuarios.</p>
+
+            <p>Para poder ver los servicios que corren actualmente en el sistema se utiliza el comando <code>sudo systemctl list-units --type=service --state=running </code></p>
+
+            <h3>Comandos du y df</h3>
+            <p>Saber administrar los recursos de un servicio es indispensable para los adminsitradores. Existen varias herramientas que permiten el entender el uso actual del disco duro del servidor; como podrian ser los comandos <code>du</code> y <code>df</code></p>
+
+            <p>El comando <code>du</code> (Disk Usage) muestra cuánto espacio ocupan los archivos y carpetas, lo que lo hace ideal para identificar qué directorios están consumiendo más espacio. Es especialmente útil cuando el disco empieza a llenarse y necesitas encontrar el origen del problema.</p>
+
+            <p>Por otro lado, <code>df</code> (Disk Free) muestra el estado general del disco, indicando cuánto espacio total hay, cuánto está usado y cuánto queda disponible en cada partición. Este comando es clave para saber si el sistema tiene espacio suficiente para seguir funcionando correctamente.</p>
+
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Revisar cuando espacio tiene el sistema</h3>
+            <p>Para revisar el estado actual del sistema se puede utilizar el comando <code>df -h</code> como se puede observar en la Figura 1</p>
+            <h3>Paso 2. Instalar el servicio de HTTP (Apache)</h3>
+            <p>Para instalar el servicio se de hacer uso del gestor de paquetes <code>dnf</code>, el cual se encargar de descargar el servidor de manera adecuada.</p>
+
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">javier@Fedora:~/</span>
+               </div>
+               <div class="terminal-body">
+                  <p class="cmd">sudo dnf install httpd -y</p>
+               </div>
+            </div>
+
+            <h3>Paso 4. Inicializar el servicio</h3>
+            <p>Una ves instalado este se debe inicializar con el comando <code>sudo systemctl start httpd.service</code>. Para poder observar el status del servicio se debe utilizar el comando <code>sudo systemctl status httpd.service</code></p>
+            <h3>Paso 5. Hacer que el servicio se inicie automaticamente al iniciar la maquina</h3>
+            <p>Para hacer que el servicio se inicialice automaticamente cuando la maquina se encienda se debe utilizar el comando <code>sudo systemctl enable httpd.service</code></p>
+            <p>Esto hace que se crea un enlace simbolico entre la ubicacion del ejecutable y una carpeta especial que el sistema lee automaticamente al iniciar el servicio.</p>
+            <h3>Paso 6. Abrir el puerto 80 para que las personas puedan conectarse al servidor</h3>
+            <p>Para abir el puerto se debe interactuar con el firewall, el cual se encarga de controlar el trafico de red de la maquina. Para esto se le debe decir que puede aceptar cualquier trafico de red que se intente conectar con el puerto 80.</p>
+
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">javier@Fedora:~/</span>
+               </div>
+               <div class="terminal-body">
+                  <p class="cmd">sudo firewall-cmd --add-port=80/tcp --permanent</p>
+               </div>
+            </div>
+
+            <p>Esto abre el servicio de tal manera que incluso la maquina host pueda acceder al servicio. En la Figura 3 se puede observar los puertos abiertos de la maquina con <code>firewall-cmd --list-ports</code> y en las Figuras 4 y Figura 5 se puede ver la pagina que muestra que el servidor esta funcionando</p>
+
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecución de comando df -h para ver el espacio total</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Ejecucion de comando du -h para ver la distribucion del home directori</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img3.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Revisar el status del servicio httpd</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img4.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Revisar los puertos abiertos del sistema</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img5.png" alt="Ejecución del programa">
+               <figcaption>Fig 5. Comprobacion del webserver en Fedora</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev8_img6.png" alt="Ejecución del programa">
+               <figcaption>Fig 6. Comprobacion de la conexion del webserver en la maquina HOST</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Dentro de esta sesion se instalo un servidor web en la maquina virtual. Y se configuro para que incluso la maquina host pueda acceder.</p>
+            <p><strong>Trabajo Futuro:</strong> Investigar como funcionan las diferentes zonas/perfiles en linux. Que otras alternativas a servidores existe y de que otras formas se puede interactuar con el firewall. Además ver como funciona los servidores web en Windows.</p>
+         </section>
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+
+            <div class="references-grid">
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-07.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #7: Interrupciones y BASH Scripting en Linux</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="./lab-09.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong></strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+         </nav>
+
+      </main>
+   </div>
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
