@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #10: Manejo de Señales en Linux</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #10</span>
+            <h1>Manejo de Señales en Linux mediante Programación en C</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 16 de Febrero, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Señales e interrupciones en Linux</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Comprender el manejo de señales en sistemas Linux mediante la implementación de un programa en lenguaje C.</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Identificar qué son las señales y cómo funcionan en Linux.</li>
+               <li><i class="fas fa-check-circle"></i> Implementar manejadores de señales usando <code>sigaction</code>.</li>
+               <li><i class="fas fa-check-circle"></i> Ejecutar comandos del sistema en respuesta a señales.</li>
+               <li><i class="fas fa-check-circle"></i> Registrar eventos de señales con marcas de tiempo.</li>
+               <li><i class="fas fa-check-circle"></i> Finalizar un proceso de forma controlada usando señales.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+
+            <p>
+               En Linux, las señales son un mecanismo de comunicación asíncrona entre el kernel y los procesos.
+               Estas permiten notificar a un proceso sobre eventos como interrupciones del usuario, errores o
+               solicitudes de terminación.
+            </p>
+
+            <h3>Señales en Linux</h3>
+            <p>
+               Cada señal tiene un identificador específico y puede ser manejada por el programa para definir
+               un comportamiento personalizado. Algunas señales comunes son:
+            </p>
+
+            <ul>
+               <li><strong>SIGINT:</strong> Interrupción enviada al presionar Ctrl + C.</li>
+               <li><strong>SIGTERM:</strong> Solicitud de terminación del proceso.</li>
+               <li><strong>SIGALRM:</strong> Señal generada por temporizadores.</li>
+               <li><strong>SIGUSR1 / SIGUSR2:</strong> Señales definidas por el usuario.</li>
+               <li><strong>SIGCHLD:</strong> Notifica la finalización de un proceso hijo.</li>
+            </ul>
+
+            <h3>Manejo de Señales en C</h3>
+            <p>
+               En lenguaje C, el manejo de señales se puede realizar mediante la función
+               <code>sigaction()</code>, la cual permite asociar un manejador a una señal específica y
+               definir banderas que controlan su comportamiento.
+            </p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+
+            <h3>Estructura General del Programa</h3>
+            <p>
+               El programa inicia mostrando su PID para permitir el envío de señales desde otra terminal.
+               Posteriormente, configura los manejadores de señales y entra en un ciclo de espera utilizando
+               la función <code>pause()</code>.
+            </p>
+
+            <h3>Registro de Eventos</h3>
+            <p>
+               Cada vez que se recibe una señal, el programa registra el evento junto con la fecha y hora
+               exacta utilizando funciones de la biblioteca <code>time.h</code>.
+            </p>
+
+            <h3>Ejecución de Comandos del Sistema</h3>
+            <p>
+               Dependiendo de la señal recibida, el programa crea un proceso hijo con <code>fork()</code>
+               y ejecuta comandos del sistema como <code>date</code>, <code>ls</code>, <code>uptime</code>
+               o herramientas de diagnóstico del sistema.
+            </p>
+
+            <h3>Manejador de Señales</h3>
+            <p>
+               El manejador central evalúa la señal recibida y ejecuta la acción correspondiente:
+            </p>
+
+            <ul>
+               <li>SIGINT: Muestra la fecha actual.</li>
+               <li>SIGTERM: Lista los archivos del directorio.</li>
+               <li>SIGALRM: Muestra el tiempo activo del sistema.</li>
+               <li>SIGUSR1: Ejecuta un diagnóstico de procesos y memoria.</li>
+               <li>SIGUSR2: Finaliza el programa de forma controlada.</li>
+            </ul>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <p>
+               Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
+            </p>
+            <figure class="screenshot-container">
+               <img src="../../img/ev10_img1.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Ejecución de programa con segunda terminal mandando señales</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev10_img2.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Ejecución del programa con señales SIGTERM y SIGUSR2</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>
+               En este laboratorio se logró comprender el funcionamiento de las señales en Linux y su manejo
+               mediante programación en C. El uso de <code>sigaction</code> permitió implementar un control
+               preciso del comportamiento del programa ante distintos eventos.
+            </p>
+            <p>
+               <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
+               comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
+            </p>
+         </section>
+
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+            <div class="references-grid">
+               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-09.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #9: Manejo de Señales en Bash</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="../../../index.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong></strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+         </nav>
+
+      </main>
+   </div>
+
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>

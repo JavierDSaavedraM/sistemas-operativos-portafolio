@@ -4,7 +4,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Laboratorio en clase #9: Manejo de Señales en Linux</title>
+   <title>Laboratorio en clase #9: Manejo de Señales en Bash</title>
    <link rel="stylesheet" href="../../../css/style.css">
    <link rel="stylesheet" href="../../../css/reporte_style.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -62,11 +62,11 @@
       <main class="report-content">
          <header id="intro" class="report-header">
             <span class="entry-type">Laboratorio en Clase #9</span>
-            <h1>Manejo de Señales en Linux mediante Programación en C</h1>
+            <h1>Manejo de Señales en Bash</h1>
             <div class="meta-data">
-               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 20 de Febrero, 2026</p>
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 12 de Febrero, 2026</p>
                <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
-               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Señales e interrupciones en Linux</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Señales e interrupciones en Bash</p>
             </div>
          </header>
 
@@ -76,124 +76,91 @@
             <h2>1. Objetivos</h2>
             <div class="objective-box">
                <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
-               <p>Comprender el manejo de señales en sistemas Linux mediante la implementación de un programa en lenguaje C.</p>
+               <p>Comprender el manejo de señales en Bash y la respuesta de un script ante eventos externos.</p>
             </div>
 
             <h3>Objetivos Específicos</h3>
             <ul class="check-list">
-               <li><i class="fas fa-check-circle"></i> Identificar qué son las señales y cómo funcionan en Linux.</li>
-               <li><i class="fas fa-check-circle"></i> Implementar manejadores de señales usando <code>sigaction</code>.</li>
-               <li><i class="fas fa-check-circle"></i> Ejecutar comandos del sistema en respuesta a señales.</li>
-               <li><i class="fas fa-check-circle"></i> Registrar eventos de señales con marcas de tiempo.</li>
-               <li><i class="fas fa-check-circle"></i> Finalizar un proceso de forma controlada usando señales.</li>
+               <li><i class="fas fa-check-circle"></i> Implementar funciones que respondan a señales específicas.</li>
+               <li><i class="fas fa-check-circle"></i> Utilizar <code>trap</code> para capturar señales como SIGINT y SIGTERM.</li>
+               <li><i class="fas fa-check-circle"></i> Mostrar información del sistema al recibir señales.</li>
+               <li><i class="fas fa-check-circle"></i> Mantener un script en ejecución esperando señales de manera controlada.</li>
             </ul>
          </section>
 
          <section id="marco">
             <h2>2. Investigación y Marco Conceptual</h2>
 
+            <h3>Señales en Bash</h3>
             <p>
-               En Linux, las señales son un mecanismo de comunicación asíncrona entre el kernel y los procesos.
-               Estas permiten notificar a un proceso sobre eventos como interrupciones del usuario, errores o
-               solicitudes de terminación.
+               Las señales en Bash permiten que un script reciba notificaciones de eventos del sistema o del usuario.
+               Se pueden usar para interrumpir la ejecución, finalizar procesos o ejecutar funciones específicas.
             </p>
 
-            <h3>Señales en Linux</h3>
+            <h3>Trap</h3>
             <p>
-               Cada señal tiene un identificador específico y puede ser manejada por el programa para definir
-               un comportamiento personalizado. Algunas señales comunes son:
+               La función <code>trap</code> permite asociar funciones del script a señales específicas. Cuando el
+               proceso recibe la señal correspondiente, se ejecuta automáticamente la función definida.
             </p>
 
+            <h3>Señales Usadas</h3>
             <ul>
-               <li><strong>SIGINT:</strong> Interrupción enviada al presionar Ctrl + C.</li>
-               <li><strong>SIGTERM:</strong> Solicitud de terminación del proceso.</li>
-               <li><strong>SIGALRM:</strong> Señal generada por temporizadores.</li>
-               <li><strong>SIGUSR1 / SIGUSR2:</strong> Señales definidas por el usuario.</li>
-               <li><strong>SIGCHLD:</strong> Notifica la finalización de un proceso hijo.</li>
+               <li><strong>SIGINT:</strong> Señal enviada al presionar Ctrl+C. En este script, muestra la fecha actual.</li>
+               <li><strong>SIGTERM:</strong> Señal de terminación. El script muestra los procesos en ejecución con <code>ps</code>.</li>
             </ul>
-
-            <h3>Manejo de Señales en C</h3>
-            <p>
-               En lenguaje C, el manejo de señales se puede realizar mediante la función
-               <code>sigaction()</code>, la cual permite asociar un manejador a una señal específica y
-               definir banderas que controlan su comportamiento.
-            </p>
          </section>
 
          <section id="desarrollo">
             <h2>3. Desarrollo Técnico</h2>
 
-            <h3>Estructura General del Programa</h3>
+            <h3>Estructura del Script</h3>
             <p>
-               El programa inicia mostrando su PID para permitir el envío de señales desde otra terminal.
-               Posteriormente, configura los manejadores de señales y entra en un ciclo de espera utilizando
-               la función <code>pause()</code>.
+               El script comienza declarando dos funciones: <code>sigint_handler</code> y <code>sigterm_handler</code>.
+               Luego, estas funciones se asocian a las señales SIGINT y SIGTERM mediante <code>trap</code>.
             </p>
 
-            <h3>Registro de Eventos</h3>
+            <h3>Visualización del PID</h3>
             <p>
-               Cada vez que se recibe una señal, el programa registra el evento junto con la fecha y hora
-               exacta utilizando funciones de la biblioteca <code>time.h</code>.
+               Se imprime el PID del script con <code>$$</code>, lo que permite enviar señales externas usando
+               <code>kill -SIGINT &lt;PID&gt;</code> o <code>kill -SIGTERM &lt;PID&gt;</code>.
             </p>
 
-            <h3>Ejecución de Comandos del Sistema</h3>
+            <h3>Bucle de Espera</h3>
             <p>
-               Dependiendo de la señal recibida, el programa crea un proceso hijo con <code>fork()</code>
-               y ejecuta comandos del sistema como <code>date</code>, <code>ls</code>, <code>uptime</code>
-               o herramientas de diagnóstico del sistema.
+               El script entra en un bucle infinito con <code>while true; do sleep 1; done</code> para mantenerse
+               activo esperando la llegada de señales.
             </p>
-
-            <h3>Manejador de Señales</h3>
-            <p>
-               El manejador central evalúa la señal recibida y ejecuta la acción correspondiente:
-            </p>
-
-            <ul>
-               <li>SIGINT: Muestra la fecha actual.</li>
-               <li>SIGTERM: Lista los archivos del directorio.</li>
-               <li>SIGALRM: Muestra el tiempo activo del sistema.</li>
-               <li>SIGUSR1: Ejecuta un diagnóstico de procesos y memoria.</li>
-               <li>SIGUSR2: Finaliza el programa de forma controlada.</li>
-            </ul>
          </section>
 
          <section id="evidencia">
             <h2>4. Evidencia de Ejecución</h2>
             <p>
-               Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
+               Durante la ejecución, al enviar <code>SIGINT</code> con <code>kill -SIGINT &lt;PID&gt;</code>,
+               el script respondió mostrando "SIGINT recibido (Ctrl+C)" y la fecha actual. Al enviar <code>SIGTERM</code>,
+               se mostró "SIGTERM recibido" y la lista de procesos activos con <code>ps</code>.
             </p>
-            <figure class="screenshot-container">
-               <img src="../../img/ev8_img1.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Ejecución de comando df -h para ver el espacio total</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/ev8_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 2. Ejecucion de comando du -h para ver la distribucion del home directori</figcaption>
-            </figure>
          </section>
 
          <section id="conclusiones">
             <h2>5. Conclusiones y Trabajo Futuro</h2>
             <p>
-               En este laboratorio se logró comprender el funcionamiento de las señales en Linux y su manejo
-               mediante programación en C. El uso de <code>sigaction</code> permitió implementar un control
-               preciso del comportamiento del programa ante distintos eventos.
+               El laboratorio permitió entender cómo Bash puede reaccionar ante señales del sistema y del usuario.
+               <code>trap</code> es una herramienta poderosa para manejar interrupciones y acciones personalizadas en scripts.
             </p>
             <p>
-               <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
-               comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
+               <strong>Trabajo Futuro:</strong> Explorar otras señales como SIGALRM, SIGUSR1, SIGUSR2 y crear scripts que realicen tareas automatizadas al recibir dichas señales.
             </p>
          </section>
 
          <section id="referencias">
             <h2>6. Bibliografía</h2>
             <div class="references-grid">
-               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+               <p style="font-style: italic;">Reporte generado con las notas y ayuda de la agente ChatGPT</p>
             </div>
          </section>
 
          <nav class="post-navigation">
-            <a href="./lab-07.html" class="nav-btn next">
+            <a href="./lab-08.html" class="nav-btn next">
                <i class="fas fa-chevron-left"></i>
                <div class="nav-text">
                   <span>Anterior</span>
@@ -203,10 +170,10 @@
 
             <div class="nav-spacer"></div>
 
-            <a href="./lab-09.html" class="nav-btn next">
+            <a href="./lab-10.html" class="nav-btn next">
                <div class="nav-text">
                   <span>Siguiente</span>
-                  <strong></strong>
+                  <strong>Laboratorio en clase #10: Manejo de Señales en Linux</strong>
                </div>
                <i class="fas fa-chevron-right"></i>
             </a>
