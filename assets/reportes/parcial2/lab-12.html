@@ -91,63 +91,39 @@
 
          <section id="marco">
             <h2>2. Investigación y Marco Conceptual</h2>
-
-            <p>
-               En Linux, las señales son un mecanismo de comunicación asíncrona entre el kernel y los procesos.
-               Estas permiten notificar a un proceso sobre eventos como interrupciones del usuario, errores o
-               solicitudes de terminación.
-            </p>
-
             <h3>Procesos</h3>
             <p>Un <strong>proceso</strong> es una instancia en ejecución de un programa.
                 Cada proceso tiene su propio espacio de memoria, recursos asignados
                 y un identificador único llamado <strong>PID</strong> (Process ID).</p>
             <p>
                 A diferencia de un programa, que es solo un archivo almacenado en disco,
-                un proceso representa al programa en ejecución dentro del sistema operativo.
+                un proceso representa al programa en ejecución dentro del sistema operativo. Un proceso puede tener varios estados:
             </p>
-            <p>Un proceso puede pasar por varios estados</p>
             <ul>
-                <li><strong>RUNNING:</strong> El proceso se está ejecutando en la CPU.</li>
-                <li><strong>READY:</strong> El proceso está listo para ejecutarse.</li>
-                <li><strong>WAITING:</strong> El proceso espera un evento (E/S, señal).</li>
-                <li><strong>STOPPED:</strong> El proceso fue detenido manualmente.</li>
-                <li><strong>PAUSED:</strong> El proceso se encuentra temporalmente suspendido.</li>
+                <li><strong>running:</strong> el proceso se está ejecutando en la cpu.</li>
+                <li><strong>ready:</strong> el proceso está listo para ejecutarse.</li>
+                <li><strong>waiting:</strong> el proceso espera un evento (e/s, señal).</li>
+                <li><strong>stopped:</strong> el proceso fue detenido manualmente.</li>
+                <li><strong>paused:</strong> el proceso se encuentra temporalmente suspendido.</li>
             </ul>
-               <p>Un proceso se divide en distintos segmentos de memoria:</p>
+            <h3>Procesos padre hijo  y Zombies </h3>
+            <p>Dentro de Linux exite lo que son los proceso padres e hijos. Un proceso padre es el proceso original que crea otro proceso, y un proceso hijo es la copia que nace a partir de él.</p>
+            <p>Esto ocurre mediante la llamada <code>fork()</code>. Cuando se ejecuta, el sistema clona el proceso. Ambos continúan desde el mismo punto del programa, pero <code>fork()</code> devuelve un valores distintos para diferenciarlos: el padre recibe el PID del hijo y el hijo recibe 0. </p>
+            <p>Un proceso hijo se queda en la lista de proceso incluso cuando ya termino su ejecucion, esto pasa porque linux le permite que los padres tengan un estatus de sus hijos. Para eso existe la funcion de <code>waitpid()</code> esta permite que el padre pueda estar al pendiente que su hijo termino y que lo puede eliminar.</p>
+            <p>Si un el padre no termina mata a el hijo cuando este completa su funcion. El hijo se vuelve <code>defunct</code> o en otras palabras en un estado zombie. Este es un proceso que no toma recursos pero se encuentra en la lista de procesos.</p>
 
+            <p>En linux se puede utilizar el comando <code>pstree</code> para ver todos los proces en forma de arbol.  Esto permite ver los procesos padre e hijo</p>
+
+               <p> En Linux, cada proceso tiene su propio espacio de direcciones virtuales dividido en varios segmentos de memoria. Cada segmento guarda un tipo diferente de datos o instrucciones del programa.</p>
             <ul>
                 <li><strong>Text Segment:</strong> Contiene el código en lenguaje máquina.</li>
                 <li><strong>Data Segment:</strong> Variables globales inicializadas.</li>
                 <li><strong>BSS:</strong> Variables globales no inicializadas.</li>
-                <li><strong>Heap:</strong> Memoria dinámica reservada en tiempo de ejecución.</li>
+                <li><strong>Heap:</strong> Memoria dinámica reservada en tiempo de ejecución, se puede modificar con funciones <code>malloc()</code> <code>calloc()</code> y <code>free()</code>, dentro de c y c++.</li>
                 <li><strong>Stack:</strong> Pila de ejecución (funciones y variables locales).</li>
             </ul>
-            <h3>Procesos padre e hijo</h3>
-            <p>Dentro de Linuz exite lo que son los proceso padres e hijos. Un proceso padre es el proceso original que crea otro proceso, y un proceso hijo es la copia que nace a partir de él.</p>
-            <p>Esto ocurre mediante la llamada <code>fork()</code>. Cuando se ejecuta, el sistema duplica el proceso. Ambos continúan desde el mismo punto del programa, pero <code>fork()</code> e devuelve valores distintos para diferenciarlos: el padre recibe el PID del hijo y el hijo recibe 0.</p>
+            <p> Par ver la estructura de la memoria de los procesos se tiene que ver el contenido del directorio: <code>/proc/[PID]/maps</code>. Dentro de <code>/proc</code> se encuentran todos los procesos corriendo en el sistema. Los directorios estan divididos por su PID. Dentro de cada uno se encuentra <code>./maps</code> es lo cual tiene toda la informacion del <code>HEAP</code> y el <code>STACK</code>.</p>
 
-            <h3>Htop y Top</h3>
-            <p>El comando <code>top</code> es una herramienta fundamental en sistemas Linux para la supervisión en tiempo real del rendimiento del sistema. Permite visualizar información dinámica sobre el uso del CPU, la memoria y el estado de los procesos activos, ordenados generalmente por consumo de recursos. Su uso facilita la identificación de procesos que impactan el desempeño del sistema, apoyando tareas de diagnóstico, administración y optimización de recursos en entornos informáticos.</p>
-            <p>De igual manera <code>htop</code> es una herramienta interactiva para monitorear procesos
-                en tiempo real. Permite visualizar el consumo de CPU, memoria,
-                jerarquía de procesos y modificar prioridades directamente.</p>
-            <p>
-                Para instalar <code>htop</code> en sistemas basados en Fedora se requiere
-                habilitar un repositorio externo.
-            </p>
-            <h3>Prioridad y el comando nice</h3>
-             <p>
-                La prioridad de un proceso se controla mediante el valor <strong>NI</strong> (Nice).
-                Valores más bajos indican mayor prioridad.
-            </p>
-
-            <ul>
-                <li><strong>PRI:</strong> Prioridad real del proceso.</li>
-                <li><strong>NI:</strong> Ajuste de prioridad (nice).</li>
-                <li><strong>UID:</strong> Identificador del usuario propietario.</li>
-            </ul>
-            
             <table class="tech-table">
                 <thead>
                     <tr>
@@ -257,7 +233,7 @@
                <i class="fas fa-chevron-left"></i>
                <div class="nav-text">
                   <span>Anterior</span>
-                  <strong>Laboratorio en clase #11: Procesos en Linux</strong>
+                  <strong>Laboratorio en clase #11: Visualizacion de Procesos con Htop y Top</strong>
                </div>
             </a>
 

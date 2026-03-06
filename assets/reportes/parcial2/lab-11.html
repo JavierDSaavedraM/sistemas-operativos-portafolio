@@ -4,7 +4,7 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Laboratorio en clase #11: Procesos en Linux</title>
+   <title>Laboratorio en clase #11: Visualizacion de Procesos con Htop, Top y Prioridad en Procesos</title>
    <link rel="stylesheet" href="../../../css/style.css">
    <link rel="stylesheet" href="../../../css/reporte_style.css">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -61,8 +61,8 @@
 
       <main class="report-content">
          <header id="intro" class="report-header">
-            <span class="entry-type">Laboratorio en Clase #10</span>
-            <h1>Procesos en Linux</h1>
+            <span class="entry-type">Laboratorio en Clase #11</span>
+            <h1>Laboratorio en clase #11: Visualizacion de Procesos con Htop y Top</h1>
             <div class="meta-data">
                <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 26 de febrero, 2026</p>
                <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
@@ -91,42 +91,6 @@
 
          <section id="marco">
             <h2>2. Investigación y Marco Conceptual</h2>
-
-            <p>
-               En Linux, las señales son un mecanismo de comunicación asíncrona entre el kernel y los procesos.
-               Estas permiten notificar a un proceso sobre eventos como interrupciones del usuario, errores o
-               solicitudes de terminación.
-            </p>
-
-            <h3>Procesos</h3>
-            <p>Un <strong>proceso</strong> es una instancia en ejecución de un programa.
-                Cada proceso tiene su propio espacio de memoria, recursos asignados
-                y un identificador único llamado <strong>PID</strong> (Process ID).</p>
-            <p>
-                A diferencia de un programa, que es solo un archivo almacenado en disco,
-                un proceso representa al programa en ejecución dentro del sistema operativo.
-            </p>
-            <p>Un proceso puede pasar por varios estados</p>
-            <ul>
-                <li><strong>RUNNING:</strong> El proceso se está ejecutando en la CPU.</li>
-                <li><strong>READY:</strong> El proceso está listo para ejecutarse.</li>
-                <li><strong>WAITING:</strong> El proceso espera un evento (E/S, señal).</li>
-                <li><strong>STOPPED:</strong> El proceso fue detenido manualmente.</li>
-                <li><strong>PAUSED:</strong> El proceso se encuentra temporalmente suspendido.</li>
-            </ul>
-               <p>Un proceso se divide en distintos segmentos de memoria:</p>
-
-            <ul>
-                <li><strong>Text Segment:</strong> Contiene el código en lenguaje máquina.</li>
-                <li><strong>Data Segment:</strong> Variables globales inicializadas.</li>
-                <li><strong>BSS:</strong> Variables globales no inicializadas.</li>
-                <li><strong>Heap:</strong> Memoria dinámica reservada en tiempo de ejecución.</li>
-                <li><strong>Stack:</strong> Pila de ejecución (funciones y variables locales).</li>
-            </ul>
-            <h3>Procesos padre e hijo</h3>
-            <p>Dentro de Linuz exite lo que son los proceso padres e hijos. Un proceso padre es el proceso original que crea otro proceso, y un proceso hijo es la copia que nace a partir de él.</p>
-            <p>Esto ocurre mediante la llamada <code>fork()</code>. Cuando se ejecuta, el sistema duplica el proceso. Ambos continúan desde el mismo punto del programa, pero <code>fork()</code> e devuelve valores distintos para diferenciarlos: el padre recibe el PID del hijo y el hijo recibe 0.</p>
-
             <h3>Htop y Top</h3>
             <p>El comando <code>top</code> es una herramienta fundamental en sistemas Linux para la supervisión en tiempo real del rendimiento del sistema. Permite visualizar información dinámica sobre el uso del CPU, la memoria y el estado de los procesos activos, ordenados generalmente por consumo de recursos. Su uso facilita la identificación de procesos que impactan el desempeño del sistema, apoyando tareas de diagnóstico, administración y optimización de recursos en entornos informáticos.</p>
             <p>De igual manera <code>htop</code> es una herramienta interactiva para monitorear procesos
