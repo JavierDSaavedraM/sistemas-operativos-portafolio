@@ -61,8 +61,8 @@
 
       <main class="report-content">
          <header id="intro" class="report-header">
-            <span class="entry-type">Laboratorio en Clase #10</span>
-            <h1>Procesos en Linux</h1>
+            <span class="entry-type">Laboratorio en Clase #13</span>
+            <h1>Cambio de estado en procesos y memoria TextSegment</h1>
             <div class="meta-data">
                <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 05 de marzo, 2026</p>
                <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
@@ -76,77 +76,27 @@
             <h2>1. Objetivos</h2>
             <div class="objective-box">
                <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
-               <p>Introducción a proceso en Linux, como ver htop y cambiar la prioridad de estos</p>
+               <p>Ver y entender como un proceso pasa por diferentes estados y como los procesos pasan de Text_Segment  </p>
             </div>
 
             <h3>Objetivos Específicos</h3>
             <ul class="check-list">
-               <li><i class="fas fa-check-circle"></i> Uso de top.</li>
-               <li><i class="fas fa-check-circle"></i> Añadir repositorio externo a dnf.</li>
-               <li><i class="fas fa-check-circle"></i> Instalar htop y diferencias con top.</li>
-               <li><i class="fas fa-check-circle"></i> Comando nice y el cambio de prioridad.</li>
-               <li><i class="fas fa-check-circle"></i> Uso de pkill para matar varios procesos.</li>
+               <li><i class="fas fa-check-circle"></i> Ver como un proceso cambia de estados.</li>
+               <li><i class="fas fa-check-circle"></i> Ver cuando un proceso ingresa a TEXTSEGMENT.</li>
+               <li><i class="fas fa-check-circle"></i> Ver con <code>size</code> los primeros 3 elementos de la memoria.</li>
+               <li><i class="fas fa-check-circle"></i> Volver a ver los primeros 2 segmentos de la memoria dinamica.</li>
+               <li><i class="fas fa-check-circle"></i> Entender el comando <code>objdump</code>.</li>
             </ul>
          </section>
 
          <section id="marco">
             <h2>2. Investigación y Marco Conceptual</h2>
-
-            <p>
-               En Linux, las señales son un mecanismo de comunicación asíncrona entre el kernel y los procesos.
-               Estas permiten notificar a un proceso sobre eventos como interrupciones del usuario, errores o
-               solicitudes de terminación.
-            </p>
-
-            <h3>Procesos</h3>
-            <p>Un <strong>proceso</strong> es una instancia en ejecución de un programa.
-                Cada proceso tiene su propio espacio de memoria, recursos asignados
-                y un identificador único llamado <strong>PID</strong> (Process ID).</p>
-            <p>
-                A diferencia de un programa, que es solo un archivo almacenado en disco,
-                un proceso representa al programa en ejecución dentro del sistema operativo.
-            </p>
-            <p>Un proceso puede pasar por varios estados</p>
-            <ul>
-                <li><strong>RUNNING:</strong> El proceso se está ejecutando en la CPU.</li>
-                <li><strong>READY:</strong> El proceso está listo para ejecutarse.</li>
-                <li><strong>WAITING:</strong> El proceso espera un evento (E/S, señal).</li>
-                <li><strong>STOPPED:</strong> El proceso fue detenido manualmente.</li>
-                <li><strong>PAUSED:</strong> El proceso se encuentra temporalmente suspendido.</li>
-            </ul>
-               <p>Un proceso se divide en distintos segmentos de memoria:</p>
-
-            <ul>
-                <li><strong>Text Segment:</strong> Contiene el código en lenguaje máquina.</li>
-                <li><strong>Data Segment:</strong> Variables globales inicializadas.</li>
-                <li><strong>BSS:</strong> Variables globales no inicializadas.</li>
-                <li><strong>Heap:</strong> Memoria dinámica reservada en tiempo de ejecución.</li>
-                <li><strong>Stack:</strong> Pila de ejecución (funciones y variables locales).</li>
-            </ul>
-            <h3>Procesos padre e hijo</h3>
-            <p>Dentro de Linuz exite lo que son los proceso padres e hijos. Un proceso padre es el proceso original que crea otro proceso, y un proceso hijo es la copia que nace a partir de él.</p>
-            <p>Esto ocurre mediante la llamada <code>fork()</code>. Cuando se ejecuta, el sistema duplica el proceso. Ambos continúan desde el mismo punto del programa, pero <code>fork()</code> e devuelve valores distintos para diferenciarlos: el padre recibe el PID del hijo y el hijo recibe 0.</p>
-
-            <h3>Htop y Top</h3>
-            <p>El comando <code>top</code> es una herramienta fundamental en sistemas Linux para la supervisión en tiempo real del rendimiento del sistema. Permite visualizar información dinámica sobre el uso del CPU, la memoria y el estado de los procesos activos, ordenados generalmente por consumo de recursos. Su uso facilita la identificación de procesos que impactan el desempeño del sistema, apoyando tareas de diagnóstico, administración y optimización de recursos en entornos informáticos.</p>
-            <p>De igual manera <code>htop</code> es una herramienta interactiva para monitorear procesos
-                en tiempo real. Permite visualizar el consumo de CPU, memoria,
-                jerarquía de procesos y modificar prioridades directamente.</p>
-            <p>
-                Para instalar <code>htop</code> en sistemas basados en Fedora se requiere
-                habilitar un repositorio externo.
-            </p>
-            <h3>Prioridad y el comando nice</h3>
-             <p>
-                La prioridad de un proceso se controla mediante el valor <strong>NI</strong> (Nice).
-                Valores más bajos indican mayor prioridad.
-            </p>
-
-            <ul>
-                <li><strong>PRI:</strong> Prioridad real del proceso.</li>
-                <li><strong>NI:</strong> Ajuste de prioridad (nice).</li>
-                <li><strong>UID:</strong> Identificador del usuario propietario.</li>
-            </ul>
+            <h3>TextSegment</h3>
+            <p>En la memoria de un programa compilado existen varias secciones que organizan cómo se almacenan y ejecutan los datos y las instrucciones. Entre las más importantes están Text Segment, Data Segment y BSS, cada una con un propósito específico dentro del funcionamiento del programa.</p>
+            <p>El Text Segment es la sección donde se guarda el código ejecutable del programa, es decir, las instrucciones que el procesador va a ejecutar. Esta parte normalmente es de solo lectura para evitar modificaciones accidentales o maliciosas durante la ejecución.</p>
+            <p>El Data Segment contiene las variables globales y estáticas que ya tienen un valor inicial definido en el código. Por ejemplo, si en el programa se declara una variable global con un valor específico desde el inicio, esa información se almacena en esta sección.</p>
+            <p>Por otro lado, el BSS (Block Started by Symbol) almacena variables globales y estáticas que han sido declaradas pero no tienen un valor inicial explícito. Estas variables se inicializan automáticamente en cero cuando el programa se carga en memoria, lo que permite optimizar el uso del espacio en el archivo ejecutable.</p>
+            <p>En conjunto, estas tres secciones ayudan a organizar la memoria del programa de forma eficiente, separando el código ejecutable de los datos inicializados y de los datos que se inicializarán al momento de la ejecución.</p>
             
             <table class="tech-table">
                 <thead>
@@ -157,32 +107,16 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><code>ps -ef</code></td>
-                        <td>Muestra todos los procesos del sistema.</td>
+                        <td><code>size [proceso]</code></td>
+                        <td>Muestra el tamaño de las secciones principales de un archivo ejecutable u objeto</td>
                     </tr>
                     <tr>
-                        <td><code>ps -ef --sort=-%mem</code></td>
-                        <td>Ordena los procesos por consumo de memoria.</td>
+                        <td><code>grep -E '\[heap\]|\[stack\]' /proc/PID/maps</code></td>
+                        <td>Muestra el contenido de la memoria dinamica del HEAP y STACK</td>
                     </tr>
                     <tr>
-                        <td><code>ps axjf</code></td>
-                        <td>Muestra los procesos en forma jerárquica.</td>
-                    </tr>
-                    <tr>
-                        <td><code>man ps</code></td>
-                        <td>Manual del comando ps.</td>
-                    </tr>
-                    <tr>
-                        <td><code>htop</code></td>
-                        <td>Monitor interactivo de procesos.</td>
-                    </tr>
-                    <tr>
-                        <td><code>/etc/yum.repos.d/</code></td>
-                        <td>Directorio de repositorios del sistema.</td>
-                    </tr>
-                    <tr>
-                        <td><code>sudo dnf install epel-release</code></td>
-                        <td>Instala el repositorio EPEL.</td>
+                        <td><code>objdump -h [programa]</code></td>
+                        <td>Muestra el encabezado de las secciones (section headers) de un archivo objeto o ejecutable</td>
                     </tr>
                 </tbody>
             </table>
@@ -191,20 +125,19 @@
 
          <section id="desarrollo">
             <h2>3. Desarrollo Técnico</h2>
-            <h3>Paso 1. Revisar procesos</h3>
-            <p>Dentro de Linux se vieron dos formas de ver todos los proceso dentro del sistema.</p>
-            <p>El comando <code>ps</code> se encarga de mostrar todos los procesos actuales del sistema. Este puede recibir diferentes banderas para mostrar diferentes resultados. En la Figura 1. se puede ver los procesos siendo acomodados por padre-hijo al usar las banderas <code>ps exjf</code></p>
-            <h3>Paso 2. Comando top vs htop</h3>
-            <p>Hay una mejor forma de ver los procesos en tiempo real, con el comando <code>top</code>. Esto permite monitorea el sistema y ver como los procesos cambian Figura 2. Pero incluso asi tiene una interfaaz con informacion necesaria de manera atractiva.</p>
+            <h3>Paso 1. Ver el cambio de procesos</h3>
+            <p>Para este ejercicio se busco ver como un proceso puede camabiar entre dos procesos. Para eso se creo un programa en c llamado <code>running</code> el cual busca imprimir un algo a la pantalla y esperar un segundo.</p>
+            <p>Al ver los procesos se ve que este codigo se queda en <em>sleeping</em> y no cambia a running (Figura ) . Esto es porque no esta ocupando realmente funciones de la CPU no esta haciendo ninguna operacion matematica, para eso creo <code>running02</code>.</p>
+            <h3>Paso 2. Running02</h3>
+            <p>Se importo la libreria math y se relizaron una operacion para que la CPU pudiera cambiar el proceso a <em>running</em>, igualmente el resultado se guardo con la palabra reservada <code>volatile</code>. Esta palabra le dice al programa que no optimize la variable porque puede ser modificada por valores fuera del programa.</p>
             <p>Para eso se utiliza el <code>htop</code> es un programa con mejor rendimiento y mas funcionalidades. Poder utilizarlo dentro de Linux se debe instalar con el comando <code>dnf</code> como se puede ver en la Figura 3. Una vez instalado se puede ver en la Figura 4, toda la informacion con mas detalle y mas sencillo de identificar. </p>/
-            <h3>Paso 3. Procesos padre y fork()</h3>
-            <p>En los sistemas tipo Unix, <code>fork()</code> es la llamada que hace posible la multitarea real. Cuando un programa ejecuta <code>fork()</code>, no se divide: se duplica. El sistema operativo crea un proceso hijo, que es casi una copia exacta del proceso padre. Ambos continúan ejecutándose desde el mismo punto del código, pero con identidades distintas.</p>
-            <p>Para ver esto en practica se creo un programa en c que crea tres procesos hijo usando fork(), cada uno con una prioridad distinta, mientras el proceso padre permanece activo. Tras cada fork(), el proceso hijo ajusta su prioridad con nice() (alta, normal y baja respectivamente), imprime su PID y entra en un bucle infinito para mantenerse en ejecución. El proceso padre, después de crear todos los hijos, muestra un mensaje y también queda en un bucle infinito, permitiendo observar con comandos como ps cómo el sistema planifica procesos según su prioridad.</p>
-            <p>Su ejecucion se puede ver en la Figura 5.</p>
+            <h3>Paso 3. Running03 con size</h3>
+            <p>Despues que se logro ver como el proso cambia del sleeping a runnning, algo importante es ver como es que el <code>TEXT SEGMENT</code> aumenta cuando se agregar mas intrucciones. Dentro del codigo se puede ver como al agregar solo la funcion, <code>running03</code> pesa mas que <code>running02</code>. Este se visualiza con el comando de <code>size</code>el cual permite ver el tamaño de cada seccion. Esto se muestra en la figura </p>
 
-            <h3>Paso 4. Comando renice, prioridad y comando pkill</h3>
-            <p>Se utilizo el comando nice para cambiar la priordad de uno de los hijos de programa en c y luego se detuvieron todos los procesos con <code>pkill</code>.</p>
-            <p>Dentro de la practica yo cometi un error al matar al padre directamente y deje a los procesos hijo huerfanos. Con el comando <code>pkill</code> me permite matar a todos los procesos que tengan el mismo nombre.</p>
+            <h3>Paso 4. Modificar las secciones de memoria dinamica en c y c++</h3>
+            <p>Finalmente existe una forma de modificar las secciones del heap con la funcion <code>malloc()</code>. Esta le pide al sistema operativo que le regrese una direccion de memoria diponible para el tipo de dato. Dentro del codigo de <code>running04</code> se cambia para que se guarde un resutado de un doble al declar explicitamente. Para interactuar con el <code>malloc()</code> se debe utilizar un pointer.</p>
+            <h3>Paso 5. Ver el comando objdump</h3>
+            <p>Sirve para analizar archivos ejecutables y objetos. Esto permite ver el codigo ensamblador, los segmentos de memoria que esta ocupando, los headers del ejecutable entre otras cosas. Su output se puede ver en la Figura. </p>
 
          </section>
 
@@ -214,35 +147,36 @@
                Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
             </p>
             <figure class="screenshot-container">
-               <img src="../../img/ev11_img1.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Ejecución de comando ps</figcaption>
+               <img src="../../img/ev13_img1.png" alt="Ejecución del programa">
             </figure>
             <figure class="screenshot-container">
-               <img src="../../img/ev11_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 2. Ejecucion con el comando top </figcaption>
+               <img src="../../img/ev13_img2.png" alt="Ejecución del programa">
             </figure>
             <figure class="screenshot-container">
-               <img src="../../img/ev11_img3.png" alt="Ejecución del programa">
-               <figcaption>Fig 3. Instalacion de htop</figcaption>
+               <img src="../../img/ev13_img3.png" alt="Ejecución del programa">
             </figure>
             <figure class="screenshot-container">
-               <img src="../../img/ev11_img4.png" alt="Ejecución del programa">
-               <figcaption>Fig 4. Ejecucion de htop</figcaption>
+               <img src="../../img/ev13_img4.png" alt="Ejecución del programa">
             </figure>
             <figure class="screenshot-container">
-               <img src="../../img/ev11_img5.png" alt="Ejecución del programa">
-               <figcaption>Fig 5. Ejecución de programa en c con cambio de prioridades</figcaption>
+               <img src="../../img/ev13_img5.png" alt="Ejecución del programa">
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev13_img6.png" alt="Ejecución del programa">
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev13_img7.png" alt="Ejecución del programa">
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/ev13_img8.png" alt="Ejecución del programa">
             </figure>
          </section>
 
          <section id="conclusiones">
             <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>En esta leccion aprendi de mejor manera como es que el codigo que uno programa termina siendo unos y ceros que la computadora puede ejecutar. Se me hace muy increible ver todo lo que se tiene que tomar en cuenta para que el sistema pueda ejecutar un hello world y un 1+1. Por ejemplo, no se me habia venido a la mente la cantidad de bits que aumenta el codigo incluso con una funcion mas. Esto no importa actualmente en los programas que estoy haciendo, pero para sistemas con recursos limitados, es indispensable al querer tener la menor cantidad de memoria y recursos utilizados por el sistema. Me imagino que un buen ingeniero siempre tiene en mente estas situaciones.</p>
             <p>
-                El manejo de procesos es fundamental en un sistema operativo. Herramientas como <code>htop</code> permiten visualizar y administrar recursos de forma eficiente, mientras que <code>nice</code> y <code>renice</code> ofrecen control sobre la prioridad de ejecución.</p>
-            <p>
-               <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
-               comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
-            </p>
+               <strong>Trabajo Futuro:</strong> Explorar mas las funciones de <code>malloc()</code>, <code>free()</code> y otras que permitan utilizar la memoria del sistema de manera mas efectiva. </p>
          </section>
 
          <section id="referencias">
