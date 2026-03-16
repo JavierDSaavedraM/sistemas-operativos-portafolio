@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #14: Ver estado sleeping (S), uninterrumptable (D) y Zombie(Z)</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #14</span>
+            <h1>Ver estado sleeping (S), uninterrumptable (D) y Zombie</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 08 de marzo, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Procesos en Linux</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Ver como algunos de los diferentes estado de los procesos (Sleeping, Uninterrumpible y Zombie)</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de sleep (S). </li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de uninterruptible (D). </li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de zombie (Z). </li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <h3>Entropia</h3>
+            <p>La <strong>entropía</strong> en informática es una medida de la aleatoriedad o imprevisibilidad de los datos dentro de un sistema. En sistemas operativos como Linux, la entropía se obtiene de diferentes eventos del hardware, como movimientos del mouse, pulsaciones del teclado, interrupciones del sistema y actividad del disco. Esta información se recolecta y se mezcla en el kernel para generar números aleatorios seguros, los cuales son fundamentales para procesos de seguridad como la generación de claves criptográficas, certificados digitales y sistemas de autenticación.
+            </p>
+            <h3>Directorio /dev/random</h3>
+            <p>En Linux, /dev/random es un dispositivo especial del sistema que genera números aleatorios basados en la entropía del sistema. Esta entropía se obtiene de eventos impredecibles del hardware, como el movimiento del mouse, la actividad del teclado, interrupciones del sistema y operaciones de disco.</p>
+            <p>A diferencia de otros generadores pseudoaleatorios, /dev/random prioriza la seguridad, por lo que puede bloquearse si el sistema no cuenta con suficiente entropía disponible. Esto lo hace especialmente útil para tareas relacionadas con la criptografía, como la generación de claves seguras, certificados digitales o tokens de autenticación.</p>
+            <h3>Libreria fcntl.h</h3>
+            <p>La librería <code>fcntl.h</code> en C se utiliza para realizar operaciones avanzadas sobre archivos y descriptores de archivo en sistemas Unix y Linux. A través de funciones como <code>open()</code> y <code>fcntl()</code>, permite controlar el acceso a archivos, establecer modos de apertura, manejar bloqueos y modificar propiedades de los descriptores. Gracias a estas capacidades, fcntl es una herramienta fundamental para la gestión eficiente de archivos y recursos del sistema dentro de programas que interactúan directamente con el sistema operativo. </p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Programa en estado de sleeping.</h3>
+            <p>Cuando un archivo se encuentra en Sleeping (S) este busca recibir cualquier input del usuario. Funciones como <code>cin</code> en c++, pero en c se utiliza <code>getchar()</code> para obtener cualquier caracter del usuario.</p>
+            <p>Una ves que el usuario ingresa un caracter el programa finaliza su ejecucion de manera inmedianta por lo cual no pasa por el estado de ejectuando o zombie. Al usar <code>ps -p $PID -o pid,ppid,user,pcpu, pmem, stat, vsz, rss,cmd</code> se puede obtener el estado en el cual se esta ejectuando el programa el cual es S como se puede ver en la Figura 1.</p>
+            <h3>Paso 2. Estado D</h3>
+            <p>Este estado es similar al sleep en el cual esta esperando que un input termine de leerse. En este caso se abre un archivo que esta escribiendo un archivo con 0. Para eso primero hay que darle los permisos necesarios al archivo para que pueda leer datos de ese directorio. Luego revisa si existe, si no existe lo crea y si existe lo abre. Luego crea un buffer donde los datos estan constantemente siendo escritos. Ademas obliga que el sistema escriba directamente al disco duro con <code>fsync()</code></p> 
+            <p>Este esta constantemente leyendo el directorio. Igualmente se puede obtener la cantidad de informacion que ocupa en el heap y el stack, en la Figura 2 se muestra informacion extra como su numero de Threads, VmRSS y VmSize.</p>
+            <p>En la Figura 3 se puede observar la cantidad de informacion que el archivo lee, mas porque la lectura se encontraba dentro de un ciclo while, nunca deja de escribir datos. Si no se detiene el archivo, este crece de manera exponencial.</p>
+            <h3>Paso 3. Procesos Zombie</h3>
+            <p>Como ya se ha explorado anteriormente un proceso puede crear hijos para que hagan subprocesos con la funcion <code>fork()</code>. Correctamente el padre debe esperar que su hijo termine su ejecucion para poder matarlo. Sin embargo cuando en el padre no espera que su hijo termine, este sigue ejecutando y nunca lo recogue. Entonces se vuelve un zombie. En este ejemplo de la Figura 4, se puede observar como el hijo toma el estado Z ademas que se ve <code>defunct</code>.</p>
+            <p>Con <code>pmap</code> se puede ver la cantidad de hijos que tiene el proceso, como se puede ver en la Figura 5. </p>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <p>
+               Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
+            </p>
+            <figure class="screenshot-container">
+               <img src="../../img/lab14-01.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Evidencia de proceso en sleeping</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab14-02.png" alt="Ejecución del programa">
+               <figcaption>Fig 2. Evidencia en proceso uninterrupible</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab14-03.png" alt="Ejecución del programa">
+               <figcaption>Fig 3. Lista de datos del archivo data</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab14-04.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Lista de ejecucion de proceso zombie</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab14-05.png" alt="Ejecución del programa">
+               <figcaption>Fig 5. Evidencia de hijos que no fueron recogidos por el padre</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Dentro de este ejercicio se reinforzo lo que ya se habia visto en otras lecciones. La diferencia entre los procesos sleeping y zombie. Ademas que se vio un nuevo estado con uninterupted, el cual es similar al sleeping pero este esta esperando input y ouput del kernel. Este no se puede detener incluso con se&ntildeales como <code>SIGKILL</code>. Tambien se vio como la utilidad de la funcion, <code>asdas</code></p>
+            <p> <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
+               comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
+            </p>
+         </section>
+
+         <section id="referencias">
+            <h2>6. Bibliografía</h2>
+            <div class="references-grid">
+               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-13.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #13: Cambio de estado en procesos y memoria TextSegment</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="../../../index.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>HOME</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+         </nav>
+
+      </main>
+   </div>
+
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
