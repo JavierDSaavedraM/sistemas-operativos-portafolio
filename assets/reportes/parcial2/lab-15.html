@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #15: Estados Stop(T), Estado de Prioridad Alta ( &lt ) y Prioridad Baja (N)</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#descargas">Archivos Fuente</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #15</span>
+            <h1>Laboratorio en clase #15: Estados Stop(T), Estado de Prioridad Alta (&lt) y Prioridad Baja (N)</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 09 de marzo, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Procesos en Linux</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Entender los procesos restantes como: Stopped (T), Procesos con prioridad alta (&lt)</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de <em>Stopped</em> (T). </li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de <em>Alta prioridad</em> (&lt). </li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa que muestre el estado de <em>Baja prioridad</em> (N). </li>
+               <li><i class="fas fa-check-circle"></i> Crear un programa que pueda recibir varias se&ntilde;ales y cambiar los estados del proceso. </li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <h3>Estado Stopped (T)</h3>
+            <p>En sistemas Linux, cuando un proceso aparece con el estado T, significa que el proceso está detenido o suspendido (stopped). Esto ocurre cuando la ejecución del proceso ha sido pausada temporalmente, generalmente debido a una señal enviada por el sistema operativo o por el usuario. Un caso común es cuando un usuario presiona <code>Ctrl + Z</code> en la terminal mientras un programa se está ejecutando, lo que envía la señal <code>SIGTSTP</code> y detiene el proceso.</p>
+
+            <p>Tener un proceso en estado T es útil porque permite pausar la ejecución de un programa sin terminarlo completamente. De esta manera, el proceso conserva su estado en memoria y puede reanudarse más adelante utilizando comandos como fg (para continuar en primer plano) o bg (para continuar en segundo plano). Esto es especialmente útil cuando se necesita liberar temporalmente la terminal o administrar múltiples tareas al mismo tiempo sin perder el progreso del programa que se estaba ejecutando.</p>
+            <h3>Proceso de Prioridad Alta (&lt) </h3>
+            <p>En sistemas Linux, los procesos pueden ejecutarse con diferentes niveles de prioridad, lo que determina cuánta atención recibe un proceso del CPU en comparación con otros procesos del sistema. Esta prioridad se maneja mediante el valor conocido como <code>nice</code>, que indica qué tan “<em>amable</em>” es un proceso al compartir los recursos del sistema con otros procesos.</p>
+            <p>. Un proceso con alta prioridad tiene un valor nice bajo o negativo (por ejemplo, -10 o -20). Esto significa que el sistema operativo intentará darle más tiempo de CPU, permitiendo que se ejecute con mayor frecuencia y rapidez que otros procesos. Este tipo de prioridad suele utilizarse en programas que requieren respuestas rápidas o procesamiento intensivo, como servicios del sistema, controladores o aplicaciones críticas que no deben retrasarse.</p>
+            <h3>Prioridad Baja (N)</h3>
+            <p>Por otro lado, un proceso con baja prioridad tiene un valor nice alto o positivo (por ejemplo, 10 o 19). En este caso, el proceso cede más fácilmente el uso del CPU a otros procesos con mayor prioridad. Esto es útil para tareas que no son urgentes, como procesos en segundo plano, compresión de archivos, copias de seguridad o cálculos largos, donde no es necesario que el programa se ejecute inmediatamente.</p>
+              <p>Linux utiliza estas prioridades para administrar eficientemente los recursos del sistema, asegurando que los procesos más importantes reciban el tiempo de CPU que necesitan, mientras que los procesos menos críticos se ejecuten cuando haya recursos disponibles. Las prioridades pueden establecerse al iniciar un programa con el comando <code>nice</code> o modificarse posteriormente con <code>renice</code>, lo que permite ajustar dinámicamente el comportamiento de los procesos según las necesidades del sistema.</p>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Programa con estado Stopped (T).</h3>
+            <p>Primero se creo un programa que pudiera demostrar el estado stopped. Como se menciono en el desarollo, el estado de stopped detiene la ejecucion del programa. Este normalmente se recibe con la se&ntilde;al <code>SIGSTOP</code> o <code>CTRL-Z</code> (los cuales ya fueron explorados en otros reportes).</p>
+            <p>En la Figura 1 se puede ver la evidencia del estado T. El programa dice textualmente que fue detenido y se puede apreciar que al usar <code>ps aux</code> se muestra en la columna de <strong>STAT</strong> con T.</p>
+            <p>En la Figura 2 se muestra como se puede continuar la ejecucion del programa al mandarle la se&ntilde <code>SIGCONT</code> con el comando <code>kill</code>.</p>
+            <h3>Paso 2. Programa con proceso de prioridad alta (&lt).</h3>
+            <p>El siguiente programa explora la diferencencia entre un progrmama con alta prioridad. La principal diferencia es que dentro del programa se utiliza la funcion <code>setpriority()</code> esta se encarga de establecer como su nombre lo dice la prioridad. El primer parametro le indica al sistema que va a realizar un cambio de prioridad, el segundo dice que es el proceso actual. Normalmente este parametro se le pone el PID del programa a cambiar pero, con 0 significa el actual, finalmente se le indica que tenga un prioridad alta con <strong>-20</strong>, este es la prioridad mas alta que podria tener.</p>
+            <p>En la Figura 3 se muestra la prioridad del proceso con el comando <code>ps</code>. Asimismo la Figura 4 se encarga de cambiar la prioridad con el comando <code>nice</code></p>
+            <h3>Paso 3. Programa con proceso de prioridad baja (N).</h3>
+            <p>El siguiente programa se encarga de lo contrario. se declara el programa con una prioridad de 19, que es la mas baja.</p>
+            <h3>Paso 4. Programa que controla todos los estados.</h3>
+            <p>Finalmente se creo un programa que recibe diferentes se&ntilde;ales para poder cambiar el proceso a diferentes estados. Primero obtiene un pid como input para poder cambiar el estado de otros programas o si mismo. Recibe se&ntilde;ales como <code>SIGSTOP</code>, <code>SIGUSR1</code> y <code>SIGUSR2</code> para poder cambiar el estado de un proceso. </p>
+            <p>En la Figura 6 y Figura 7 se puede ver su ejecucion al mostrar el mismo proceso en diferentes estados.</p>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-01.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Evidencia de proceso en sleeping</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-02.png" alt="Evidencia en proceso stopped">
+               <figcaption>Fig 2. Evidencia en proceso stopped</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-03.png" alt="Proceso con high Priority">
+               <figcaption>Fig 3. Proceso con high Priority</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-04.png" alt=" Proceso con Alta prioridad siendo modificado.">
+               <figcaption>Fig 4. Proceso con Alta prioridad siendo modificado.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-05.png" alt="Ejecución del programa">
+               <figcaption>Fig 5. Evidencia de comando renice con baja prioridad</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-07.png" alt="Ejecución del programa">
+               <figcaption>Fig 6. Proceso T de codigo que cambia de proceso.</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab15-07.png" alt="Ejecución del programa">
+               <figcaption>Fig 7. Evidencia se envio de se&ntilde;ales con &uacute;ltimo programa.</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>Se siguio reforzando como funcionan los programas en estado stopped (T) y se exploro lo que eran los procesos con alta y baja prioridad. Ya que se vieron todos los estados de los programaes esto ayuda a entender como un programa puede cambiar durante su ejecucion y la importancia de saber como modificarlo.</p>
+            <p> <strong>Trabajo Futuro:</strong>> Explorar lo que son los <code>daemons</code> y utilizarlos para automatizar los  procesos para ejecutar las tareas dependiendo del horario.
+            </p>
+         </section>
+
+         <section id="descargas">
+            <h2>6. Archivos Fuente</h2>
+            <div class="download-box">
+               <div class="icon"><i class="fas fa-file-archive"></i></div>
+               <div class="info">
+                  <h4>Lab15</h4>
+                  <p>Contiene: running.c, running02.c, running03.c, running04.c, zombie.c, stop.c, ninterruptible.c, sleeping, highPriority.c, lowPriority.c y processPriorities.c </p>
+               </div>
+               <a href="../../zipFiles/Lab15.tar" class="dl-btn">Descargar .TAR</a>
+            </div>
+         </section>
+
+         <section id="referencias">
+            <h2>7. Bibliografía</h2>
+            <div class="references-grid">
+               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-14.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #14: Ver estado sleeping (S), uninterrumptable (D) y Zombie(Z)</strong>
+               </div>
+            </a>
+
+            <div class="nav-spacer"></div>
+
+            <a href="../../../index.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>HOME</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+         </nav>
+
+      </main>
+   </div>
+
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
