@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Laboratorio en clase #16: Daemons y procesos cron</title>
+   <link rel="stylesheet" href="../../../css/style.css">
+   <link rel="stylesheet" href="../../../css/reporte_style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+   <nav class="app-header">
+
+      <div class="app-branding">
+         <div class="mini-avatar"></div>
+         <div class="brand-text">
+            <h3>Javier Saavedra</h3>
+            <p>Portafolio OS</p>
+         </div>
+      </div>
+
+      <div class="app-menu">
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+            <i class="fas fa-home"></i> Inicio
+         </a>
+
+         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
+            <i class="fas fa-folder"></i> Parcial 1
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+            <i class="fas fa-folder"></i> Parcial 2
+         </a>
+
+         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+            <i class="fas fa-folder"></i> Parcial 3
+         </a>
+      </div>
+   </nav>
+
+   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+   </a>
+
+   <div class="report-container">
+
+      <aside class="toc-sidebar">
+         <h3>Contenido</h3>
+         <ul>
+            <li><a href="#intro">Carátula e Info</a></li>
+            <li><a href="#objetivos">Objetivos</a></li>
+            <li><a href="#marco">Marco Conceptual</a></li>
+            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#referencias">Fuentes y Enlaces</a></li>
+         </ul>
+      </aside>
+
+      <main class="report-content">
+         <header id="intro" class="report-header">
+            <span class="entry-type">Laboratorio en Clase #15</span>
+            <h1>Laboratorio en clase #16: Daemons y procesos cron</h1>
+            <div class="meta-data">
+               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 19 de marzo, 2026</p>
+               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Daemons en Linux</p>
+            </div>
+         </header>
+
+         <hr class="divider">
+
+         <section id="objetivos">
+            <h2>1. Objetivos</h2>
+            <div class="objective-box">
+               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+               <p>Entender los procesos autom&atilde;ticos en Linux, Daemons y crons</p>
+            </div>
+
+            <h3>Objetivos Específicos</h3>
+            <ul class="check-list">
+               <li><i class="fas fa-check-circle"></i> Revisar que <code>cornie</code> este instalado en el sistema. </li>
+               <li><i class="fas fa-check-circle"></i> Checar que el servicio de <code>cronies</code> se encuentren activos en el sistema.</li>
+               <li><i class="fas fa-check-circle"></i> Crear tareas <code>cron</code>.</li>
+            </ul>
+         </section>
+
+         <section id="marco">
+            <h2>2. Investigación y Marco Conceptual</h2>
+            <h3>Daemons</h3>
+            <p>Los daemons son procesos que se ejecutan en segundo plano dentro de un sistema operativo, sin interacción directa con el usuario. Su función principal es gestionar servicios y tareas continuas, como la administración de red, servidores o monitoreo del sistema, garantizando que estos operen de manera estable y eficiente.</p>
+            <h3>Crons</h3>
+            <p>Cron es un programador de tareas que permite ejecutar procesos de forma automática en momentos específicos o en intervalos definidos. A través de los llamados cron jobs, es posible automatizar actividades repetitivas como respaldos, actualizaciones o mantenimiento del sistema.</p>
+            <p>La sintaxis de cron se compone de cinco campos que definen el momento exacto en que se ejecutará una tarea, seguidos del comando a ejecutar: minuto, hora, día del mes, mes y día de la semana. Cada campo acepta valores numéricos dentro de un rango específico o caracteres especiales como * (todos los valores), , (lista), - (rango) y / (intervalos), lo que permite programar tareas con gran precisión. De esta forma, una línea en crontab indica tanto la periodicidad como la acción a realizar, facilitando la automatización de procesos dentro del sistema.</p>
+
+            <div class="terminal-window">
+                     <pre>
+ * * * * * comando
+ │ │ │ │ │
+ │ │ │ │ └── Día de la semana (0 - 6) (domingo = 0)
+ │ │ │ └──── Mes (1 - 12)
+ │ │ └────── Día del mes (1 - 31)
+ │ └──────── Hora (0 - 23)
+ └────────── Minuto (0 - 59)
+                 </pre>
+              </div>
+         </section>
+
+         <section id="desarrollo">
+            <h2>3. Desarrollo Técnico</h2>
+            <h3>Paso 1. Revisar que cornie este instalado en el sistema.</h3>
+            <p>Antes que nada se debe verificar que el servicio de cronie ya se encuentre en el sistema. Para eso se utiliza el comando <code>rpm -q cornies</code>. En caso que no se encuentre en el sistema se tendria que instalar con <code>sudo dnf install cronies -y</code>.</p>
+            <h3>Paso 2. Checar que el servicio de cronies se encuentre activo.</h3>
+            <p>Ya que se tengan los cronies instalados en el sistema se debe revisar que el servicio se encuentre activo. Con el comando <code>sudo systemctl status cronies</code> te muestra si el servicio esta apagado o encendido. En la Figura 1 se muestra tanto el paso 1 como el paso 2.</p>
+            <h3>Paso 3. Crear cron para cada minuto.</h3>
+            <p>Para poder crear un cron se debe utilizar <code>crontab</code> para crear las tareas automaticas.</p>
+            <p>La primera tarea <code>(* * * * *)</code> se ejecuta cada minuto, ya que todos los campos están definidos con *. En este caso, el comando echo escribe el mensaje "Hola a todos, esto es una tarea automatica de cron" y lo agrega (gracias a &gt;&gt;) al archivo <code>/home/javier/logs.txt</code>. Esto es útil para verificar que el servicio de cron está funcionando correctamente o para generar registros constantes.</p> 
+            <p>La segunda tarea <code>(0 * * * *)</code> se ejecuta al inicio de cada hora, es decir, cuando el minuto es 0. El comando date obtiene la fecha y hora actual del sistema y la añade al mismo archivo de logs. Este tipo de configuración se utiliza comúnmente para llevar un registro periódico del tiempo o monitorear eventos a lo largo del día.</p>
+            <p>La tercera y cuarta tareas están programadas para momentos más específicos. La expresión <code>30 2 * * *</code> ejecuta un mensaje a las 2:30 AM todos los días, simulando un aviso o registro relacionado con un respaldo diario. Por otro lado, <code>0 9 * * 1</code> se ejecuta a las 9:00 AM cada lunes, escribiendo el mensaje "inicio de semana" en el archivo, lo cual puede servir como referencia para actividades semanales o inicio de procesos programados.</p>
+            <div class="terminal-window">
+               <div class="terminal-header">
+                  <span class="title">javier@Fedora:~/</span>
+                </div>
+                     <pre class="cmd">
+ * * * * * echo "Hola a todos, esto es una tarea automatica de cron" &gt;&gt;
+ /home/javier/logs.txt
+ 0 * * * * date &gt;&gt; /home/javier/logs.txt
+ 30 2 * * * echo "esto es un mensaje de respaldo diario al las 2:30 am" &gt;&gt; 
+ /home/javier/logs.txt
+ 0 9 * * 1 echo "inicio de semana " &gt;&gt; /home/javier/logs.txt
+                 </pre>
+              </div>
+         </section>
+
+         <section id="evidencia">
+            <h2>4. Evidencia de Ejecución</h2>
+            <figure class="screenshot-container">
+               <img src="../../img/lab16-01.png" alt="Ejecución del programa">
+               <figcaption>Fig 1. Evidencia de proceso en sleeping</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab16-02.png" alt=" Evidencia de cuando se crea un cron">
+               <figcaption>Fig 2. Evidencia de cuando se crea un cron</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab16-03.png" alt="Lista de crons en el sistema">
+               <figcaption>Fig 3. Lista de crons en el sistema</figcaption>
+            </figure>
+            <figure class="screenshot-container">
+               <img src="../../img/lab16-04.png" alt="Ejecución del programa">
+               <figcaption>Fig 4. Evidencia de proceso cron</figcaption>
+            </figure>
+         </section>
+
+         <section id="conclusiones">
+            <h2>5. Conclusiones y Trabajo Futuro</h2>
+            <p>En conjunto, los daemons y cron constituyen elementos clave para la automatización y operación eficiente de sistemas, ya que permiten mantener procesos activos y ejecutar tareas programadas sin intervención manual.</p>
+            <p> <strong>Trabajo Futuro:</strong> Interactuar con los daemons del sistema y crear mas crons complicados.
+            </p>
+         </section>
+
+         <section id="referencias">
+            <h2>7. Bibliografía</h2>
+            <div class="references-grid">
+               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+            </div>
+         </section>
+
+         <nav class="post-navigation">
+            <a href="./lab-15.html" class="nav-btn next">
+               <i class="fas fa-chevron-left"></i>
+               <div class="nav-text">
+                  <span>Anterior</span>
+                  <strong>Laboratorio en clase #15: Estados Stop(T), Estado de Prioridad Alta ( &lt ) y Prioridad Baja (N)</strong>
+               </div>
+            </a>
+            <div class="nav-spacer"></div>
+
+            <a href="../../../index.html" class="nav-btn next">
+               <div class="nav-text">
+                  <span>Siguiente</span>
+                  <strong>HOME</strong>
+               </div>
+               <i class="fas fa-chevron-right"></i>
+            </a>
+         </nav>
+
+      </main>
+   </div>
+
+   <script>
+      function guardarFiltro(filtro) {
+         localStorage.setItem('filtroActual', filtro);
+      }
+   </script>
+</body>
+
+</html>
