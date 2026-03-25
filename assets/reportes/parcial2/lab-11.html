@@ -2,248 +2,271 @@
 <html lang="es">
 
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Laboratorio en clase #11: Visualizacion de Procesos con Htop, Top y Prioridad en Procesos</title>
-   <link rel="stylesheet" href="../../../css/style.css">
-   <link rel="stylesheet" href="../../../css/reporte_style.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio en clase #11: Visualizacion de Procesos con Htop, Top y Prioridad en Procesos</title>
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/reporte_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-   <nav class="app-header">
+  <nav class="app-header">
 
-      <div class="app-branding">
-         <div class="mini-avatar"></div>
-         <div class="brand-text">
-            <h3>Javier Saavedra</h3>
-            <p>Portafolio OS</p>
-         </div>
+    <div class="app-branding">
+      <div class="mini-avatar"></div>
+      <div class="brand-text">
+        <h3>Javier Saavedra</h3>
+        <p>Portafolio OS</p>
       </div>
+    </div>
 
-      <div class="app-menu">
-         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
-            <i class="fas fa-home"></i> Inicio
-         </a>
+    <div class="app-menu">
+      <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+        <i class="fas fa-home"></i> Inicio
+      </a>
 
-         <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial1')">
-            <i class="fas fa-folder"></i> Parcial 1
-         </a>
+      <a href="../../../index.html" class="app-btn " onclick="guardarFiltro('parcial1')">
+        <i class="fas fa-folder"></i> Parcial 1
+      </a>
 
-         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
-            <i class="fas fa-folder"></i> Parcial 2
-         </a>
+      <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial2')">
+        <i class="fas fa-folder"></i> Parcial 2
+      </a>
 
-         <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
-            <i class="fas fa-folder"></i> Parcial 3
-         </a>
-      </div>
-   </nav>
+      <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+        <i class="fas fa-folder"></i> Parcial 3
+      </a>
+    </div>
+  </nav>
 
-   <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
-      <i class="fas fa-arrow-left"></i> Volver al Portafolio
-   </a>
+  <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+    <i class="fas fa-arrow-left"></i> Volver al Portafolio
+  </a>
 
-   <div class="report-container">
+  <div class="report-container">
 
-      <aside class="toc-sidebar">
-         <h3>Contenido</h3>
-         <ul>
-            <li><a href="#intro">Carátula e Info</a></li>
-            <li><a href="#objetivos">Objetivos</a></li>
-            <li><a href="#marco">Marco Conceptual</a></li>
-            <li><a href="#desarrollo">Desarrollo Técnico</a></li>
-            <li><a href="#evidencia">Evidencia de Ejecución</a></li>
-            <li><a href="#conclusiones">Conclusiones</a></li>
-            <li><a href="#referencias">Fuentes y Enlaces</a></li>
-         </ul>
-      </aside>
+    <aside class="toc-sidebar">
+      <h3>Contenido</h3>
+      <ul>
+        <li><a href="#intro">Carátula e Info</a></li>
+        <li><a href="#objetivos">Objetivos</a></li>
+        <li><a href="#marco">Marco Conceptual</a></li>
+        <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+        <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+        <li><a href="#conclusiones">Conclusiones</a></li>
+        <li><a href="#referencias">Fuentes y Enlaces</a></li>
+      </ul>
+    </aside>
 
-      <main class="report-content">
-         <header id="intro" class="report-header">
-            <span class="entry-type">Laboratorio en Clase #11</span>
-            <h1>Laboratorio en clase #11: Visualizacion de Procesos con Htop y Top</h1>
-            <div class="meta-data">
-               <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 26 de febrero, 2026</p>
-               <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
-               <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Procesos en Linux</p>
-            </div>
-         </header>
+    <main class="report-content">
+      <header id="intro" class="report-header">
+        <span class="entry-type">Laboratorio en Clase #11</span>
+        <h1>Laboratorio en clase #11: Visualizacion de Procesos con Htop y Top</h1>
+        <div class="meta-data">
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 26 de febrero, 2026</p>
+          <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+          <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Procesos en Linux</p>
+        </div>
+      </header>
 
-         <hr class="divider">
+      <hr class="divider">
 
-         <section id="objetivos">
-            <h2>1. Objetivos</h2>
-            <div class="objective-box">
-               <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
-               <p>Introducción a proceso en Linux, como ver htop y cambiar la prioridad de estos</p>
-            </div>
+      <section id="objetivos">
+        <h2>1. Objetivos</h2>
+        <div class="objective-box">
+          <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+          <p>Introducción a proceso en Linux, como ver htop y cambiar la prioridad de estos</p>
+        </div>
 
-            <h3>Objetivos Específicos</h3>
-            <ul class="check-list">
-               <li><i class="fas fa-check-circle"></i> Uso de top.</li>
-               <li><i class="fas fa-check-circle"></i> Añadir repositorio externo a dnf.</li>
-               <li><i class="fas fa-check-circle"></i> Instalar htop y diferencias con top.</li>
-               <li><i class="fas fa-check-circle"></i> Comando nice y el cambio de prioridad.</li>
-               <li><i class="fas fa-check-circle"></i> Uso de pkill para matar varios procesos.</li>
-            </ul>
-         </section>
+        <h3>Objetivos Específicos</h3>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> Uso de top.</li>
+          <li><i class="fas fa-check-circle"></i> Añadir repositorio externo a dnf.</li>
+          <li><i class="fas fa-check-circle"></i> Instalar htop y diferencias con top.</li>
+          <li><i class="fas fa-check-circle"></i> Comando nice y el cambio de prioridad.</li>
+          <li><i class="fas fa-check-circle"></i> Uso de pkill para matar varios procesos.</li>
+        </ul>
+      </section>
 
-         <section id="marco">
-            <h2>2. Investigación y Marco Conceptual</h2>
-            <h3>Htop y Top</h3>
-            <p>El comando <code>top</code> es una herramienta fundamental en sistemas Linux para la supervisión en tiempo real del rendimiento del sistema. Permite visualizar información dinámica sobre el uso del CPU, la memoria y el estado de los procesos activos, ordenados generalmente por consumo de recursos. Su uso facilita la identificación de procesos que impactan el desempeño del sistema, apoyando tareas de diagnóstico, administración y optimización de recursos en entornos informáticos.</p>
-            <p>De igual manera <code>htop</code> es una herramienta interactiva para monitorear procesos
-                en tiempo real. Permite visualizar el consumo de CPU, memoria,
-                jerarquía de procesos y modificar prioridades directamente.</p>
-            <p>
-                Para instalar <code>htop</code> en sistemas basados en Fedora se requiere
-                habilitar un repositorio externo.
-            </p>
-            <h3>Prioridad y el comando nice</h3>
-             <p>
-                La prioridad de un proceso se controla mediante el valor <strong>NI</strong> (Nice).
-                Valores más bajos indican mayor prioridad.
-            </p>
+      <section id="marco">
+        <h2>2. Investigación y Marco Conceptual</h2>
+        <h3>Htop y Top</h3>
+        <p>El comando <code>top</code> es una herramienta fundamental en sistemas Linux para la supervisión en tiempo
+          real del rendimiento del sistema. Permite visualizar información dinámica sobre el uso del CPU, la memoria y
+          el estado de los procesos activos, ordenados generalmente por consumo de recursos. Su uso facilita la
+          identificación de procesos que impactan el desempeño del sistema, apoyando tareas de diagnóstico,
+          administración y optimización de recursos en entornos informáticos.</p>
+        <p>De igual manera <code>htop</code> es una herramienta interactiva para monitorear procesos
+          en tiempo real. Permite visualizar el consumo de CPU, memoria,
+          jerarquía de procesos y modificar prioridades directamente.</p>
+        <p>
+          Para instalar <code>htop</code> en sistemas basados en Fedora se requiere
+          habilitar un repositorio externo.
+        </p>
+        <h3>Prioridad y el comando nice</h3>
+        <p>
+          La prioridad de un proceso se controla mediante el valor <strong>NI</strong> (Nice).
+          Valores más bajos indican mayor prioridad.
+        </p>
 
-            <ul>
-                <li><strong>PRI:</strong> Prioridad real del proceso.</li>
-                <li><strong>NI:</strong> Ajuste de prioridad (nice).</li>
-                <li><strong>UID:</strong> Identificador del usuario propietario.</li>
-            </ul>
-            
-            <table class="tech-table">
-                <thead>
-                    <tr>
-                        <th>Comando</th>
-                        <th>Descripción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><code>ps -ef</code></td>
-                        <td>Muestra todos los procesos del sistema.</td>
-                    </tr>
-                    <tr>
-                        <td><code>ps -ef --sort=-%mem</code></td>
-                        <td>Ordena los procesos por consumo de memoria.</td>
-                    </tr>
-                    <tr>
-                        <td><code>ps axjf</code></td>
-                        <td>Muestra los procesos en forma jerárquica.</td>
-                    </tr>
-                    <tr>
-                        <td><code>man ps</code></td>
-                        <td>Manual del comando ps.</td>
-                    </tr>
-                    <tr>
-                        <td><code>htop</code></td>
-                        <td>Monitor interactivo de procesos.</td>
-                    </tr>
-                    <tr>
-                        <td><code>/etc/yum.repos.d/</code></td>
-                        <td>Directorio de repositorios del sistema.</td>
-                    </tr>
-                    <tr>
-                        <td><code>sudo dnf install epel-release</code></td>
-                        <td>Instala el repositorio EPEL.</td>
-                    </tr>
-                </tbody>
-            </table>
+        <ul>
+          <li><strong>PRI:</strong> Prioridad real del proceso.</li>
+          <li><strong>NI:</strong> Ajuste de prioridad (nice).</li>
+          <li><strong>UID:</strong> Identificador del usuario propietario.</li>
+        </ul>
 
-         </section>
+        <table class="tech-table">
+          <thead>
+            <tr>
+              <th>Comando</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>ps -ef</code></td>
+              <td>Muestra todos los procesos del sistema.</td>
+            </tr>
+            <tr>
+              <td><code>ps -ef --sort=-%mem</code></td>
+              <td>Ordena los procesos por consumo de memoria.</td>
+            </tr>
+            <tr>
+              <td><code>ps axjf</code></td>
+              <td>Muestra los procesos en forma jerárquica.</td>
+            </tr>
+            <tr>
+              <td><code>man ps</code></td>
+              <td>Manual del comando ps.</td>
+            </tr>
+            <tr>
+              <td><code>htop</code></td>
+              <td>Monitor interactivo de procesos.</td>
+            </tr>
+            <tr>
+              <td><code>/etc/yum.repos.d/</code></td>
+              <td>Directorio de repositorios del sistema.</td>
+            </tr>
+            <tr>
+              <td><code>sudo dnf install epel-release</code></td>
+              <td>Instala el repositorio EPEL.</td>
+            </tr>
+          </tbody>
+        </table>
 
-         <section id="desarrollo">
-            <h2>3. Desarrollo Técnico</h2>
-            <h3>Paso 1. Revisar procesos</h3>
-            <p>Dentro de Linux se vieron dos formas de ver todos los proceso dentro del sistema.</p>
-            <p>El comando <code>ps</code> se encarga de mostrar todos los procesos actuales del sistema. Este puede recibir diferentes banderas para mostrar diferentes resultados. En la Figura 1. se puede ver los procesos siendo acomodados por padre-hijo al usar las banderas <code>ps exjf</code></p>
-            <h3>Paso 2. Comando top vs htop</h3>
-            <p>Hay una mejor forma de ver los procesos en tiempo real, con el comando <code>top</code>. Esto permite monitorea el sistema y ver como los procesos cambian Figura 2. Pero incluso asi tiene una interfaaz con informacion necesaria de manera atractiva.</p>
-            <p>Para eso se utiliza el <code>htop</code> es un programa con mejor rendimiento y mas funcionalidades. Poder utilizarlo dentro de Linux se debe instalar con el comando <code>dnf</code> como se puede ver en la Figura 3. Una vez instalado se puede ver en la Figura 4, toda la informacion con mas detalle y mas sencillo de identificar. </p>/
-            <h3>Paso 3. Procesos padre y fork()</h3>
-            <p>En los sistemas tipo Unix, <code>fork()</code> es la llamada que hace posible la multitarea real. Cuando un programa ejecuta <code>fork()</code>, no se divide: se duplica. El sistema operativo crea un proceso hijo, que es casi una copia exacta del proceso padre. Ambos continúan ejecutándose desde el mismo punto del código, pero con identidades distintas.</p>
-            <p>Para ver esto en practica se creo un programa en c que crea tres procesos hijo usando fork(), cada uno con una prioridad distinta, mientras el proceso padre permanece activo. Tras cada fork(), el proceso hijo ajusta su prioridad con nice() (alta, normal y baja respectivamente), imprime su PID y entra en un bucle infinito para mantenerse en ejecución. El proceso padre, después de crear todos los hijos, muestra un mensaje y también queda en un bucle infinito, permitiendo observar con comandos como ps cómo el sistema planifica procesos según su prioridad.</p>
-            <p>Su ejecucion se puede ver en la Figura 5.</p>
+      </section>
 
-            <h3>Paso 4. Comando renice, prioridad y comando pkill</h3>
-            <p>Se utilizo el comando nice para cambiar la priordad de uno de los hijos de programa en c y luego se detuvieron todos los procesos con <code>pkill</code>.</p>
-            <p>Dentro de la practica yo cometi un error al matar al padre directamente y deje a los procesos hijo huerfanos. Con el comando <code>pkill</code> me permite matar a todos los procesos que tengan el mismo nombre.</p>
+      <section id="desarrollo">
+        <h2>3. Desarrollo Técnico</h2>
+        <h3>Paso 1. Revisar procesos</h3>
+        <p>Dentro de Linux se vieron dos formas de ver todos los proceso dentro del sistema.</p>
+        <p>El comando <code>ps</code> se encarga de mostrar todos los procesos actuales del sistema. Este puede recibir
+          diferentes banderas para mostrar diferentes resultados. En la Figura 1. se puede ver los procesos siendo
+          acomodados por padre-hijo al usar las banderas <code>ps exjf</code></p>
+        <h3>Paso 2. Comando top vs htop</h3>
+        <p>Hay una mejor forma de ver los procesos en tiempo real, con el comando <code>top</code>. Esto permite
+          monitorea el sistema y ver como los procesos cambian Figura 2. Pero incluso asi tiene una interfaaz con
+          informacion necesaria de manera atractiva.</p>
+        <p>Para eso se utiliza el <code>htop</code> es un programa con mejor rendimiento y mas funcionalidades. Poder
+          utilizarlo dentro de Linux se debe instalar con el comando <code>dnf</code> como se puede ver en la Figura 3.
+          Una vez instalado se puede ver en la Figura 4, toda la informacion con mas detalle y mas sencillo de
+          identificar. </p>/
+        <h3>Paso 3. Procesos padre y fork()</h3>
+        <p>En los sistemas tipo Unix, <code>fork()</code> es la llamada que hace posible la multitarea real. Cuando un
+          programa ejecuta <code>fork()</code>, no se divide: se duplica. El sistema operativo crea un proceso hijo, que
+          es casi una copia exacta del proceso padre. Ambos continúan ejecutándose desde el mismo punto del código, pero
+          con identidades distintas.</p>
+        <p>Para ver esto en practica se creo un programa en c que crea tres procesos hijo usando fork(), cada uno con
+          una prioridad distinta, mientras el proceso padre permanece activo. Tras cada fork(), el proceso hijo ajusta
+          su prioridad con nice() (alta, normal y baja respectivamente), imprime su PID y entra en un bucle infinito
+          para mantenerse en ejecución. El proceso padre, después de crear todos los hijos, muestra un mensaje y también
+          queda en un bucle infinito, permitiendo observar con comandos como ps cómo el sistema planifica procesos según
+          su prioridad.</p>
+        <p>Su ejecucion se puede ver en la Figura 5.</p>
 
-         </section>
+        <h3>Paso 4. Comando renice, prioridad y comando pkill</h3>
+        <p>Se utilizo el comando nice para cambiar la priordad de uno de los hijos de programa en c y luego se
+          detuvieron todos los procesos con <code>pkill</code>.</p>
+        <p>Dentro de la practica yo cometi un error al matar al padre directamente y deje a los procesos hijo huerfanos.
+          Con el comando <code>pkill</code> me permite matar a todos los procesos que tengan el mismo nombre.</p>
 
-         <section id="evidencia">
-            <h2>4. Evidencia de Ejecución</h2>
-            <p>
-               Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
-            </p>
-            <figure class="screenshot-container">
-               <img src="../../img/ev11_img1.png" alt="Ejecución del programa">
-               <figcaption>Fig 1. Ejecución de comando ps</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/ev11_img2.png" alt="Ejecución del programa">
-               <figcaption>Fig 2. Ejecucion con el comando top </figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/ev11_img3.png" alt="Ejecución del programa">
-               <figcaption>Fig 3. Instalacion de htop</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/ev11_img4.png" alt="Ejecución del programa">
-               <figcaption>Fig 4. Ejecucion de htop</figcaption>
-            </figure>
-            <figure class="screenshot-container">
-               <img src="../../img/ev11_img5.png" alt="Ejecución del programa">
-               <figcaption>Fig 5. Ejecución de programa en c con cambio de prioridades</figcaption>
-            </figure>
-         </section>
+      </section>
 
-         <section id="conclusiones">
-            <h2>5. Conclusiones y Trabajo Futuro</h2>
-            <p>
-                El manejo de procesos es fundamental en un sistema operativo. Herramientas como <code>htop</code> permiten visualizar y administrar recursos de forma eficiente, mientras que <code>nice</code> y <code>renice</code> ofrecen control sobre la prioridad de ejecución.</p>
-            <p>
-               <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
-               comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
-            </p>
-         </section>
+      <section id="evidencia">
+        <h2>4. Evidencia de Ejecución</h2>
+        <p>
+          Durante la ejecución del programa, se enviaron distintas señales utilizando el comando
+        </p>
+        <figure class="screenshot-container">
+          <img src="../../img/ev11_img1.png" alt="Ejecución del programa">
+          <figcaption>Fig 1. Ejecución de comando ps</figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/ev11_img2.png" alt="Ejecución del programa">
+          <figcaption>Fig 2. Ejecucion con el comando top </figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/ev11_img3.png" alt="Ejecución del programa">
+          <figcaption>Fig 3. Instalacion de htop</figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/ev11_img4.png" alt="Ejecución del programa">
+          <figcaption>Fig 4. Ejecucion de htop</figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/ev11_img5.png" alt="Ejecución del programa">
+          <figcaption>Fig 5. Ejecución de programa en c con cambio de prioridades</figcaption>
+        </figure>
+      </section>
 
-         <section id="referencias">
-            <h2>6. Bibliografía</h2>
-            <div class="references-grid">
-               <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
-            </div>
-         </section>
+      <section id="conclusiones">
+        <h2>5. Conclusiones y Trabajo Futuro</h2>
+        <p>
+          El manejo de procesos es fundamental en un sistema operativo. Herramientas como <code>htop</code> permiten
+          visualizar y administrar recursos de forma eficiente, mientras que <code>nice</code> y <code>renice</code>
+          ofrecen control sobre la prioridad de ejecución.</p>
+        <p>
+          <strong>Trabajo Futuro:</strong> Implementar temporizadores con <code>alarm()</code>,
+          comparar el manejo de señales en Linux contra Windows y desarrollar un handler en BASH.
+        </p>
+      </section>
 
-         <nav class="post-navigation">
-            <a href="../parcial1/lab-10.html" class="nav-btn next">
-               <i class="fas fa-chevron-left"></i>
-               <div class="nav-text">
-                  <span>Anterior</span>
-                  <strong>Laboratorio en clase #10: Manejo de Señales en Linux</strong>
-               </div>
-            </a>
+      <section id="referencias">
+        <h2>6. Bibliografía</h2>
+        <div class="references-grid">
+          <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+        </div>
+      </section>
 
-            <div class="nav-spacer"></div>
+      <nav class="post-navigation">
+        <a href="../parcial1/lab-10.html" class="nav-btn next">
+          <i class="fas fa-chevron-left"></i>
+          <div class="nav-text">
+            <span>Anterior</span>
+            <strong>Laboratorio en clase #10: Manejo de Señales en Linux</strong>
+          </div>
+        </a>
 
-            <a href="./lab-12.html" class="nav-btn next">
-               <div class="nav-text">
-                  <span>Siguiente</span>
-                  <strong>Laboratorio en clase #12: Procesos y mapeo de memoria Heap y Stack</strong>
-               </div>
-               <i class="fas fa-chevron-right"></i>
-            </a>
-         </nav>
+        <div class="nav-spacer"></div>
 
-      </main>
-   </div>
+        <a href="./lab-12.html" class="nav-btn next">
+          <div class="nav-text">
+            <span>Siguiente</span>
+            <strong>Laboratorio en clase #12: Procesos y mapeo de memoria Heap y Stack</strong>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </nav>
 
-   <script>
-      function guardarFiltro(filtro) {
-         localStorage.setItem('filtroActual', filtro);
-      }
-   </script>
+    </main>
+  </div>
+
+  <script>
+    function guardarFiltro(filtro) {
+      localStorage.setItem('filtroActual', filtro);
+    }
+  </script>
 </body>
 
 </html>

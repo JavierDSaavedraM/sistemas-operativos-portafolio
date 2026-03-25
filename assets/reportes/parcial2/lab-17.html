@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laboratorio en clase #17: Procesos cron y creaci&oacute;n de respaldos autom&aacute;ticos.</title>
+  <link rel="stylesheet" href="../../../css/style.css">
+  <link rel="stylesheet" href="../../../css/reporte_style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <nav class="app-header">
+
+    <div class="app-branding">
+      <div class="mini-avatar"></div>
+      <div class="brand-text">
+        <h3>Javier Saavedra</h3>
+        <p>Portafolio OS</p>
+      </div>
+    </div>
+
+    <div class="app-menu">
+      <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+        <i class="fas fa-home"></i> Inicio
+      </a>
+
+      <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial1')">
+        <i class="fas fa-folder"></i> Parcial 1
+      </a>
+
+      <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial2')">
+        <i class="fas fa-folder"></i> Parcial 2
+      </a>
+
+      <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial3')">
+        <i class="fas fa-folder"></i> Parcial 3
+      </a>
+    </div>
+  </nav>
+
+  <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+    <i class="fas fa-arrow-left"></i> Volver al Portafolio
+  </a>
+
+  <div class="report-container">
+
+    <aside class="toc-sidebar">
+      <h3>Contenido</h3>
+      <ul>
+        <li><a href="#intro">Carátula e Info</a></li>
+        <li><a href="#objetivos">Objetivos</a></li>
+        <li><a href="#marco">Marco Conceptual</a></li>
+        <li><a href="#desarrollo">Desarrollo Técnico</a></li>
+        <li><a href="#evidencia">Evidencia de Ejecución</a></li>
+        <li><a href="#conclusiones">Conclusiones</a></li>
+        <li><a href="#referencias">Fuentes y Enlaces</a></li>
+      </ul>
+    </aside>
+
+    <main class="report-content">
+      <header id="intro" class="report-header">
+        <span class="entry-type">Laboratorio en Clase #17</span>
+        <h1>Laboratorio en clase #17: Procesos cron y creaci&oacute;n de respaldos autom&aacute;ticos</h1>
+        <div class="meta-data">
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 23 de marzo, 2026</p>
+          <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+          <p><i class="fas fa-tag"></i> <strong>Tema:</strong> Crons en Linux</p>
+        </div>
+      </header>
+
+      <hr class="divider">
+
+      <section id="objetivos">
+        <h2>1. Objetivos</h2>
+        <div class="objective-box">
+          <h3><i class="fas fa-bullseye"></i> Objetivo General</h3>
+          <p>Utilizar los crons para crear un respaldo autom&aacute;tico de una carpeta del sistema.</p>
+        </div>
+
+        <h3>Objetivos Específicos</h3>
+        <ul class="check-list">
+          <li><i class="fas fa-check-circle"></i> Crear script sh que permita realizar.</li>
+          <li><i class="fas fa-check-circle"></i> Crear cron que se ejecute el script cada cierto tiempo.</li>
+        </ul>
+      </section>
+
+      <section id="marco">
+        <h2>2. Investigación y Marco Conceptual</h2>
+        <h3>Archivos ZIP</h3>
+        <p>Los archivos ZIP son un formato de compresión que permite agrupar uno o varios archivos en un solo fichero, reduciendo su tamaño para facilitar su almacenamiento y transferencia. Este tipo de archivo utiliza algoritmos de compresión sin pérdida, lo que significa que la información original se conserva intacta al descomprimirla. Dependiendo del tipo de archivo, la compresión puede reducir el tamaño entre un 10% y un 90%: por ejemplo, archivos de texto suelen comprimirse mucho, mientras que imágenes o videos ya comprimidos reducen menos. Gracias a su compatibilidad con múltiples sistemas operativos y herramientas, los archivos ZIP son ampliamente utilizados para compartir documentos, programas y datos de manera más eficiente. Además, pueden incluir opciones de seguridad como protección con contraseña, lo que los hace útiles para resguardar información.</p>
+
+        <p>En Windows, también es posible crear y descomprimir archivos ZIP utilizando la línea de comandos (CMD) mediante herramientas integradas como PowerShell. Para crear un archivo ZIP desde CMD, se puede ejecutar el comando powershell <code>Compress-Archive -Path archivo.txt -DestinationPath archivo.zip</code>, lo que permite comprimir uno o varios archivos. Para descomprimir, se utiliza powershell <code>Expand-Archive -Path archivo.zip -DestinationPath carpeta_destino</code>, extrayendo su contenido en la ubicación deseada.</p>
+
+        <p>En Linux, la creación y descompresión de archivos ZIP se realiza comúnmente desde la línea de comandos mediante las herramientas zip y unzip. El comando <code>zip</code> permite comprimir uno o varios archivos en un solo fichero, por ejemplo <code>zip archivo.zip archivo.txt o zip -r archivo.zip carpeta/</code> para incluir directorios completos, mientras que <code>unzip archivo.zip</code> se utiliza para extraer su contenido.</p>
+
+        <h3>Archivos TAR</h3>
+        <p>Los archivos TAR y TAR.GZ son formatos ampliamente utilizados en sistemas Linux para el almacenamiento y compresión de datos. Un archivo TAR (Tape Archive) se encarga de agrupar múltiples archivos y directorios en un solo fichero sin aplicar compresión, facilitando su manejo y organización. Por otro lado, el formato TAR.GZ combina TAR con compresión mediante gzip, lo que permite reducir significativamente el tamaño del archivo. Dependiendo del tipo de contenido, la compresión en archivos TAR.GZ puede variar aproximadamente entre un 20% y un 80%, siendo más efectiva en archivos de texto y menos en archivos multimedia ya comprimidos. Esta combinación es muy utilizada para distribuir software y respaldos, ya que conserva la estructura original de los archivos mientras optimiza el espacio de almacenamiento y la transferencia de datos.</p>
+
+        <p>Tanto Windows como Linux existe un comando <code>tar</code> el cual permite comprimir y descomprimir.Este comando permite tanto empaquetar como comprimir archivos desde la línea de comandos. Por ejemplo, para crear un archivo comprimido se puede usar <code>tar -czf archivo.tar.gz carpeta\</code>, mientras que para extraer su contenido se utiliza <code>tar -xzf archivo.tar.gz</code>. Asimismo, si solo se desea agrupar archivos sin compresión, se puede usar <code>tar -cvf archivo.tar carpeta\</code>. </p>
+        <h3>ZIP vs TAR</h3>
+        <p>Los formatos ZIP y TAR son ampliamente utilizados para el manejo de archivos, pero tienen propósitos distintos en sistemas como Linux y Windows. El formato ZIP combina la función de empaquetado y compresión en un solo paso, lo que lo hace práctico y compatible con múltiples plataformas. En cambio, TAR (Tape Archive) se utiliza principalmente para agrupar archivos sin comprimirlos, aunque puede combinarse con herramientas de compresión como gzip (TAR.GZ) para reducir su tamaño. En general, ZIP es más común en entornos Windows por su facilidad de uso, mientras que TAR y TAR.GZ son preferidos en Linux por su flexibilidad y eficiencia en la gestión de archivos y respaldos.</p>
+      </section>
+
+      <section id="desarrollo">
+        <h2>3. Desarrollo Técnico</h2>
+        <h3>Paso 1. Script Bash que pemite realizar respaldos.</h3>
+        <p>Primero se quiere crear una script que comprima un directorio con <code>tar</code> y escriba una en un archivo log la accion que realizo de esta manera existe la retrazabilidad.</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="title">javier@Fedora:~/</span>
+          </div>
+          <pre class="cmd">
+tar -czf estados_$(date +\%F).tar.gz /home/javier/estados
+echo "Respaldo realizado el dia $(date)" &gt;&gt; /home/javier/respaldo.log
+          </pre>
+        </div>
+
+        <p>Las banderas <code>-czf</code> significan:</p>
+        <ul>
+          <li>c: compime un en un archivo directorio</li>
+          <li>z: utilza Gzip para hacer un doble cifrado</li>
+          <li>f: para dar un archivo a coprimir</li>
+        </ul>
+        <p>Para eso tambien se le a&ntilde;ade la fecha al string del nombre y al final se declara el path al directorio a comprimir.</p>
+        <p>Para que este archivo pueda ser ejecutado por el sistema se debe cambiar los permisos y permitir que los crons lo puedan ejecutar. Esto se realiza mediante <code>chmod 755 script.sh</code></p>
+
+        <h3>Paso 2. Agregar un cron a crontab.</h3>
+        <p>Ya que se creo el script a ejecutar se debe declara un cron que realice la tarea cada cierto tiempo, al igual que la anterior tarea se a&ntilde;ade un cron con <code>crontab -e </code>, esta tarea se realizara cada dia a las 12:31.</p>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="title">javier@Fedora:~/</span>
+          </div>
+          <pre class="cmd">
+31 12 * * * /home/javier/respaldo.sh
+          </pre>
+        </div>
+      </section>
+
+      <section id="evidencia">
+        <h2>4. Evidencia de Ejecución</h2>
+        <figure class="screenshot-container">
+          <img src="../../img/lab17-01.png" alt="Ejecución del programa">
+          <figcaption>Fig 1. Evidencia de cambio de permisos del script y directorio antes que se ejecutara</figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/lab17-02.png" alt=" Evidencia de cuando se crea un cron">
+          <figcaption>Fig 2. Evidencia de crontab</figcaption>
+        </figure>
+        <figure class="screenshot-container">
+          <img src="../../img/lab17-03.png" alt="Lista de crons en el sistema">
+          <figcaption>Fig 3. Contendio de tar</figcaption>
+        </figure>
+      </section>
+
+      <section id="conclusiones">
+        <h2>5. Conclusiones y Trabajo Futuro</h2>
+        <p>En conclusión, el uso de procesos cron en Linux permite automatizar tareas de manera eficiente, como la generación de respaldos periódicos mediante scripts Bash. A través de este laboratorio se comprendió la importancia de combinar herramientas como tar para la compresión de archivos y cron para su ejecución programada, logrando así un sistema de respaldo automático sin intervención manual. Además, se reforzaron conceptos sobre permisos, manejo de scripts y diferencias entre formatos de compresión como ZIP y TAR, lo que contribuye a una mejor administración de la información y a la implementación de buenas prácticas en la gestión de sistemas.</p>
+        <p> <strong>Trabajo Futuro:</strong> Estudiar para el examen parcial</p> 
+      </section>
+
+      <section id="referencias">
+        <h2>7. Bibliografía</h2>
+        <div class="references-grid">
+          <p style="font-style: italic;"> Reporte generado con ayuda de ChatGPT</p>
+        </div>
+      </section>
+
+      <nav class="post-navigation">
+        <a href="./lab-16.html" class="nav-btn next">
+          <i class="fas fa-chevron-left"></i>
+          <div class="nav-text">
+            <span>Anterior</span>
+            <strong>Laboratorio en clase #16: Daemons y procesos cron</strong>
+          </div>
+        </a>
+        <div class="nav-spacer"></div>
+
+        <a href="../../../index.html" class="nav-btn next">
+          <div class="nav-text">
+            <span>Siguiente</span>
+            <strong>HOME</strong>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </nav>
+
+    </main>
+  </div>
+
+  <script>
+    function guardarFiltro(filtro) {
+      localStorage.setItem('filtroActual', filtro);
+    }
+  </script>
+</body>
+
+</html>
