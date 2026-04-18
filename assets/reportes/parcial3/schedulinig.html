@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Scheduling Dinámico: Python vs C (Hasta 44 Núcleos)</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a1a; color: #e0e0e0; padding: 20px; max-width: 1000px; margin: auto; }
+        .controls { background: #333; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 20px; border: 1px solid #444; }
+        .scenario-container { background: #252525; border-radius: 8px; padding: 15px; margin-bottom: 25px; border-left: 5px solid #0e639c; }
+        
+        /* Contenedor con Scroll para muchos núcleos */
+        .cores-container { 
+            max-height: 300px; 
+            overflow-y: auto; 
+            padding-right: 10px; 
+            border: 1px solid #333;
+            background-color: #1e1e1e;
+        }
+        /* Estilizar la barra de scroll */
+        .cores-container::-webkit-scrollbar { width: 8px; }
+        .cores-container::-webkit-scrollbar-track { background: #1a1a1a; }
+        .cores-container::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        .cores-container::-webkit-scrollbar-thumb:hover { background: #777; }
+
+        .core-row { display: flex; align-items: center; margin: 2px 0; height: 25px; }
+        .core-label { width: 80px; font-size: 12px; color: #9cdcfe; padding-left: 5px;}
+        .timeline { display: flex; flex: 1; height: 100%; background: #111; overflow: hidden; border-left: 2px solid #666; }
+        
+        /* Threads */
+        .task { height: 100%; width: 12px; flex-shrink: 0; margin-right: 1px; }
+        .t-active { background-color: #4fc3f7; box-shadow: inset 0 0 5px rgba(0,0,0,0.5); }
+        .py-main { background-color: #b39ddb; }
+        .idle { background-color: transparent; width: 12px; flex-shrink: 0; margin-right: 1px; }
+        
+        .usage-badge { background: #444; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 10px; }
+        .active-count { color: #4fc3f7; }
+
+        input[type=range] { cursor: pointer; width: 200px; }
+        button { background: #0e639c; color: white; border: none; padding: 10px 15px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        button:hover { background: #1177bb; }
+        h2 { margin-top: 0; display: flex; align-items: center; justify-content: space-between; }
+    </style>
+</head>
+<body>
+
+    <h1>Simulador de Paralelismo y Scheduling</h1>
+    
+    <div class="controls">
+        <div>
+            <label for="core-slider">Número de Núcleos: </label>
+            <input type="range" id="core-slider" min="1" max="44" value="4" oninput="updateCoreLabel(this.value)">
+            <span id="core-val" style="font-weight: bold; color: #4fc3f7; font-size: 1.2em;">4</span>
+        </div>
+        <button onclick="startSimulation()">Reiniciar Simulación</button>
+    </div>
+
+    <div class="scenario-container">
+        <h2>1. Python Puro (GIL) <span class="usage-badge">Uso Máximo: <span id="usage-py" class="active-count">0</span> núcleos</span></h2>
+        <p style="font-size: 0.9em; color: #aaa;">El GIL bloquea la ejecución paralela. No importa si tienes 44 núcleos, solo uno trabaja a la vez.</p>
+        <div class="cores-container" id="py-cores"></div>
+    </div>
+
+    <div class="scenario-container" style="border-left-color: #81c784;">
+        <h2>2. C Puro (Multithread) <span class="usage-badge">Uso Máximo: <span id="usage-c" class="active-count">0</span> núcleos</span></h2>
+        <p style="font-size: 0.9em; color: #aaa;">Sin restricciones. El SO distribuye los hilos en todos los núcleos disponibles (hasta 44) simultáneamente.</p>
+        <div class="cores-container" id="c-cores"></div>
+    </div>
+
+    <div class="scenario-container" style="border-left-color: #ffd54f;">
+        <h2>3. Python + Wrapper C <span class="usage-badge">Uso Máximo: <span id="usage-wrap" class="active-count">0</span> núcleos</span></h2>
+        <p style="font-size: 0.9em; color: #aaa;">Python inicia (1 núcleo), C toma el control y libera el GIL (se expande a todos), luego devuelve el control a Python.</p>
+        <div class="cores-container" id="wrapper-cores"></div>
+    </div>
+
+    <script>
+        let numCores = 4;
+        const MAX_TICKS = 80;
+        let currentTick = 0;
+        let simulationInterval;
+
+        function updateCoreLabel(val) {
+            numCores = parseInt(val);
+            document.getElementById('core-val').textContent = val;
+            initVisuals();
+        }
+
+        function initVisuals() {
+            createCoreRows('py-cores');
+            createCoreRows('c-cores');
+            createCoreRows('wrapper-cores');
+        }
+
+        function createCoreRows(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            for (let i = 0; i < numCores; i++) {
+                const row = document.createElement('div');
+                row.className = 'core-row';
+                row.innerHTML = `<div class="core-label">Core ${i + 1}</div><div class="timeline" id="${containerId}-t-${i}"></div>`;
+                container.appendChild(row);
+            }
+        }
+
+        function addBlock(containerId, coreIdx, type) {
+            const timeline = document.getElementById(`${containerId}-t-${coreIdx}`);
+            const block = document.createElement('div');
+            block.className = type === 'idle' ? 'idle' : `task ${type}`;
+            timeline.appendChild(block);
+        }
+
+        function startSimulation() {
+            clearInterval(simulationInterval);
+            currentTick = 0;
+            initVisuals();
+            
+            let maxPy = 0, maxC = 0, maxWrap = 0;
+
+            simulationInterval = setInterval(() => {
+                if (currentTick >= MAX_TICKS) {
+                    clearInterval(simulationInterval);
+                    return;
+                }
+
+                // 1. Python Puro (Siempre 1 núcleo)
+                const activePyCore = Math.floor(Math.random() * numCores);
+                for (let i = 0; i < numCores; i++) {
+                    addBlock('py-cores', i, (i === activePyCore) ? 't-active' : 'idle');
+                }
+                maxPy = 1;
+
+                // 2. C Puro (Todos los núcleos activos)
+                for (let i = 0; i < numCores; i++) {
+                    addBlock('c-cores', i, 't-active');
+                }
+                maxC = numCores;
+
+                // 3. Wrapper Python -> C
+                let currentWrapActive = 0;
+                const isParallelPhase = (currentTick > 15 && currentTick < 65);
+                for (let i = 0; i < numCores; i++) {
+                    if (isParallelPhase) {
+                        addBlock('wrapper-cores', i, 't-active');
+                        currentWrapActive = numCores;
+                    } else {
+                        if (i === 0) {
+                            addBlock('wrapper-cores', i, 'py-main');
+                            currentWrapActive = 1;
+                        } else {
+                            addBlock('wrapper-cores', i, 'idle');
+                        }
+                    }
+                }
+                if (currentWrapActive > maxWrap) maxWrap = currentWrapActive;
+
+                // Actualizar interfaz
+                document.getElementById('usage-py').textContent = maxPy;
+                document.getElementById('usage-c').textContent = maxC;
+                document.getElementById('usage-wrap').textContent = maxWrap;
+
+                // Auto-scroll en la línea de tiempo si se desborda (opcional)
+                const timelines = document.querySelectorAll('.timeline');
+                timelines.forEach(tl => tl.scrollLeft = tl.scrollWidth);
+
+                currentTick++;
+            }, 80);
+        }
+
+        window.onload = () => {
+            initVisuals();
+            startSimulation();
+        };
+    </script>
+</body>
+</html>

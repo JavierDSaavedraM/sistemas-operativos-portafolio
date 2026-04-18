@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python vs C — Threads & Scheduling (Hasta 44 Cores)</title>
+    <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #ffffff;
+  --bg2:       #f5f4ef;
+  --bg3:       #eeecea;
+  --text:      #1a1a18;
+  --text2:     #5f5e5a;
+  --text3:     #9c9a92;
+  --border:    rgba(0,0,0,0.12);
+  --border2:   rgba(0,0,0,0.22);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --danger-bg: #fcebeb; --danger-tx: #a32d2d;
+  --success-bg:#eaf3de; --success-tx:#3b6d11;
+  --info-bg:   #e6f1fb; --info-tx:   #185fa5;
+  --warn-bg:   #faeeda; --warn-tx:   #854f0b;
+}
+        @media (prefers-color-scheme: dark) {
+          :root {
+            --bg:        #1e1e1c; --bg2: #2a2a28; --bg3: #333330;
+            --text:      #e8e4d8; --text2: #b0aea6; --text3: #73726c;
+            --border:    rgba(255,255,255,0.12); --border2: rgba(255,255,255,0.22);
+            --danger-bg: #3d1c1c; --danger-tx: #f09595;
+            --success-bg:#1d2e10; --success-tx:#97c459;
+            --info-bg:   #0d2035; --info-tx:   #85b7eb;
+            --warn-bg:   #2e1e06; --warn-tx:   #fac775;
+          }
+        }
+
+        body {
+          font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+          background: var(--bg3); color: var(--text);
+          min-height: 100vh; padding: 2rem 1rem;
+        }
+        .container {
+          max-width: 920px; margin: 0 auto;
+          background: var(--bg); border-radius: var(--radius-lg);
+          border: 0.5px solid var(--border); padding: 2rem;
+        }
+        h1 { font-size: 20px; font-weight: 500; margin-bottom: 0.4rem; }
+        .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 1.4rem; }
+
+        /* ── SCROLLABLE AREAS FOR 44 CORES ── */
+        .scrollable-wrap {
+          max-height: 260px;
+          overflow-y: auto;
+          padding-right: 6px;
+        }
+        .scrollable-wrap::-webkit-scrollbar { width: 6px; }
+        .scrollable-wrap::-webkit-scrollbar-track { background: var(--bg2); border-radius: 4px; }
+        .scrollable-wrap::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+        .scrollable-wrap::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+        /* ── CPU SELECTOR ── */
+        .cpu-selector {
+          display: flex; align-items: center; gap: 14px;
+          padding: 12px 16px; background: var(--bg2);
+          border: 0.5px solid var(--border2); border-radius: var(--radius-lg);
+          margin-bottom: 1.2rem; flex-wrap: wrap;
+        }
+        .cpu-selector-label { font-size: 13px; font-weight: 500; white-space: nowrap; }
+        .core-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+        .core-btn {
+          width: 36px; height: 30px; border: 0.5px solid var(--border2);
+          border-radius: var(--radius-md); font-size: 12px; font-weight: 500;
+          cursor: pointer; background: var(--bg); color: var(--text2);
+          transition: all .12s; font-family: inherit;
+        }
+        .core-btn:hover { background: var(--bg3); }
+        .core-btn.active { background: #185FA5; color: #fff; border-color: transparent; }
+        .cpu-selector-hint { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+        /* ── CORE METER ── */
+        .core-meter {
+          background: var(--bg2); border: 0.5px solid var(--border);
+          border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1.3rem;
+        }
+        .core-meter-header {
+          display: flex; justify-content: space-between; align-items: baseline;
+          margin-bottom: 12px; flex-wrap: wrap; gap: 6px;
+        }
+        .core-meter-title {
+          font-size: 11px; font-weight: 500; color: var(--text3);
+          text-transform: uppercase; letter-spacing: .07em;
+        }
+        .core-meter-summary { font-size: 12px; color: var(--text2); }
+        .core-meter-grid { display: flex; gap: 5px; flex-wrap: wrap; align-items: flex-end; }
+        .core-chip { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+        .core-chip-bar {
+          width: 30px; height: 48px; background: var(--bg3); border-radius: 4px;
+          border: 0.5px solid var(--border); overflow: hidden;
+          display: flex; flex-direction: column; justify-content: flex-end;
+        }
+        .core-chip-fill { width: 100%; border-radius: 3px 3px 0 0; transition: height .2s ease, background .2s ease; }
+        .core-chip-id  { font-size: 9px; color: var(--text3); font-weight: 500; }
+        .core-chip-pct { font-size: 9px; font-weight: 500; min-width: 28px; text-align: center; transition: color .2s; }
+        .core-meter-legend {
+          display: flex; gap: 12px; flex-wrap: wrap;
+          margin-top: 10px; padding-top: 10px;
+          border-top: 0.5px solid var(--border);
+        }
+        .core-meter-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text2); }
+        .core-meter-legend-dot  { width: 9px; height: 9px; border-radius: 2px; flex-shrink: 0; }
+
+        /* ── TABS ── */
+        .tabs { display: flex; gap: 6px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .tab {
+          padding: 7px 16px; border: 0.5px solid var(--border2);
+          border-radius: var(--radius-md); font-size: 13px; cursor: pointer;
+          background: transparent; color: var(--text2); transition: all .15s; font-family: inherit;
+        }
+        .tab.active { background: var(--bg2); color: var(--text); font-weight: 500; }
+        .tab:hover:not(.active) { background: var(--bg2); }
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        /* ── SHARED ── */
+        .section-title {
+          font-size: 11px; font-weight: 500; color: var(--text3);
+          text-transform: uppercase; letter-spacing: .07em; margin-bottom: 10px;
+        }
+        .note {
+          font-size: 12px; color: var(--text2); line-height: 1.65;
+          padding: 10px 14px; border-left: 2px solid var(--border2);
+          margin-bottom: 1.2rem; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+          background: var(--bg2);
+        }
+        .note strong { font-weight: 500; color: var(--text); }
+        .note em { font-style: italic; }
+        .note code { font-family: monospace; font-size: 11px; }
+
+        .cpu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 1.2rem; }
+        @media (max-width: 600px) { .cpu-grid { grid-template-columns: 1fr; } }
+
+        .cpu-box {
+          background: var(--bg2); border: 0.5px solid var(--border);
+          border-radius: var(--radius-lg); padding: 14px;
+        }
+        .cpu-box-label { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+        .cpu-box-name  { font-size: 13px; font-weight: 500; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+        .badge { font-size: 11px; padding: 2px 8px; border-radius: var(--radius-md); font-weight: 500; }
+        .badge-red   { background: var(--danger-bg);  color: var(--danger-tx); }
+        .badge-green { background: var(--success-bg); color: var(--success-tx); }
+
+        .lane-wrap { display: flex; flex-direction: column; gap: 4px; }
+        .lane { display: flex; align-items: center; gap: 8px; height: 20px; }
+        .lane-label { font-size: 10px; color: var(--text3); width: 38px; flex-shrink: 0; text-align: right; }
+        .lane-bar {
+          flex: 1; height: 13px; border-radius: 3px;
+          background: var(--bg); border: 0.5px solid var(--border);
+          overflow: hidden; position: relative;
+        }
+        .tick { position: absolute; top: 0; height: 100%; width: 3px; border-radius: 2px; }
+
+        .legend-row { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 1rem; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text2); }
+        .dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+        .ctrl { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text2); margin-bottom: 1.2rem; flex-wrap: wrap; }
+        .btn {
+          padding: 6px 14px; border: 0.5px solid var(--border2); border-radius: var(--radius-md);
+          font-size: 13px; cursor: pointer; background: transparent; color: var(--text);
+          font-family: inherit; transition: background .15s;
+        }
+        .btn:hover   { background: var(--bg2); }
+        .btn.running { background: var(--success-bg); color: var(--success-tx); border-color: transparent; }
+
+        .info-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.2rem; }
+        @media (max-width: 480px) { .info-cards { grid-template-columns: 1fr; } }
+        .info-card { background: var(--bg2); border-radius: var(--radius-md); padding: 10px 12px; border: 0.5px solid var(--border); }
+        .info-card-label { font-size: 11px; color: var(--text3); margin-bottom: 3px; }
+        .info-card-val   { font-size: 20px; font-weight: 500; }
+
+        /* TIMELINE */
+        .timeline-wrap { width: 100%; border-radius: var(--radius-md); border: 0.5px solid var(--border); background: var(--bg); margin-bottom: 8px; }
+        .tl-row { display: flex; align-items: center; height: 24px; border-bottom: 0.5px solid var(--border); }
+        .tl-row:last-child { border-bottom: none; }
+        .tl-label { width: 80px; font-size: 11px; color: var(--text2); padding: 0 8px; flex-shrink: 0; text-align: right; border-right: 0.5px solid var(--border); }
+        .tl-track { flex: 1; height: 100%; position: relative; overflow: hidden; }
+        .tl-seg { position: absolute; height: 55%; top: 22%; border-radius: 3px; opacity: 0; transition: opacity 0.1s; }
+
+        .sched-controls { display: flex; gap: 12px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; }
+        .sched-controls label { font-size: 12px; color: var(--text2); }
+        .sched-controls input[type=range] { flex: 1; min-width: 80px; max-width: 160px; }
+        .sched-controls span { font-size: 12px; font-weight: 500; min-width: 20px; }
+
+        /* PARALLEL */
+        .par-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+        @media (max-width: 600px) { .par-grid { grid-template-columns: 1fr; } }
+        .par-card { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 12px; }
+        .par-card-title { font-size: 12px; font-weight: 500; margin-bottom: 8px; color: var(--text2); }
+        .par-cores { display: flex; gap: 3px; flex-wrap: wrap; min-height: 26px; align-items: center; margin-bottom: 6px; }
+        .par-core {
+          height: 24px; min-width: 24px; flex: 1;
+          border-radius: 4px; border: 0.5px solid var(--border);
+          display: flex; align-items: center; justify-content: center;
+          font-size: 9px; font-weight: 500; transition: background .25s, color .25s;
+        }
+        .par-card-note { font-size: 11px; color: var(--text3); }
+        .par-card-eff  { font-size: 13px; font-weight: 500; margin-top: 4px; }
+
+        .speedup-card { background: var(--bg2); border-radius: var(--radius-lg); border: 0.5px solid var(--border); padding: 14px; }
+        .speedup-card-title { font-size: 12px; font-weight: 500; margin-bottom: 12px; color: var(--text2); }
+        .speedup-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .speedup-row:last-child { margin-bottom: 0; }
+        .speedup-row-label { width: 180px; font-size: 12px; color: var(--text2); text-align: right; flex-shrink: 0; }
+        @media (max-width: 560px) { .speedup-row-label { width: 110px; font-size: 10px; } }
+        .speedup-track { flex: 1; background: var(--bg); border-radius: 4px; height: 18px; overflow: hidden; border: 0.5px solid var(--border); }
+        .speedup-bar   { height: 100%; border-radius: 4px; width: 0%; transition: width 1s ease; }
+        .speedup-val   { font-size: 12px; font-weight: 500; width: 42px; }
+        .speedup-note  { font-size: 10px; color: var(--text3); min-width: 80px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Python vs C — Threads &amp; Scheduling</h1>
+      <p class="subtitle">Visualización interactiva del GIL, scheduling de CPU y paralelismo real</p>
+
+      <div class="cpu-selector">
+        <span class="cpu-selector-label">Núcleos de CPU:</span>
+        <div class="core-btns" id="core-btns"></div>
+        <span class="cpu-selector-hint" id="selector-hint">4 cores — 4 threads en simulación</span>
+      </div>
+
+      <div class="core-meter">
+        <div class="core-meter-header">
+          <span class="core-meter-title">Monitor de núcleos en uso</span>
+          <span class="core-meter-summary" id="meter-summary">Inicia una simulación para ver el uso de cores</span>
+        </div>
+        <div class="core-meter-grid scrollable-wrap" id="core-meter-grid"></div>
+        <div class="core-meter-legend" id="meter-legend"></div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="showPanel('gil',this)">GIL — Python vs C</button>
+        <button class="tab" onclick="showPanel('sched',this)">Scheduling en CPU</button>
+        <button class="tab" onclick="showPanel('wrapper',this)">Python + wrapper C</button>
+        <button class="tab" onclick="showPanel('parallel',this)">Paralelismo real</button>
+      </div>
+
+      <div class="panel active" id="panel-gil">
+        <p class="section-title">Global Interpreter Lock — por qué Python no es verdaderamente paralelo</p>
+        <div class="note">Python tiene un <strong>GIL</strong>: un mutex que solo permite que <em>un thread</em> ejecute bytecode a la vez, incluso con muchos cores disponibles. C no tiene ningún equivalente — cada thread obtiene su propio core.</div>
+        <div class="cpu-grid">
+          <div class="cpu-box">
+            <div class="cpu-box-label" id="lbl-py-gil">PYTHON — threads, 1 proceso</div>
+            <div class="cpu-box-name" style="color:#B05538">Con GIL <span class="badge badge-red">concurrente, no paralelo</span></div>
+            <div class="lane-wrap scrollable-wrap" id="lanes-python"></div>
+          </div>
+          <div class="cpu-box">
+            <div class="cpu-box-label" id="lbl-c-gil">C — threads, 1 proceso</div>
+            <div class="cpu-box-name" style="color:#185FA5">Sin GIL <span class="badge badge-green">paralelo real</span></div>
+            <div class="lane-wrap scrollable-wrap" id="lanes-c"></div>
+          </div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="dot" style="background:#E85D24"></div>Thread Python activo</div>
+          <div class="legend-item"><div class="dot" style="background:#D3D1C7;border:0.5px solid #aaa"></div>Bloqueado por GIL</div>
+          <div class="legend-item"><div class="dot" style="background:#378ADD"></div>Thread C en core</div>
+        </div>
+        <div class="ctrl">
+          <button class="btn" id="btn-gil" onclick="toggleGil()">▶ Iniciar simulación</button>
+          <span id="time-gil" style="font-size:12px;color:var(--text3)">t = 0 ms</span>
+        </div>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-label">Cores activos — Python</div>
+            <div class="info-card-val" id="stat-py-active" style="color:#B05538">—</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Cores activos — C</div>
+            <div class="info-card-val" id="stat-c-active" style="color:#185FA5">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-sched">
+        <p class="section-title">Cómo el OS asigna tiempo de CPU a cada thread</p>
+        <div class="note">El scheduler del OS reparte <strong>quantums</strong> entre threads. En Python, el GIL fuerza round-robin estricto (1 thread a la vez). En C, el OS puede asignar hasta <em>N</em> threads simultáneamente — uno por core disponible.</div>
+        <div class="sched-controls">
+          <label>Quantum (ms):</label>
+          <input type="range" min="1" max="20" value="8" id="quantum-slider" oninput="document.getElementById('quantum-val').textContent=this.value">
+          <span id="quantum-val">8</span>
+        </div>
+        <div class="ctrl">
+          <button class="btn" id="btn-sched" onclick="toggleSched()">▶ Iniciar</button>
+          <span id="time-sched" style="font-size:12px;color:var(--text3)">t = 0 ms</span>
+        </div>
+        <p class="section-title" style="margin-bottom:6px">Timeline — Python (GIL, round-robin)</p>
+        <div class="timeline-wrap scrollable-wrap" id="tl-python"></div>
+        <p class="section-title" style="margin-top:12px;margin-bottom:6px">Timeline — C (paralelo, todos los cores simultáneos)</p>
+        <div class="timeline-wrap scrollable-wrap" id="tl-c"></div>
+      </div>
+
+      <div class="panel" id="panel-wrapper">
+        <p class="section-title">Python puro vs Python con wrapper a C</p>
+        <div class="note">Cuando Python llama código C via <strong>ctypes</strong>, <strong>Cython</strong> o <strong>cffi</strong>, el GIL puede liberarse con <code>Py_BEGIN_ALLOW_THREADS</code>. Mientras la extensión C corre, todos los threads disponibles pueden usar sus propios cores.</div>
+        <div class="cpu-grid">
+          <div class="cpu-box">
+            <div class="cpu-box-label" id="lbl-py-wrap">Python puro — threads CPU-bound</div>
+            <div class="cpu-box-name" style="color:#B05538">Sin wrapper <span class="badge badge-red">GIL siempre activo</span></div>
+            <div class="lane-wrap scrollable-wrap" id="lanes-pypure"></div>
+          </div>
+          <div class="cpu-box">
+            <div class="cpu-box-label" id="lbl-c-wrap">Python + wrapper C — threads</div>
+            <div class="cpu-box-name" style="color:#0F6E56">Con wrapper <span class="badge badge-green">GIL liberado</span></div>
+            <div class="lane-wrap scrollable-wrap" id="lanes-pywrap"></div>
+          </div>
+        </div>
+        <div class="legend-row">
+          <div class="legend-item"><div class="dot" style="background:#E85D24"></div>Python bytecode (GIL tomado)</div>
+          <div class="legend-item"><div class="dot" style="background:#1D9E75"></div>Extensión C (GIL libre)</div>
+          <div class="legend-item"><div class="dot" style="background:#D3D1C7;border:0.5px solid #aaa"></div>Esperando GIL</div>
+        </div>
+        <div class="ctrl">
+          <button class="btn" id="btn-wrap" onclick="toggleWrap()">▶ Iniciar simulación</button>
+          <span id="time-wrap" style="font-size:12px;color:var(--text3)">t = 0 ms</span>
+        </div>
+        <div class="info-cards">
+          <div class="info-card">
+            <div class="info-card-label">Cores activos — Python puro</div>
+            <div class="info-card-val" id="stat-py-pure" style="color:#B05538">—</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Cores activos — Python + C</div>
+            <div class="info-card-val" id="stat-py-wrap" style="color:#0F6E56">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-parallel">
+        <p class="section-title">Comparativa de paralelismo real</p>
+        <div class="note"><strong>multiprocessing</strong> evita el GIL con procesos separados. <strong>threading</strong> CPU-bound en Python no escala. <strong>C pthreads</strong> y <strong>wrapper C</strong> usan todos los cores disponibles.</div>
+        <div class="par-grid">
+          <div class="par-card">
+            <div class="par-card-title">PYTHON threading (CPU-bound)</div>
+            <div class="par-cores scrollable-wrap" id="par-pythread"></div>
+            <div class="par-card-note" id="note-pythread"></div>
+            <div class="par-card-eff"  id="eff-pythread"></div>
+          </div>
+          <div class="par-card">
+            <div class="par-card-title">C pthreads (CPU-bound)</div>
+            <div class="par-cores scrollable-wrap" id="par-cthread"></div>
+            <div class="par-card-note" id="note-cthread"></div>
+            <div class="par-card-eff"  id="eff-cthread"></div>
+          </div>
+          <div class="par-card">
+            <div class="par-card-title">PYTHON multiprocessing</div>
+            <div class="par-cores scrollable-wrap" id="par-pymp"></div>
+            <div class="par-card-note" id="note-pymp"></div>
+            <div class="par-card-eff"  id="eff-pymp"></div>
+          </div>
+          <div class="par-card">
+            <div class="par-card-title">PYTHON + wrapper C (ctypes/Cython)</div>
+            <div class="par-cores scrollable-wrap" id="par-pywrap2"></div>
+            <div class="par-card-note" id="note-pywrap2"></div>
+            <div class="par-card-eff"  id="eff-pywrap2"></div>
+          </div>
+        </div>
+        <div class="speedup-card">
+          <div class="speedup-card-title" id="speedup-title">Speedup relativo — tarea CPU-bound</div>
+          <div id="speedup-chart"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ============================================================
+      CONSTANTS
+        ============================================================ */
+        const COLORS_PY = ['#E85D24','#F2A623','#BA7517','#854F0B','#CC6B1A','#A33B10','#7A2E08','#D4893A'];
+      const COLORS_C  = ['#378ADD','#1D9E75','#7F77DD','#D4537E','#1F6FBF','#0D7A5C','#5B52C2','#B33569'];
+      const GRAY_IDLE = '#D3D1C7';
+
+      // ── ACTUALIZADO PARA PERMITIR HASTA 44 CORES ──
+      const CORE_OPTS = [1, 2, 4, 8, 16, 32, 44];
+
+      let numCores = 4;
+      let gilAnim   = null, gilRunning   = false, gilT   = 0;
+      let schedAnim = null, schedRunning = false, schedT = 0;
+      let wrapAnim  = null, wrapRunning  = false, wrapT  = 0;
+
+      /* ============================================================
+        CPU SELECTOR
+        ============================================================ */
+        function buildCoreSelector() {
+          const wrap = document.getElementById('core-btns');
+          wrap.innerHTML = '';
+          CORE_OPTS.forEach(n => {
+            const btn = document.createElement('button');
+            btn.className = 'core-btn' + (n === numCores ? ' active' : '');
+            btn.textContent = n;
+            btn.title = n + (n === 1 ? ' núcleo' : ' núcleos');
+            btn.onclick = () => selectCores(n);
+            wrap.appendChild(btn);
+          });
+        }
+
+      function selectCores(n) {
+        stopAll();
+        numCores = n;
+        document.querySelectorAll('.core-btn').forEach(b =>
+          b.classList.toggle('active', parseInt(b.textContent) === n)
+        );
+        document.getElementById('selector-hint').textContent =
+          n + ' core' + (n > 1 ? 's' : '') + ' — ' + n + ' thread' + (n > 1 ? 's' : '') + ' en simulación';
+        rebuildAll();
+      }
+
+      function stopAll() {
+        if (gilRunning)   { gilRunning=false;   clearInterval(gilAnim);   resetBtn('btn-gil',  '▶ Iniciar simulación'); }
+        if (schedRunning) { schedRunning=false; clearInterval(schedAnim); resetBtn('btn-sched','▶ Iniciar'); }
+        if (wrapRunning)  { wrapRunning=false;  clearInterval(wrapAnim);  resetBtn('btn-wrap', '▶ Iniciar simulación'); }
+        clearMeter();
+      }
+
+      function resetBtn(id, label) {
+        const btn = document.getElementById(id);
+        if (btn) { btn.textContent = label; btn.classList.remove('running'); }
+      }
+
+      /* ============================================================
+        CORE METER
+        ============================================================ */
+        function buildMeter() {
+          const grid = document.getElementById('core-meter-grid');
+          grid.innerHTML = '';
+          for (let i = 0; i < numCores; i++) {
+            const chip = document.createElement('div');
+            chip.className = 'core-chip';
+            chip.innerHTML = `
+              <div class="core-chip-bar">
+              <div class="core-chip-fill" id="mf-${i}" style="height:0%;background:${GRAY_IDLE}"></div>
+              </div>
+              <div class="core-chip-id">C${i+1}</div>
+              <div class="core-chip-pct" id="mp-${i}" style="color:var(--text3)">0%</div>
+              `;
+            grid.appendChild(chip);
+          }
+          buildMeterLegend([]);
+          document.getElementById('meter-summary').textContent = 'Inicia una simulación para ver el uso de cores';
+        }
+
+      function buildMeterLegend(entries) {
+        const el = document.getElementById('meter-legend');
+        if (!entries || entries.length === 0) { el.innerHTML = ''; return; }
+        el.innerHTML = entries.map(e =>
+          `<div class="core-meter-legend-item">
+          <div class="core-meter-legend-dot" style="background:${e.color}"></div>${e.label}
+          </div>`
+        ).join('');
+      }
+
+      function setMeter(coreUsage, legendEntries) {
+        let activeCount = 0, totalPct = 0;
+        for (let i = 0; i < numCores; i++) {
+          const u = (coreUsage && coreUsage[i]) ? coreUsage[i] : { pct: 0, color: GRAY_IDLE };
+          const fill = document.getElementById('mf-' + i);
+          const pctEl = document.getElementById('mp-' + i);
+          if (!fill || !pctEl) continue;
+          const pct = Math.round(Math.min(100, Math.max(0, u.pct)));
+          fill.style.height     = pct + '%';
+          fill.style.background = pct > 5 ? u.color : GRAY_IDLE;
+          pctEl.textContent     = pct + '%';
+          pctEl.style.color     = pct > 5 ? u.color : 'var(--text3)';
+          if (pct > 5) activeCount++;
+          totalPct += pct;
+        }
+        const avg = Math.round(totalPct / numCores);
+        document.getElementById('meter-summary').textContent =
+          activeCount + ' / ' + numCores + ' cores activos — uso promedio: ' + avg + '%';
+        if (legendEntries) buildMeterLegend(legendEntries);
+      }
+
+      function clearMeter() {
+        setMeter(Array.from({length: numCores}, () => ({pct:0, color:GRAY_IDLE})), []);
+      }
+
+      /* ============================================================
+        BUILD LANE ROWS (MODIFICADO PARA MOSTRAR TODOS LOS CORES)
+        ============================================================ */
+        function buildLanes(id, n, colors) {
+          const wrap = document.getElementById(id);
+          if (!wrap) return;
+          wrap.innerHTML = '';
+          // Usar n completo en vez de Math.min(n, 8) para que el scroll trabaje con todos.
+            const show = n; 
+          for (let i = 0; i < show; i++) {
+            const lane = document.createElement('div');
+            lane.className = 'lane';
+            const lbl = document.createElement('div');
+            lbl.className = 'lane-label';
+            lbl.textContent = 'T' + (i + 1);
+            const bar = document.createElement('div');
+            bar.className = 'lane-bar';
+            const tick = document.createElement('div');
+            tick.className = 'tick';
+            tick.id = id + '-t' + i;
+            tick.style.background = colors[i % colors.length];
+            bar.appendChild(tick);
+            lane.appendChild(lbl);
+            lane.appendChild(bar);
+            wrap.appendChild(lane);
+          }
+        }
+
+      /* ============================================================
+        REBUILD ALL PANELS
+        ============================================================ */
+        function rebuildAll() {
+          const n = numCores;
+          const s = (x, id) => { const el = document.getElementById(id); if (el) el.textContent = x; };
+
+          s('PYTHON (CPython) — ' + n + ' threads, 1 proceso', 'lbl-py-gil');
+          s('C — ' + n + ' threads, 1 proceso',                'lbl-c-gil');
+          s('Python puro — ' + n + ' threads CPU-bound',        'lbl-py-wrap');
+          s('Python + wrapper C — ' + n + ' threads',           'lbl-c-wrap');
+          s('—', 'stat-py-active'); s('—', 'stat-c-active');
+          s('—', 'stat-py-pure');   s('—', 'stat-py-wrap');
+
+          buildLanes('lanes-python', n, COLORS_PY);
+          buildLanes('lanes-c',      n, COLORS_C);
+          buildLanes('lanes-pypure', n, COLORS_PY);
+          buildLanes('lanes-pywrap', n, ['#1D9E75']);
+
+          buildMeter();
+          buildSchedTimelines();
+          buildParallelPanel();
+          buildSpeedupChart();
+        }
+
+      /* ============================================================
+        PANEL 1: GIL
+        ============================================================ */
+        function toggleGil() {
+          const btn = document.getElementById('btn-gil');
+          if (gilRunning) {
+            gilRunning = false; clearInterval(gilAnim);
+            btn.textContent = '▶ Iniciar simulación'; btn.classList.remove('running');
+            clearMeter(); return;
+          }
+          gilRunning = true; gilT = 0;
+          btn.textContent = '⏹ Detener'; btn.classList.add('running');
+
+          const n = numCores;
+          const show = n;
+          let activeThread = 0;
+
+          const legend = [
+            { color: '#E85D24', label: 'Python — 1 core activo (GIL)' },
+            { color: '#378ADD', label: 'C — ' + n + ' cores activos (paralelo)' },
+          ];
+          buildMeterLegend(legend);
+
+          gilAnim = setInterval(() => {
+            gilT += 50;
+            const prog = (gilT % 5000) / 5000 * 100;
+            if (gilT % 500 === 0) activeThread = (activeThread + 1) % show;
+
+            for (let i = 0; i < show; i++) {
+              const tick = document.getElementById('lanes-python-t' + i);
+              if (!tick) continue;
+              if (i === activeThread) {
+                tick.style.left = prog + '%'; tick.style.background = COLORS_PY[i % 8];
+                tick.style.width = '4px'; tick.style.opacity = '1';
+              } else {
+                tick.style.background = GRAY_IDLE; tick.style.width = '2px'; tick.style.opacity = '0.28';
+              }
+            }
+            for (let i = 0; i < show; i++) {
+              const tick = document.getElementById('lanes-c-t' + i);
+              if (!tick) continue;
+              tick.style.left = ((prog + i * (80 / Math.max(show, 1))) % 100) + '%';
+              tick.style.background = COLORS_C[i % 8]; tick.style.width = '4px'; tick.style.opacity = '1';
+            }
+
+            document.getElementById('time-gil').textContent = 't = ' + gilT + ' ms';
+            document.getElementById('stat-py-active').textContent = '1 / ' + n;
+            document.getElementById('stat-c-active').textContent  = n + ' / ' + n;
+
+            const cUsage = Array.from({length: n}, (_, i) => ({
+              pct:   75 + Math.random() * 25,
+              color: COLORS_C[i % 8],
+            }));
+            const blended = cUsage.map((u, i) => ({
+              pct:   i === activeThread % n ? 82 + Math.random()*18 : u.pct,
+              color: i === activeThread % n ? '#E85D24' : u.color,
+            }));
+            setMeter(blended);
+
+            if (gilT >= 10000) gilT = 0;
+          }, 50);
+        }
+
+      /* ============================================================
+        PANEL 2: SCHEDULING
+        ============================================================ */
+        function buildSchedTimelines() {
+          ['tl-python','tl-c'].forEach((id, idx) => {
+            const wrap = document.getElementById(id);
+            if (!wrap) return;
+            wrap.innerHTML = '';
+            const show = numCores; // Mostrar todos con scroll
+            for (let i = 0; i < show; i++) {
+              const row = document.createElement('div'); row.className = 'tl-row';
+              const lbl = document.createElement('div'); lbl.className = 'tl-label';
+              lbl.textContent = 'Thread ' + (i + 1);
+              const track = document.createElement('div'); track.className = 'tl-track';
+              track.id = id + '-track-' + i;
+              row.appendChild(lbl); row.appendChild(track); wrap.appendChild(row);
+            }
+          });
+        }
+
+      function toggleSched() {
+        const btn = document.getElementById('btn-sched');
+        if (schedRunning) {
+          schedRunning = false; clearInterval(schedAnim);
+          btn.textContent = '▶ Iniciar'; btn.classList.remove('running');
+          clearMeter(); return;
+        }
+        schedRunning = true; schedT = 0;
+        btn.textContent = '⏹ Detener'; btn.classList.add('running');
+
+        const n = numCores;
+        const show = n;
+        const segsPerThread = 20;
+        const totalSteps    = segsPerThread * show;
+
+        const pySegs = Array.from({length: show}, () => []);
+        for (let s = 0; s < totalSteps; s++) {
+          const t = s % show;
+          const qW = 100 / totalSteps;
+          pySegs[t].push({ x: s * qW, w: qW * 0.88 });
+        }
+        const cSegs = Array.from({length: show}, () => []);
+        for (let i = 0; i < show; i++) {
+          for (let s = 0; s < segsPerThread; s++) {
+            const qW = 100 / segsPerThread;
+            cSegs[i].push({ x: s * qW, w: qW * 0.88 });
+          }
+        }
+
+        // AQUÍ ESTABA EL CORTE - Uniendo la lógica
+        [['tl-python', pySegs, COLORS_PY], ['tl-c', cSegs, COLORS_C]].forEach(([id, segs, colors]) => {
+          for (let i = 0; i < show; i++) {
+            const track = document.getElementById(id + '-track-' + i);
+            if (!track) continue;
+            track.innerHTML = '';
+            segs[i].forEach((seg, idx) => {
+              const d = document.createElement('div'); d.className = 'tl-seg';
+              d.style.left = seg.x + '%'; d.style.width = seg.w + '%';
+              d.style.background = colors[i % 8];
+              d.id = id + '-seg-' + i + '-' + idx;
+              track.appendChild(d);
+            });
+          }
+        });
+
+        const legend = [
+          { color: '#E85D24', label: 'Python — 1 thread/quantum (GIL)' },
+          { color: '#378ADD', label: 'C — ' + n + ' threads simultáneos' },
+        ];
+        buildMeterLegend(legend);
+
+        let step = 0;
+        schedAnim = setInterval(() => {
+          const pyActive = step % show;
+
+          // Animación visual de los segmentos
+          for (let i = 0; i < show; i++) {
+            const els = document.querySelectorAll('#tl-python-track-' + i + ' .tl-seg');
+            els.forEach((el, idx) => { if (idx <= Math.floor(step / show)) el.style.opacity = '1'; });
+
+            const cels = document.querySelectorAll('#tl-c-track-' + i + ' .tl-seg');
+            cels.forEach((el, idx) => { if (idx <= Math.floor(step / show)) el.style.opacity = '1'; });
+          }
+
+          schedT = Math.round(step / totalSteps * 100);
+          document.getElementById('time-sched').textContent = 't = ' + schedT + ' ms (simulado)';
+
+          const meterUsage = Array.from({length: n}, (_, i) => ({
+            pct:   step > 2 ? (i === pyActive % n ? 85 + Math.random()*15 : (i < show ? 70 + Math.random()*30 : 0)) : 0,
+            color: i === pyActive % n ? '#E85D24' : COLORS_C[i % 8],
+          }));
+          setMeter(meterUsage);
+
+          step++;
+          if (step > totalSteps + 5) {
+            step = 0;
+            document.querySelectorAll('.tl-seg').forEach(e => e.style.opacity = '0');
+          }
+        }, 80);
+      }
+
+      /* ============================================================
+        PANEL 3: WRAPPER
+        ============================================================ */
+        function toggleWrap() {
+          const btn = document.getElementById('btn-wrap');
+          if (wrapRunning) {
+            wrapRunning = false; clearInterval(wrapAnim);
+            btn.textContent = '▶ Iniciar simulación'; btn.classList.remove('running');
+            clearMeter(); return;
+          }
+          wrapRunning = true; wrapT = 0;
+          btn.textContent = '⏹ Detener'; btn.classList.add('running');
+
+          const n = numCores;
+          const show = n;
+          let activeThread = 0;
+
+          const legend = [
+            { color: '#E85D24', label: 'Python puro — 1 core (GIL)' },
+            { color: '#1D9E75', label: 'Python + wrapper C — ' + n + ' cores' },
+          ];
+          buildMeterLegend(legend);
+
+          wrapAnim = setInterval(() => {
+            wrapT += 50;
+            const prog = (wrapT % 5000) / 5000 * 100;
+            if (wrapT % 500 === 0) activeThread = (activeThread + 1) % show;
+
+            for (let i = 0; i < show; i++) {
+              const tick = document.getElementById('lanes-pypure-t' + i);
+              if (!tick) continue;
+              if (i === activeThread) {
+                tick.style.left = prog + '%'; tick.style.background = COLORS_PY[i % 8];
+                tick.style.width = '4px'; tick.style.opacity = '1';
+              } else {
+                tick.style.background = GRAY_IDLE; tick.style.width = '2px'; tick.style.opacity = '0.22';
+              }
+            }
+            for (let i = 0; i < show; i++) {
+              const tick = document.getElementById('lanes-pywrap-t' + i);
+              if (!tick) continue;
+              tick.style.left = ((prog + i * (80 / Math.max(show,1))) % 100) + '%';
+              tick.style.background = '#1D9E75'; tick.style.width = '4px'; tick.style.opacity = '1';
+            }
+
+            document.getElementById('time-wrap').textContent = 't = ' + wrapT + ' ms';
+            document.getElementById('stat-py-pure').textContent = '1 / ' + n;
+            document.getElementById('stat-py-wrap').textContent  = n + ' / ' + n;
+
+            const half = Math.ceil(n / 2);
+            const meterUsage = Array.from({length: n}, (_, i) => {
+              if (i < half) {
+                return { pct: i === activeThread % half ? 82+Math.random()*18 : 3+Math.random()*3, color: '#E85D24' };
+              } else {
+                return { pct: 76 + Math.random()*24, color: '#1D9E75' };
+              }
+            });
+            setMeter(meterUsage);
+
+            if (wrapT >= 10000) wrapT = 0;
+          }, 50);
+        }
+
+      /* ============================================================
+        PANEL 4: PARALLELISM
+        ============================================================ */
+        function buildParallelPanel() {
+          const n = numCores;
+          const cfgs = [
+            { id:'par-pythread', noteId:'note-pythread', effId:'eff-pythread',
+              active:1, colors:COLORS_PY,
+              note: n + ' threads → solo 1 core activo (GIL)',
+              eff: 'Eficiencia: ' + Math.round(100/n) + '%', effColor:'#B05538' },
+            { id:'par-cthread',  noteId:'note-cthread',  effId:'eff-cthread',
+              active:n, colors:COLORS_C,
+              note: n + ' threads → ' + n + ' cores activos',
+              eff: 'Eficiencia: 100%', effColor:'#185FA5' },
+            { id:'par-pymp',     noteId:'note-pymp',      effId:'eff-pymp',
+              active:n, colors:['#0F6E56'],
+              note: n + ' procesos → ' + n + ' cores activos',
+              eff: 'Eficiencia: 100%', effColor:'#0F6E56' },
+            { id:'par-pywrap2',  noteId:'note-pywrap2',   effId:'eff-pywrap2',
+              active:n, colors:['#1D9E75'],
+              note: n + ' threads → ' + n + ' cores (GIL liberado)',
+              eff: 'Eficiencia: 100%', effColor:'#0F6E56' },
+          ];
+          cfgs.forEach(cfg => {
+            const wrap = document.getElementById(cfg.id);
+            if (!wrap) return;
+            wrap.innerHTML = '';
+            const show = n; // Mostrar todos con scroll
+            for (let i = 0; i < show; i++) {
+              const core = document.createElement('div'); core.className = 'par-core';
+              core.textContent = 'C' + (i + 1);
+              if (i < cfg.active) {
+                core.style.background = cfg.colors[i % cfg.colors.length];
+                core.style.color = '#fff'; core.style.border = 'none';
+              } else {
+                core.style.background = 'var(--bg3)'; core.style.color = 'var(--text3)';
+              }
+              wrap.appendChild(core);
+            }
+            document.getElementById(cfg.noteId).textContent = cfg.note;
+            const effEl = document.getElementById(cfg.effId);
+            effEl.textContent = cfg.eff; effEl.style.color = cfg.effColor;
+          });
+        }
+
+      function buildSpeedupChart() {
+        const n = numCores;
+        const mp   = +(Math.min(n * 0.90, n)).toFixed(1);
+        const wrap = +(Math.min(n * 0.86, n)).toFixed(1);
+        const cpar = +(Math.min(n * 0.97, n)).toFixed(1);
+
+        const speedups = [
+          { label: 'Python threading (CPU)', val: 1.0,  color: '#E85D24', note: 'Sin mejora — GIL' },
+          { label: 'Python multiprocessing', val: mp,   color: '#0F6E56', note: n + ' procesos' },
+          { label: 'Python + wrapper C',     val: wrap, color: '#1D9E75', note: 'GIL liberado' },
+          { label: 'C pthreads',             val: cpar, color: '#378ADD', note: 'Paralelo nativo' },
+        ];
+
+        document.getElementById('speedup-title').textContent =
+          'Speedup relativo — tarea CPU-bound en ' + n + ' core' + (n > 1 ? 's' : '');
+
+        const chartEl = document.getElementById('speedup-chart');
+        chartEl.innerHTML = '';
+        const maxVal = Math.max(...speedups.map(s => s.val)) * 1.05;
+
+        speedups.forEach(s => {
+          const row = document.createElement('div'); row.className = 'speedup-row';
+          row.innerHTML = `
+            <div class="speedup-row-label">${s.label}</div>
+            <div class="speedup-track">
+            <div class="speedup-bar" data-val="${s.val}" data-max="${maxVal.toFixed(2)}" style="background:${s.color}"></div>
+            </div>
+            <div class="speedup-val" style="color:${s.color}">${s.val}x</div>
+            <div class="speedup-note">${s.note}</div>
+            `;
+          chartEl.appendChild(row);
+        });
+
+        const btn = document.getElementById('btn-par');
+        if (btn) { btn.textContent = '▶ Animar comparativa'; btn.classList.remove('running'); btn.onclick = togglePar; }
+      }
+
+      function togglePar() {
+        const btn = document.getElementById('btn-par');
+        btn.classList.add('running'); btn.textContent = '⏳ Animando...';
+        document.querySelectorAll('.speedup-bar').forEach(bar => {
+          const val = parseFloat(bar.dataset.val);
+          const max = parseFloat(bar.dataset.max);
+          setTimeout(() => { bar.style.width = (val / max * 100).toFixed(1) + '%'; }, 100);
+        });
+        setTimeout(() => {
+          btn.textContent = '↺ Reiniciar'; btn.classList.remove('running');
+          btn.onclick = () => {
+            document.querySelectorAll('.speedup-bar').forEach(b => b.style.width = '0%');
+            btn.textContent = '▶ Animar comparativa'; btn.onclick = togglePar;
+          };
+        }, 1400);
+      }
+
+      /* ============================================================
+        TAB SWITCHING
+        ============================================================ */
+        function showPanel(id, tabEl) {
+          stopAll();
+          document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.getElementById('panel-' + id).classList.add('active');
+          tabEl.classList.add('active');
+        }
+
+      /* ============================================================
+        INIT
+        ============================================================ */
+        buildCoreSelector();
+      rebuildAll();
+    </script>
+  </body>
+</html>
