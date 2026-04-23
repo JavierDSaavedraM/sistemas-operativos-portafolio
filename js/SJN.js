@@ -109,17 +109,23 @@ function copyProcesses() {
 // ============================================================
 // ALGORITMOS
 // ============================================================
-function runFCFS(procs) {
-  var timeline = [];
-  var time     = 0;
-  var sorted   = procs.slice().sort(function(a, b) {
-    return a.arrival - b.arrival || a.pid - b.pid;
-  });
-  sorted.forEach(function(p) {
-    if (time < p.arrival) time = p.arrival;
+function runSJF(procs) {
+  var timeline  = [];
+  var time      = 0;
+  var remaining = procs.slice();
+  while (remaining.length > 0) {
+    var available = remaining.filter(function(p) { return p.arrival <= time; });
+    if (available.length === 0) {
+      remaining.sort(function(a, b) { return a.arrival - b.arrival; });
+      time = remaining[0].arrival;
+      available = [remaining[0]];
+    }
+    available.sort(function(a, b) { return a.burst - b.burst || a.arrival - b.arrival; });
+    var p = available[0];
+    remaining.splice(remaining.indexOf(p), 1);
     timeline.push({ pid: p.pid, start: time, end: time + p.burst });
     time += p.burst;
-  });
+  }
   return timeline;
 }
 
@@ -280,16 +286,24 @@ document.getElementById("btn-run-sched").addEventListener("click", function() {
   const activeTab = document.querySelector(".tab-panel.active");
   if (activeTab.id == "tab-caso1"){ 
     simData.processes = [ 
-      { pid:1, arrival: 0, burst: 5}, 
-      { pid:2, arrival: 2, burst: 4},
-      { pid:3, arrival: 4, burst: 2}];
+      { pid:1, arrival: 0, burst: 8}, 
+      { pid:2, arrival: 1, burst: 1},
+      { pid:3, arrival: 2, burst: 10},
+      { pid:4, arrival: 3, burst: 5},
+      { pid:5, arrival: 4, burst: 2}];
   }
   else if (activeTab.id == "tab-caso2"){ 
     simData.processes = [ 
-      { pid:1, arrival: 0, burst: 3}, 
-      { pid:2, arrival: 0, burst: 2}, 
-      { pid:3, arrival: 1, burst: 4}, 
-      { pid:4, arrival: 3, burst: 2}];
+      { pid:1, arrival: 0, burst: 8}, 
+      { pid:2, arrival: 0, burst: 4}, 
+      { pid:3, arrival: 0, burst: 9}];
+  }
+  else if (activeTab.id == "tab-caso3"){ 
+    simData.processes = [ 
+      { pid:1, arrival: 0, burst: 10}, 
+      { pid:2, arrival: 0, burst: 1}, 
+      { pid:3, arrival: 2, burst: 2}, 
+      { pid:4, arrival: 3, burst: 1}];
   }
   else {
     syncFromTabla()
@@ -303,7 +317,7 @@ document.getElementById("btn-run-sched").addEventListener("click", function() {
 
 function startSched() {
   var procs = copyProcesses();
-  var timeline = runFCFS(procs); 
+  var timeline = runSJF(procs); 
   var result = calcMetrics(timeline, simData.processes);
 
   schedState.timeline       = timeline;

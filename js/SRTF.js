@@ -109,22 +109,27 @@ function copyProcesses() {
 // ============================================================
 // ALGORITMOS
 // ============================================================
-function runSJF(procs) {
+function runSRTF(procs) {
   var timeline  = [];
   var time      = 0;
   var remaining = procs.slice();
+
   while (remaining.length > 0) {
     var available = remaining.filter(function(p) { return p.arrival <= time; });
-    if (available.length === 0) {
-      remaining.sort(function(a, b) { return a.arrival - b.arrival; });
-      time = remaining[0].arrival;
-      available = [remaining[0]];
-    }
-    available.sort(function(a, b) { return a.burst - b.burst || a.arrival - b.arrival; });
+    if (available.length === 0) { time++; continue; }
+
+    available.sort(function(a, b) { return a.remaining - b.remaining || a.arrival - b.arrival; });
     var p = available[0];
-    remaining.splice(remaining.indexOf(p), 1);
-    timeline.push({ pid: p.pid, start: time, end: time + p.burst });
-    time += p.burst;
+
+    if (timeline.length > 0 && timeline[timeline.length - 1].pid === p.pid) {
+      timeline[timeline.length - 1].end++;
+    } else {
+      timeline.push({ pid: p.pid, start: time, end: time + 1 });
+    }
+
+    p.remaining--;
+    time++;
+    if (p.remaining === 0) remaining.splice(remaining.indexOf(p), 1);
   }
   return timeline;
 }
@@ -309,7 +314,7 @@ document.getElementById("btn-run-sched").addEventListener("click", function() {
 
 function startSched() {
   var procs = copyProcesses();
-  var timeline = runSJF(procs); 
+  var timeline = runSRTF(procs); 
   var result = calcMetrics(timeline, simData.processes);
 
   schedState.timeline       = timeline;

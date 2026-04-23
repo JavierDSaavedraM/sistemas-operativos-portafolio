@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: Vizualizador de algoritmo FCSC</title>
-    <link rel="stylesheet" href="../../../css/style.css">
-    <link rel="stylesheet" href="../../../css/reporte_style.css">
-    <link rel="stylesheet" href="../../../css/FCFS.css">
+    <title>Quiz: Vizualizador de algoritmo SRTF</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/reporte_style.css">
+    <link rel="stylesheet" href="/css/scheduling.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   </head>
 
@@ -47,10 +47,10 @@
     <div class="report-container">
       <main class="report-content">
         <header id="intro" class="report-header">
-          <span class="entry-type">Laboratorio en Clase #18</span>
-          <h1>Quiz Vizualizador de algoritmo SJF y SJN</h1>
+          <span class="entry-type">Laboratorio en Clase #19</span>
+          <h1>Quiz Vizualizador de Algoritmo Preemptive Shortest Job Next (SJN)</h1>
           <div class="meta-data">
-            <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 22 de abril, 2026</p>
+            <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 20 de abril, 2026</p>
             <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
             <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
           </div>
@@ -62,7 +62,8 @@
           <nav class="tabs-nav">
             <button class="tab-btn" data-tab="tab-caso1">Caso 1</button>
             <button class="tab-btn" data-tab="tab-caso2">Caso 2</button>
-            <button class="tab-btn" data-tab="tab-caso3">Simulador Libre</button>
+            <button class="tab-btn" data-tab="tab-caso3">Caso 3</button>
+            <button class="tab-btn" data-tab="tab-caso4">Simulador Libre</button>
           </nav>
           <div class="tab-panel" id="tab-caso1">
             <div id="table-wrapper">
@@ -75,21 +76,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>P1</td>
-                    <td>0</td>
-                    <td>5</td>
-                  </tr>
-                  <tr>
-                    <td>P2</td>
-                    <td>2</td>
-                    <td>4</td>
-                  </tr>
-                  <tr>
-                    <td>P3</td>
-                    <td>4</td>
-                    <td>2</td>
-                  </tr>
+                  <tr> <td>P1</td> <td>0</td> <td>8</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>9</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>5</td> </tr>
+                  <tr> <td>P5</td> <td>4</td> <td>2</td> </tr>
                 </tbody>
               </table>
             </div>
@@ -98,38 +89,32 @@
             <div id="table-wrapper">
               <table class="tech-table" id="tabla-caso1">
                 <thead>
-                  <tr>
-                    <th>PID</th>
-                    <th>Arrival</th>
-                    <th>Burst</th>
-                  </tr>
+                  <tr> <th>PID</th> <th>Burst</th> </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>P1</td>
-                    <td>0</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>P2</td>
-                    <td>0</td>
-                    <td>2</td>
-                  </tr>
-                  <tr>
-                    <td>P3</td>
-                    <td>1</td>
-                    <td>4</td>
-                  </tr>
-                  <tr>
-                    <td>P4</td>
-                    <td>3</td>
-                    <td>2</td>
-                  </tr>
+                  <tr> <td>P1</td> <td>8</td> </tr>
+                  <tr> <td>P2</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="tab-panel" id="tab-caso3">
+            <div id="table-wrapper">
+              <table class="tech-table" id="tabla-caso1">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>10</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>1</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>2</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>1</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso4">
             <div id="table-wrapper">
               <table class="tech-table" id="tabla-procesos">
                 <thead>
@@ -241,6 +226,13 @@
           </div>
         </div>
       </main>
+      <section id="navegacion">
+        <div class="download-box">
+          <div class="icon"><i class="fas fa-chevron-left"></i></div>
+          <div class="info"> </div>
+          <a href="./SJN.html" class="dl-btn">Ir Algoritmo Non-Preemptive</a>
+        </div>
+      </section>
     </div>
 
     <script>
@@ -248,7 +240,8 @@
         localStorage.setItem('filtroActual', filtro);
       }
     </script>
-    <script src="../../../js/FCFS.js" ></script>
+    <script src="/js/scheduling-canvas.js" ></script>
+    <script src="/js/FCFS.js" ></script>
   </body>
 
 </html>
