@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+// Estructura de procesos
 typedef struct {
   int id;
   int arrivalTime;
@@ -11,12 +12,13 @@ typedef struct {
   int waitingTime;
 } Process;
 
+// Estructura necesaria para usar threads en c
 typedef struct {
   Process *processes;
   int n;
 } ThreadData;
 
-/* sort by arrival time */
+/* Algoritmo de bubble sort que ordena en base al numero de llegada*/
 void sortProcesses(Process p[], int n) {
   for (int i = 0; i < n - 1; i++) {
     for (int j = 0; j < n - i - 1; j++) {
@@ -28,7 +30,7 @@ void sortProcesses(Process p[], int n) {
     }
   }
 }
-/* sort by ID*/
+/* Algoritmo de bubble sort que ordena en base del ID*/
 void sortID(Process p[], int n) {
   for (int i = 0; i < n - 1; i++) {
     for (int j = 0; j < n - i - 1; j++) {
@@ -41,7 +43,7 @@ void sortID(Process p[], int n) {
   }
 }
 
-/* required function */
+/* Funcion para calcular los tiempos */
 void calculateTimes(Process p[], int n) {
   sortProcesses(p, n);
 
@@ -65,7 +67,7 @@ void calculateTimes(Process p[], int n) {
   sortID(p, n);
 }
 
-/* thread function */
+/* Funcion que se utiliza para usar threads*/
 void *threadCalculate(void *arg) {
   ThreadData *data = (ThreadData *)arg;
 
@@ -74,15 +76,16 @@ void *threadCalculate(void *arg) {
   pthread_exit(NULL);
 }
 
+// Funcion main
 int main() {
   int n;
-  pthread_t thread;
-  ThreadData data;
+  pthread_t thread; // Se declara el thread
+  ThreadData data; // Se declara la informacion que pasa por el threadx
 
   printf("Numero de procesos: ");
   scanf("%d", &n);
 
-  Process *p = malloc(n * sizeof(Process));
+  Process *p = malloc(n * sizeof(Process)); // Forma de declarar un arreglo con memoria dinamica
 
   for (int i = 0; i < n; i++) {
     printf("\nProceso %d\n", i + 1);
@@ -104,8 +107,8 @@ int main() {
   data.processes = p;
   data.n = n;
 
-  pthread_create(&thread, NULL, threadCalculate, &data);
-  pthread_join(thread, NULL);
+  pthread_create(&thread, NULL, threadCalculate, &data); // Se crea el thread
+  pthread_join(thread, NULL); // Se recibe el thread una ves que termino su ejecucion
 
   double avgTurnaround = 0.0;
   double avgWaiting = 0.0;
@@ -133,7 +136,7 @@ int main() {
   printf("\nPromedio Turnaround Time: %.2f\n", avgTurnaround);
   printf("Promedio Waiting Time: %.2f\n", avgWaiting);
 
-  free(p);
+  free(p); //Libera la memoria de aqui
 
   return 0;
 }
