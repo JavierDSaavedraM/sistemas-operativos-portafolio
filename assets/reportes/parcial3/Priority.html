@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Vizualizador de Algoritmo Priority </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/reporte_style.css">
+    <link rel="stylesheet" href="/css/scheduling.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+
+  <body>
+    <nav class="app-header">
+
+      <div class="app-branding">
+        <div class="mini-avatar"></div>
+        <div class="brand-text">
+          <h3>Javier Saavedra</h3>
+          <p>Portafolio OS</p>
+        </div>
+      </div>
+
+      <div class="app-menu">
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+          <i class="fas fa-home"></i> Inicio
+        </a>
+
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial1')">
+          <i class="fas fa-folder"></i> Parcial 1
+        </a>
+
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+          <i class="fas fa-folder"></i> Parcial 2
+        </a>
+
+        <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial3')">
+          <i class="fas fa-folder"></i> Parcial 3
+        </a>
+      </div>
+    </nav>
+
+    <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+    </a>
+
+    <div class="report-container">
+      <main class="report-content">
+        <header id="intro" class="report-header">
+          <span class="entry-type">Laboratorio en Clase #19</span>
+          <h1>Quiz Vizualizador de Algoritmo Priority</h1>
+          <div class="meta-data">
+            <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 23 de abril, 2026</p>
+            <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+            <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
+          </div>
+        </header>
+
+        <hr class="divider">
+
+        <div class="tabs-container" id="casos-quiz"> 
+          <nav class="tabs-nav">
+            <button class="tab-btn" data-tab="tab-caso1">Caso 1</button>
+            <button class="tab-btn" data-tab="tab-caso2">Caso 2</button>
+            <button class="tab-btn" data-tab="tab-caso3">Caso 3</button>
+            <button class="tab-btn" data-tab="tab-caso4">Simulador Libre</button>
+          </nav>
+          <div class="tab-panel" id="tab-caso1">
+            <div id="table-wrapper">
+              <table class="tech-table" id="tabla-caso1">
+                <thead>
+                  <tr>
+                    <th>PID</th>
+                    <th>Arrival</th>
+                    <th>Burst</th>
+                    <th>Priority</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>5</td> <td>2</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>3</td> <td>1</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>8</td> <td>3</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>6</td> <td>2</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso2">
+            <div id="table-wrapper">
+              <table class="tech-table" id="tabla-caso1">
+                <thead>
+                  <tr> <th>PID</th> <th>Burst</th> <th>Priority</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>8</td> <td>3</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>4</td> <td>1</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>9</td> <td>4</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>5</td> <td>2</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso3">
+            <div id="table-wrapper">
+              <table class="tech-table" id="tabla-caso1">
+                <thead>
+                  <tr> <th>PID</th> <th>Burst</th> <th>Priority</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>6</td> <td>1</td> </tr>
+                  <tr> <td>P2</td> <td>2</td> <td>4</td> <td>3</td> </tr>
+                  <tr> <td>P3</td> <td>4</td> <td>2</td> <td>2</td> </tr>
+                  <tr> <td>P4</td> <td>6</td> <td>8</td> <td>1</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso4">
+            <div id="table-wrapper">
+              <table class="tech-table" id="tabla-procesos">
+                <thead>
+                  <tr>
+                    <th>PID</th>
+                    <th>Arrival</th>
+                    <th>Burst</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="number" class="pid" min="1" value="1" readonly></td>
+                    <td><input type="number" class="arrival" min="0" value="0"></td>
+                    <td><input type="number" class="burst" min="1" value="5"></td>
+                    <td><button class="btn-remove-row">X</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button id="btn-add-proceso">+ Proceso</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="scheduling-container">
+          <!-- Controles superiores -->
+          <div id="sched-controls">
+            <div id="sched-controls-left">
+              <button id="btn-run-sched">▶ Correr FCFS</button>
+            </div>
+            <div id="sched-controls-right">
+              <label>Velocidad:</label>
+              <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
+              <span id="sched-speed-label">1000ms</span>
+            </div>
+          </div>
+
+          <!-- Cola de listos + ejecucion + contexto -->
+          <div id="sched-state">
+            <div class="sched-panel" id="panel-ready">
+              <h3>Cola de Listos</h3>
+              <div id="queue-wrapper">
+                <canvas id="queue-canvas"></canvas>
+              </div>
+            </div>
+            <div class="sched-panel" id="panel-running">
+              <h3>En Ejecución</h3>
+              <canvas id="running-canvas"></canvas>
+            </div>
+            <div class="sched-panel" id="panel-context">
+              <h3>Cambios de Contexto</h3>
+              <span id="context-count">0</span>
+            </div>
+          </div>
+
+          <!-- Diagrama de Gantt -->
+          <div id="gantt-wrapper">
+            <h3>Diagrama de Gantt</h3>
+            <div id="gantt-scroll">
+              <canvas id="gantt-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Tabla de métricas -->
+          <div class="table-wrapper" id="metrics-wrapper">
+            <table class="tech-table" id="metrics-table">
+              <thead>
+                <tr>
+                  <th>PID</th>
+                  <th>Arrival</th>
+                  <th>Burst</th>
+                  <th>Completion</th>
+                  <th>Turnaround</th>
+                  <th>Waiting</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody id="metrics-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Promedios y CPU Utilization -->
+          <div id="sched-summary">
+            <div class="summary-item">
+              <span class="summary-label">Avg Turnaround</span>
+              <span class="summary-value" id="avg-turnaround">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Waiting</span>
+              <span class="summary-value" id="avg-waiting">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Response</span>
+              <span class="summary-value" id="avg-response">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">CPU Utilization</span>
+              <span class="summary-value" id="cpu-utilization">-</span>
+            </div>
+          </div>
+
+          <!-- Tooltip -->
+          <div id="metrics-tooltip" class="hidden"></div>
+
+          <!-- Botón siguiente paso -->
+          <div id="sched-step-controls">
+            <button id="btn-next-step" disabled>▶ Iniciar</button>
+            <button id="btn-reset-sched" disabled>↺ Reset</button>
+          </div>
+        </div>
+      </main>
+      <section id="navegacion">
+        <div class="download-box">
+          <div class="icon"><i class="fas fa-chevron-left"></i></div>
+          <div class="info"> </div>
+          <a href="./SJN.html" class="dl-btn">Ir Algoritmo Non-Preemptive</a>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      function guardarFiltro(filtro) {
+        localStorage.setItem('filtroActual', filtro);
+      }
+    </script>
+    <script src="/js/scheduling-canvas.js" ></script>
+    <script src="/js/FCFS.js" ></script>
+  </body>
+
+</html>
+
