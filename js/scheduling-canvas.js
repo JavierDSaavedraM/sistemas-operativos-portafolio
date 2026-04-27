@@ -1,3 +1,27 @@
+// ── Codigo De TABS ──────────────────────────────────────────
+document.addEventListener("DOMContentLoaded", function () {
+  var container = document.querySelector("#casos-quiz");
+  if (!container) return;
+  var buttons = container.querySelectorAll(".tab-btn");
+  var panels = container.querySelectorAll(".tab-panel");
+  buttons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var target = btn.getAttribute("data-tab");
+      buttons.forEach(function (b) {
+        b.classList.remove("active");
+      });
+      panels.forEach(function (p) {
+        p.classList.remove("active");
+      });
+      btn.classList.add("active");
+      container.querySelector("#" + target)
+        .classList.add("active");
+    });
+  });
+
+  if (buttons.length > 0) buttons[0].click();
+});
+
 // CANVAS SETUP ============================================================
 var ganttCanvas   = null;
 var ganttCtx      = null;
@@ -33,10 +57,15 @@ function initCanvases() {
 // COLORES
 // ============================================================
 var pidColors = [
-  "#b7b7e0","#f0c080","#80d0a0","#f08080",
-  "#80c8f0","#d0a0f0","#f0e080","#a0d0c0"
+  "#00d4ff", // cyan
+  "#00ffb3", // aqua green
+  "#7cff00", // lime
+  "#ffd400", // yellow
+  "#ff9a00", // orange
+  "#ff5cc8", // pink
+  "#9b6cff", // purple
+  "#ff4d4d"  // red
 ];
-
 function getColor(pid) {
   return pidColors[(pid - 1) % pidColors.length];
 }
@@ -87,7 +116,7 @@ function drawGanttStatic(timeline, upToStep) {
     ganttCtx.textBaseline = "middle";
     ganttCtx.fillText("P" + block.pid, x + w / 2, TICK_H + GANTT_H / 2);
 
-    ganttCtx.fillStyle    = "#333";
+    ganttCtx.fillStyle    = "#fff";
     ganttCtx.font         = "11px Arial";
     ganttCtx.textAlign    = "left";
     ganttCtx.textBaseline = "top";
@@ -96,7 +125,7 @@ function drawGanttStatic(timeline, upToStep) {
 
   if (visible.length > 0) {
     var last = visible[visible.length - 1];
-    ganttCtx.fillStyle    = "#333";
+    ganttCtx.fillStyle    = "#fff";
     ganttCtx.font         = "11px Arial";
     ganttCtx.textAlign    = "left";
     ganttCtx.textBaseline = "top";
@@ -289,7 +318,7 @@ function renderRunning(block, procs, usedBurst) {
 
   runningCtx.clearRect(0, 0, runningCanvas.width, runningCanvas.height);
 
-  runningCtx.fillStyle    = "#000";
+  runningCtx.fillStyle    = "#fff";
   runningCtx.font         = "bold 14px Arial";
   runningCtx.textAlign    = "left";
   runningCtx.textBaseline = "top";

@@ -1,28 +1,3 @@
-// ── Codigo De TABS ──────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", function () {
-  var container = document.querySelector("#casos-quiz");
-  if (!container) return;
-  var buttons = container.querySelectorAll(".tab-btn");
-  var panels = container.querySelectorAll(".tab-panel");
-  buttons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var target = btn.getAttribute("data-tab");
-      buttons.forEach(function (b) {
-        b.classList.remove("active");
-      });
-      panels.forEach(function (p) {
-        p.classList.remove("active");
-      });
-      btn.classList.add("active");
-      container.querySelector("#" + target)
-        .classList.add("active");
-    });
-  });
-
-  if (buttons.length > 0) buttons[0].click();
-});
-
-
 // ALGORITHM RUNNER
 // ── Estructura para algoritmos ──────────────────────────────────────────
 var simData = {
@@ -37,7 +12,7 @@ function renderTabla() {
   simData.processes.forEach(function(p) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td><input type="number" class="pid"      value="' + p.pid      + '" readonly></td>' +
+      '<td> P' + p.pid    + '</td>' +
       '<td><input type="number" class="arrival"  value="' + p.arrival  + '"></td>' +
       '<td><input type="number" class="burst"    value="' + p.burst    + '"></td>' +
       '<td><button class="btn-remove-row">X</button></td>';
@@ -54,7 +29,7 @@ function syncFromTabla() {
     simData.processes.push({
       pid:      index + 1,
       arrival:  parseInt(tr.querySelector(".arrival").value)  || 0,
-      burst:    parseInt(tr.querySelector(".burst").value)    || 1,
+      burst:    parseInt(tr.querySelector(".burst").value)    || 0,
     });
   });
 }
@@ -65,7 +40,7 @@ document.getElementById("btn-add-proceso").addEventListener("click", function() 
   var nextPID = simData.processes.length > 0
     ? simData.processes[simData.processes.length - 1].pid + 1
     : 1;
-  simData.processes.push({ pid: nextPID, arrival: 0, burst: 1});
+  simData.processes.push({ pid: nextPID, arrival: 0, burst: 0});
   renderTabla();
 });
 
@@ -86,7 +61,6 @@ document.querySelector("#tabla-procesos tbody").addEventListener("click", functi
 var schedState = {
   timeline       : [],
   currentStep    : 0,
-  contextChanges : 0,
   isRunning      : false,
   stepPaused     : false,
   metrics        : {},
@@ -106,6 +80,52 @@ function copyProcesses() {
   });
 }
 
+// ── Validacion individual al cambiar celda ───────────────────
+document.querySelector("#tabla-procesos tbody").addEventListener("change", function(e) {
+  var input = e.target;
+  if (!input.matches("input[type='number']")) return;
+  validateCell(input);
+  syncFromTabla();
+});
+
+function validateCell(input) {
+    var val   = parseInt(input.value);
+    var field = input.className;
+    var min   = field === "arrival" ? 0 : 1;
+
+
+    if (isNaN(val) || val < min) {
+        alert("Valor inválido en campo '" + field + "'. Debe ser >= " + min + ".");
+        input.value = min;
+    }
+}
+
+// ── Validacion global antes de correr algoritmo ──────────────
+function validateSimData() {
+    if (simData.processes.length === 0) {
+        alert("No hay procesos definidos.");
+        return false;
+    }
+
+    var warnings = [];
+    var errors   = [];
+
+    simData.processes.forEach(function(p) {
+        if (p.arrival < 0)    errors.push("P" + p.pid + ": Arrival no puede ser negativo.");
+        if (p.burst < 1)      errors.push("P" + p.pid + ": Burst debe ser diferente a 0>= 1.");
+    });
+
+    if (errors.length > 0) {
+        alert("Errores que impiden ejecutar:\n\n" + errors.join("\n"));
+        return false;
+    }
+
+    if (warnings.length > 0) {
+        return confirm("Advertencias (valores en default):\n\n" + warnings.join("\n") + "\n\n¿Continuar de todas formas?");
+    }
+
+    return true;
+}
 // ============================================================
 // ALGORITMOS
 // ============================================================
@@ -146,14 +166,6 @@ function calcMetrics(timeline, procs) {
   });
 
   return { metrics: metrics, firstResponse: firstResponse };
-}
-
-function countContextChanges(timeline) {
-  var count = 0;
-  for (var i = 1; i < timeline.length; i++) {
-    if (timeline[i].pid !== timeline[i - 1].pid) count++;
-  }
-  return count;
 }
 
 // ============================================================
@@ -302,13 +314,13 @@ document.getElementById("btn-run-sched").addEventListener("click", function() {
 });
 
 function startSched() {
+  if (!validateSimData()) return;
   var procs = copyProcesses();
   var timeline = runFCFS(procs); 
   var result = calcMetrics(timeline, simData.processes);
 
   schedState.timeline       = timeline;
   schedState.currentStep    = 0;
-  schedState.contextChanges = countContextChanges(timeline);
   schedState.isRunning      = true;
   schedState.stepPaused     = false;
   schedState.metrics        = result.metrics;
@@ -318,7 +330,6 @@ function startSched() {
   document.getElementById("btn-run-sched").classList.add("running");
   document.getElementById("btn-next-step").disabled       = false;
   document.getElementById("btn-reset-sched").disabled     = false;
-  document.getElementById("context-count").textContent    = schedState.contextChanges;
 
   initCanvases();
   runStep();
@@ -327,7 +338,6 @@ function startSched() {
 function resetSched() {
   schedState.timeline       = [];
   schedState.currentStep    = 0;
-  schedState.contextChanges = 0;
   schedState.isRunning      = false;
   schedState.stepPaused     = false;
   schedState.metrics        = {};
@@ -337,7 +347,6 @@ function resetSched() {
   document.getElementById("btn-next-step").textContent    = "⏸ Pausar";
   document.getElementById("btn-next-step").disabled       = true;
   document.getElementById("btn-reset-sched").disabled     = true;
-  document.getElementById("context-count").textContent    = "0";
   document.getElementById("avg-turnaround").textContent   = "-";
   document.getElementById("avg-waiting").textContent      = "-";
   document.getElementById("avg-response").textContent     = "-";

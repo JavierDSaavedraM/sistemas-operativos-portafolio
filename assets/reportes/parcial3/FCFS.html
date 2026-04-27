@@ -16,7 +16,7 @@
       <div class="app-branding">
         <div class="mini-avatar"></div>
         <div class="brand-text">
-          <h3>Javier Saavedra</h3>
+          <h3>Javier D Saavedra</h3>
           <p>Portafolio OS</p>
         </div>
       </div>
@@ -44,20 +44,31 @@
       <i class="fas fa-arrow-left"></i> Volver al Portafolio
     </a>
 
-    <div class="report-container">
-      <main class="report-content">
-        <header id="intro" class="report-header">
-          <span class="entry-type">Laboratorio en Clase #18</span>
-          <h1>Quiz Vizualizador de algoritmo FCSC</h1>
-          <div class="meta-data">
-            <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 16 de abril, 2026</p>
-            <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
-            <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
+    <main class="report-container">
+      <header id="intro" class="report-header">
+        <span class="entry-type">Laboratorio en Clase #18</span>
+        <h1>Quiz Vizualizador de algoritmo FCSC</h1>
+        <div class="meta-data">
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 16 de abril, 2026</p>
+          <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+          <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
+        </div>
+      </header>
+
+      <hr class="divider"></hr>
+
+      <section id="visualizer-container">
+        <!-- Controles superiores -->
+        <div id="sched-controls">
+          <div id="sched-controls-left">
+            <button id="btn-run-sched">▶ Correr FCFS</button>
           </div>
-        </header>
-
-        <hr class="divider">
-
+          <div id="sched-controls-right">
+            <label>Velocidad:</label>
+            <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
+            <span id="sched-speed-label">1000ms</span>
+          </div>
+        </div>
         <div class="tabs-container" id="casos-quiz"> 
           <nav class="tabs-nav">
             <button class="tab-btn" data-tab="tab-caso1">Caso 1</button>
@@ -65,86 +76,47 @@
             <button class="tab-btn" data-tab="tab-caso3">Simulador Libre</button>
           </nav>
           <div class="tab-panel" id="tab-caso1">
-            <div id="table-wrapper">
+            <div class="table-wrapper">
               <table class="tech-table" id="tabla-caso1">
                 <thead>
-                  <tr>
-                    <th>PID</th>
-                    <th>Arrival</th>
-                    <th>Burst</th>
-                  </tr>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>P1</td>
-                    <td>0</td>
-                    <td>5</td>
-                  </tr>
-                  <tr>
-                    <td>P2</td>
-                    <td>2</td>
-                    <td>4</td>
-                  </tr>
-                  <tr>
-                    <td>P3</td>
-                    <td>4</td>
-                    <td>2</td>
-                  </tr>
+                  <tr> <td>P1</td> <td>0</td> <td>5</td> </tr>
+                  <tr> <td>P2</td> <td>2</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>4</td> <td>2</td> </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="tab-panel" id="tab-caso2">
-            <div id="table-wrapper">
-              <table class="tech-table" id="tabla-caso1">
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso2">
                 <thead>
-                  <tr>
-                    <th>PID</th>
-                    <th>Arrival</th>
-                    <th>Burst</th>
-                  </tr>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>P1</td>
-                    <td>0</td>
-                    <td>3</td>
-                  </tr>
-                  <tr>
-                    <td>P2</td>
-                    <td>0</td>
-                    <td>2</td>
-                  </tr>
-                  <tr>
-                    <td>P3</td>
-                    <td>1</td>
-                    <td>4</td>
-                  </tr>
-                  <tr>
-                    <td>P4</td>
-                    <td>3</td>
-                    <td>2</td>
-                  </tr>
+                  <tr> <td>P1</td> <td>0</td> <td>3</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>2</td> </tr>
+                  <tr> <td>P3</td> <td>1</td> <td>4</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>2</td> </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="tab-panel" id="tab-caso3">
-            <div id="table-wrapper">
+            <div class="table-wrapper">
               <table class="tech-table" id="tabla-procesos">
                 <thead>
                   <tr>
-                    <th>PID</th>
-                    <th>Arrival</th>
-                    <th>Burst</th>
-                    <th></th>
+                    <th>PID</th> <th>Arrival</th> <th>Burst</th> <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td><input type="number" class="pid" min="1" value="1" readonly></td>
+                    <td>P1</td>
                     <td><input type="number" class="arrival" min="0" value="0"></td>
-                    <td><input type="number" class="burst" min="1" value="5"></td>
+                    <td><input type="number" class="burst" min="0" value="0"></td>
                     <td><button class="btn-remove-row">X</button></td>
                   </tr>
                 </tbody>
@@ -153,20 +125,15 @@
             </div>
           </div>
         </div>
+        <!-- Diagrama de Gantt -->
+        <div id="gantt-wrapper">
+          <h3>Diagrama de Gantt</h3>
+          <div id="gantt-scroll">
+            <canvas id="gantt-canvas"></canvas>
+          </div>
+        </div>
 
         <div id="scheduling-container">
-          <!-- Controles superiores -->
-          <div id="sched-controls">
-            <div id="sched-controls-left">
-              <button id="btn-run-sched">▶ Correr FCFS</button>
-            </div>
-            <div id="sched-controls-right">
-              <label>Velocidad:</label>
-              <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
-              <span id="sched-speed-label">1000ms</span>
-            </div>
-          </div>
-
           <!-- Cola de listos + ejecucion + contexto -->
           <div id="sched-state">
             <div class="sched-panel" id="panel-ready">
@@ -179,68 +146,56 @@
               <h3>En Ejecución</h3>
               <canvas id="running-canvas"></canvas>
             </div>
-            <div class="sched-panel" id="panel-context">
-              <h3>Cambios de Contexto</h3>
-              <span id="context-count">0</span>
-            </div>
           </div>
-
-          <!-- Diagrama de Gantt -->
-          <div id="gantt-wrapper">
-            <h3>Diagrama de Gantt</h3>
-            <div id="gantt-scroll">
-              <canvas id="gantt-canvas"></canvas>
-            </div>
-          </div>
-
-          <!-- Tabla de métricas -->
-          <div class="table-wrapper" id="metrics-wrapper">
-            <table class="tech-table" id="metrics-table">
-              <thead>
-                <tr>
-                  <th>PID</th>
-                  <th>Arrival</th>
-                  <th>Burst</th>
-                  <th>Completion</th>
-                  <th>Turnaround</th>
-                  <th>Waiting</th>
-                  <th>Response</th>
-                </tr>
-              </thead>
-              <tbody id="metrics-body"></tbody>
-            </table>
-          </div>
-
-          <!-- Promedios y CPU Utilization -->
-          <div id="sched-summary">
-            <div class="summary-item">
-              <span class="summary-label">Avg Turnaround</span>
-              <span class="summary-value" id="avg-turnaround">-</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Avg Waiting</span>
-              <span class="summary-value" id="avg-waiting">-</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">Avg Response</span>
-              <span class="summary-value" id="avg-response">-</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-label">CPU Utilization</span>
-              <span class="summary-value" id="cpu-utilization">-</span>
-            </div>
-          </div>
-
-          <!-- Tooltip -->
-          <div id="metrics-tooltip" class="hidden"></div>
-
-          <!-- Botón siguiente paso -->
           <div id="sched-step-controls">
             <button id="btn-next-step" disabled>▶ Iniciar</button>
             <button id="btn-reset-sched" disabled>↺ Reset</button>
           </div>
         </div>
-      </main>
+      </section>
+
+      <!-- Tabla de métricas -->
+      <section class="table-wrapper" id="metrics-wrapper">
+        <!-- Botón siguiente paso -->
+        <table class="tech-table" id="metrics-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Arrival</th>
+              <th>Burst</th>
+              <th>Completion</th>
+              <th>Turnaround</th>
+              <th>Waiting</th>
+              <th>Response</th>
+            </tr>
+          </thead>
+          <tbody id="metrics-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Promedios y CPU Utilization -->
+      <section id="sched-summary">
+        <div class="summary-item">
+          <span class="summary-label">Avg Turnaround</span>
+          <span class="summary-value" id="avg-turnaround">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Avg Waiting</span>
+          <span class="summary-value" id="avg-waiting">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Avg Response</span>
+          <span class="summary-value" id="avg-response">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">CPU Utilization</span>
+          <span class="summary-value" id="cpu-utilization">-</span>
+        </div>
+      </section>
+
+      <!-- Tooltip -->
+      <div id="metrics-tooltip" class="hidden"></div>
+
       <section id="descargas">
         <h2>Codigo en C</h2>
         <div class="download-box">
@@ -249,10 +204,28 @@
             <h4>scheduling.c.</h4>
             <p>Codigo en C que resuleve el algoritmo FCFS</p>
           </div>
-          <a href="../../zipFiles/scheduling.c" class="dl-btn">Descargar .ZIP</a>
+          <a href="../../zipFiles/scheduling.c" class="dl-btn">Descargar</a>
         </div>
       </section>
-    </div>
+      <nav class="post-navigation">
+        <a href="../parcial2/lab-17.html" class="nav-btn next">
+          <i class="fas fa-chevron-left"></i>
+          <div class="nav-text">
+            <span>Anterior</span>
+            <strong>Laboratorio en clase #17: Procesos cron y creaci&oacute;n de respaldos autom&aacute;ticos.</strong>
+          </div>
+        </a>
+        <div class="nav-spacer"></div>
+
+        <a href="./SJN.html" class="nav-btn next">
+          <div class="nav-text">
+            <span>Siguiente</span>
+            <strong>Quiz: Vizualizador de Algoritmo SJF</strong>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </nav>
+    </main>
 
     <script>
       function guardarFiltro(filtro) {
@@ -264,4 +237,3 @@
   </body>
 
 </html>
-

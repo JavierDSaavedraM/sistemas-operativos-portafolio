@@ -1,52 +1,40 @@
-// ── Codigo De TABS ──────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", function () {
-  var container = document.querySelector("#casos-quiz");
-  if (!container) return;
-  var buttons = container.querySelectorAll(".tab-btn");
-  var panels = container.querySelectorAll(".tab-panel");
-  buttons.forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      var target = btn.getAttribute("data-tab");
-      buttons.forEach(function (b) {
-        b.classList.remove("active");
-      });
-      panels.forEach(function (p) {
-        p.classList.remove("active");
-      });
-      btn.classList.add("active");
-      container.querySelector("#" + target)
-        .classList.add("active");
-    });
-  });
-
-  if (buttons.length > 0) buttons[0].click();
-});
-
-
-// ALGORITHM RUNNER
-// ── Estructura para algoritmos ──────────────────────────────────────────
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
 var simData = {
-  processes: [],
+  processes: []
 };
 
-// ── Render ──────────────────────────────────────────
-// Unica funcion que escribe en la tabla HTML
+var schedState = {
+  timeline      : [],
+  currentStep   : 0,
+  isRunning     : false,
+  stepPaused    : false,
+  metrics       : {},
+  firstResponse : {}
+};
+
+// ============================================================
+// RENDER TABLA
+// ============================================================
 function renderTabla() {
   var tbody = document.querySelector("#tabla-procesos tbody");
   tbody.innerHTML = "";
   simData.processes.forEach(function(p) {
     var tr = document.createElement("tr");
     tr.innerHTML =
-      '<td><input type="number" class="pid"      value="' + p.pid      + '" readonly></td>' +
-      '<td><input type="number" class="arrival"  value="' + p.arrival  + '"></td>' +
-      '<td><input type="number" class="burst"    value="' + p.burst    + '"></td>' +
+      '<td>P' + p.pid + '</td>' +
+      '<td><input type="number" class="arrival"  value="' + p.arrival  + '" min="0"></td>' +
+      '<td><input type="number" class="burst"    value="' + p.burst    + '" min="1"></td>' +
+      '<td><input type="number" class="priority" value="' + p.priority + '" min="1"></td>' +
       '<td><button class="btn-remove-row">X</button></td>';
     tbody.appendChild(tr);
   });
 }
 
-// ── Sincronizar tabla → simData ─────────────────────
-// Lee la tabla y actualiza simData.processes
+// ============================================================
+// SYNC TABLA → SIMDATA
+// ============================================================
 function syncFromTabla() {
   var rows = document.querySelectorAll("#tabla-procesos tbody tr");
   simData.processes = [];
@@ -54,44 +42,75 @@ function syncFromTabla() {
     simData.processes.push({
       pid:      index + 1,
       arrival:  parseInt(tr.querySelector(".arrival").value)  || 0,
-      burst:    parseInt(tr.querySelector(".burst").value)    || 1,
+      burst:    parseInt(tr.querySelector(".burst").value)    || 0,
+      priority: parseInt(tr.querySelector(".priority").value) || 0
     });
   });
 }
 
-// ── Agregar proceso ─────────────────────────────────
+// ============================================================
+// AGREGAR / ELIMINAR PROCESO
+// ============================================================
 document.getElementById("btn-add-proceso").addEventListener("click", function() {
   syncFromTabla();
   var nextPID = simData.processes.length > 0
     ? simData.processes[simData.processes.length - 1].pid + 1
     : 1;
-  simData.processes.push({ pid: nextPID, arrival: 0, burst: 1});
+  simData.processes.push({ pid: nextPID, arrival: 0, burst: 0, priority: 0 });
   renderTabla();
 });
 
-// ── Eliminar proceso ────────────────────────────────
 document.querySelector("#tabla-procesos tbody").addEventListener("click", function(e) {
   if (e.target.classList.contains("btn-remove-row")) {
     var index = e.target.closest("tr").rowIndex - 1;
     simData.processes.splice(index, 1);
-    // Reasignar PIDs
     simData.processes.forEach(function(p, i) { p.pid = i + 1; });
     renderTabla();
   }
 });
 
 // ============================================================
-// ESTADO GLOBAL
+// VALIDACION POR CELDA
 // ============================================================
-var schedState = {
-  timeline       : [],
-  currentStep    : 0,
-  contextChanges : 0,
-  isRunning      : false,
-  stepPaused     : false,
-  metrics        : {},
-  firstResponse  : {}
-};
+document.querySelector("#tabla-procesos tbody").addEventListener("change", function(e) {
+  var input = e.target;
+  if (!input.matches("input[type='number']")) return;
+  validateCell(input);
+  syncFromTabla();
+});
+
+function validateCell(input) {
+  var val = parseInt(input.value);
+  var min = input.classList.contains("arrival") ? 0 : 1;
+  if (isNaN(val) || val < min) {
+    alert("Valor inválido en campo '" + input.className + "'. Debe ser >= " + min + ".");
+    input.value = min;
+  }
+}
+
+// ============================================================
+// VALIDACION GLOBAL
+// ============================================================
+function validateSimData() {
+  if (simData.processes.length === 0) {
+    alert("No hay procesos definidos.");
+    return false;
+  }
+
+  var errors = [];
+  simData.processes.forEach(function(p) {
+    if (p.arrival < 0)  errors.push("P" + p.pid + ": Arrival no puede ser negativo.");
+    if (p.burst < 1)    errors.push("P" + p.pid + ": Burst debe ser >= 1.");
+    if (p.priority < 1) errors.push("P" + p.pid + ": Priority debe ser >= 1.");
+  });
+
+  if (errors.length > 0) {
+    alert("Errores que impiden ejecutar:\n\n" + errors.join("\n"));
+    return false;
+  }
+
+  return true;
+}
 
 // ============================================================
 // UTILIDADES
@@ -99,9 +118,11 @@ var schedState = {
 function copyProcesses() {
   return simData.processes.map(function(p) {
     return {
-      pid      : p.pid,
-      arrival  : p.arrival,
-      burst    : p.burst,
+      pid:       p.pid,
+      arrival:   p.arrival,
+      burst:     p.burst,
+      remaining: p.burst,
+      priority:  p.priority
     };
   });
 }
@@ -109,27 +130,42 @@ function copyProcesses() {
 // ============================================================
 // ALGORITMOS
 // ============================================================
-function runSRTF(procs) {
+function runPriorityNPAging(procs, agingRate) {
+  var order     = document.getElementById("priority-order").value;
   var timeline  = [];
   var time      = 0;
-  var remaining = procs.slice();
+  var remaining = procs.slice().map(function(p) {
+    return Object.assign({}, p, { effectivePriority: p.priority, waitTime: 0 });
+  });
 
   while (remaining.length > 0) {
     var available = remaining.filter(function(p) { return p.arrival <= time; });
     if (available.length === 0) { time++; continue; }
 
-    available.sort(function(a, b) { return a.remaining - b.remaining || a.arrival - b.arrival; });
+    // Aplicar aging a procesos en espera
+    available.forEach(function(p) {
+      p.waitTime++;
+      if (order === "asc") {
+        // Menor número = mayor prioridad, aging reduce el número
+        p.effectivePriority = Math.max(0, p.priority - Math.floor(p.waitTime / agingRate));
+      } else {
+        // Mayor número = mayor prioridad, aging incrementa el número
+        p.effectivePriority = p.priority + Math.floor(p.waitTime / agingRate);
+      }
+    });
+
+    available.sort(function(a, b) {
+      var cmp = order === "asc"
+        ? a.effectivePriority - b.effectivePriority
+        : b.effectivePriority - a.effectivePriority;
+      return cmp || a.arrival - b.arrival;
+    });
+
     var p = available[0];
-
-    if (timeline.length > 0 && timeline[timeline.length - 1].pid === p.pid) {
-      timeline[timeline.length - 1].end++;
-    } else {
-      timeline.push({ pid: p.pid, start: time, end: time + 1 });
-    }
-
-    p.remaining--;
-    time++;
-    if (p.remaining === 0) remaining.splice(remaining.indexOf(p), 1);
+    timeline.push({ pid: p.pid, start: time, end: time + p.remaining });
+    time += p.remaining;
+    p.remaining = 0;
+    remaining.splice(remaining.indexOf(p), 1);
   }
   return timeline;
 }
@@ -148,30 +184,22 @@ function calcMetrics(timeline, procs) {
   });
 
   procs.forEach(function(p) {
-    var m         = metrics[p.pid] || {};
-    m.completion  = m.completion || 0;
-    m.turnaround  = m.completion - p.arrival;
-    m.waiting     = m.turnaround - p.burst;
-    m.response    = (firstResponse[p.pid] || 0) - p.arrival;
+    var m        = metrics[p.pid] || {};
+    m.completion = m.completion || 0;
+    m.turnaround = m.completion - p.arrival;
+    m.waiting    = m.turnaround - p.burst;
+    m.response   = (firstResponse[p.pid] || 0) - p.arrival;
     metrics[p.pid] = m;
   });
 
   return { metrics: metrics, firstResponse: firstResponse };
 }
 
-function countContextChanges(timeline) {
-  var count = 0;
-  for (var i = 1; i < timeline.length; i++) {
-    if (timeline[i].pid !== timeline[i - 1].pid) count++;
-  }
-  return count;
-}
-
 // ============================================================
 // RENDER TABLA DE METRICAS
 // ============================================================
 function renderMetricsTable(metrics, procs, upToStep, timeline) {
-  var tbody     = document.getElementById("metrics-body");
+  var tbody = document.getElementById("metrics-body");
   tbody.innerHTML = "";
 
   var usedBurst = {};
@@ -192,10 +220,10 @@ function renderMetricsTable(metrics, procs, upToStep, timeline) {
       '<td>P' + p.pid + '</td>' +
       '<td>' + p.arrival + '</td>' +
       '<td>' + p.burst   + '</td>' +
-      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="completion">'  + ct  + '</td>' +
-      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="turnaround">'  + tat + '</td>' +
-      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="waiting">'     + wt  + '</td>' +
-      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="response">'    + rt  + '</td>';
+      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="completion">' + ct  + '</td>' +
+      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="turnaround">' + tat + '</td>' +
+      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="waiting">'    + wt  + '</td>' +
+      '<td class="'+(done?"has-value":"")+'" data-pid="'+p.pid+'" data-type="response">'   + rt  + '</td>';
     tbody.appendChild(tr);
   });
 }
@@ -288,72 +316,76 @@ document.getElementById("btn-run-sched").addEventListener("click", function() {
     resetSched();
     return;
   }
-  const activeTab = document.querySelector(".tab-panel.active");
-  if (activeTab.id == "tab-caso1"){ 
-    simData.processes = [ 
-      { pid:1, arrival: 0, burst: 5}, 
-      { pid:2, arrival: 2, burst: 4},
-      { pid:3, arrival: 4, burst: 2}];
+
+  var activeTab = document.querySelector(".tab-panel.active");
+
+  if (activeTab.id === "tab-caso1") {
+    simData.processes = [
+      { pid: 1, arrival: 0, burst: 5, priority: 2 },
+      { pid: 2, arrival: 1, burst: 3, priority: 1 },
+      { pid: 3, arrival: 2, burst: 8, priority: 3 },
+      { pid: 4, arrival: 4, burst: 6, priority: 2 }
+    ];
+  } else if (activeTab.id === "tab-caso2") {
+    simData.processes = [
+      { pid: 1, arrival: 0, burst: 8, priority: 3 },
+      { pid: 2, arrival: 1, burst: 4, priority: 1 },
+      { pid: 3, arrival: 2, burst: 9, priority: 4 },
+      { pid: 4, arrival: 3, burst: 5, priority: 2 }
+    ];
+  } else if (activeTab.id === "tab-caso3") {
+    simData.processes = [
+      { pid: 1, arrival: 0, burst: 6, priority: 1 },
+      { pid: 2, arrival: 2, burst: 4, priority: 3 },
+      { pid: 3, arrival: 4, burst: 2, priority: 2 },
+      { pid: 4, arrival: 6, burst: 8, priority: 1 }
+    ];
+  } else {
+    syncFromTabla();
   }
-  else if (activeTab.id == "tab-caso2"){ 
-    simData.processes = [ 
-      { pid:1, arrival: 0, burst: 3}, 
-      { pid:2, arrival: 0, burst: 2}, 
-      { pid:3, arrival: 1, burst: 4}, 
-      { pid:4, arrival: 3, burst: 2}];
-  }
-  else {
-    syncFromTabla()
-  }
-  if (simData.processes.length === 0) {
-    alert("No hay procesos en simData.");
-    return;
-  }
+
   startSched();
 });
 
 function startSched() {
-  var procs = copyProcesses();
-  var timeline = runSRTF(procs); 
-  var result = calcMetrics(timeline, simData.processes);
+  if (!validateSimData()) return;
+  var procs    = copyProcesses();
+  var timeline = runPriorityNPAging(procs, 1);
+  var result   = calcMetrics(timeline, simData.processes);
 
-  schedState.timeline       = timeline;
-  schedState.currentStep    = 0;
-  schedState.contextChanges = countContextChanges(timeline);
-  schedState.isRunning      = true;
-  schedState.stepPaused     = false;
-  schedState.metrics        = result.metrics;
-  schedState.firstResponse  = result.firstResponse;
+  schedState.timeline      = timeline;
+  schedState.currentStep   = 0;
+  schedState.isRunning     = true;
+  schedState.stepPaused    = false;
+  schedState.metrics       = result.metrics;
+  schedState.firstResponse = result.firstResponse;
 
-  document.getElementById("btn-run-sched").textContent    = "↺ Reset";
+  document.getElementById("btn-run-sched").textContent  = "↺ Reset";
   document.getElementById("btn-run-sched").classList.add("running");
-  document.getElementById("btn-next-step").disabled       = false;
-  document.getElementById("btn-reset-sched").disabled     = false;
-  document.getElementById("context-count").textContent    = schedState.contextChanges;
+  document.getElementById("btn-next-step").disabled     = false;
+  document.getElementById("btn-reset-sched").disabled   = false;
 
   initCanvases();
   runStep();
 }
 
 function resetSched() {
-  schedState.timeline       = [];
-  schedState.currentStep    = 0;
-  schedState.contextChanges = 0;
-  schedState.isRunning      = false;
-  schedState.stepPaused     = false;
-  schedState.metrics        = {};
+  schedState.timeline      = [];
+  schedState.currentStep   = 0;
+  schedState.isRunning     = false;
+  schedState.stepPaused    = false;
+  schedState.metrics       = {};
 
-  document.getElementById("btn-run-sched").textContent    = "▶ Correr";
+  document.getElementById("btn-run-sched").textContent  = "▶ Correr";
   document.getElementById("btn-run-sched").classList.remove("running");
-  document.getElementById("btn-next-step").textContent    = "⏸ Pausar";
-  document.getElementById("btn-next-step").disabled       = true;
-  document.getElementById("btn-reset-sched").disabled     = true;
-  document.getElementById("context-count").textContent    = "0";
-  document.getElementById("avg-turnaround").textContent   = "-";
-  document.getElementById("avg-waiting").textContent      = "-";
-  document.getElementById("avg-response").textContent     = "-";
-  document.getElementById("cpu-utilization").textContent  = "-";
-  document.getElementById("metrics-body").innerHTML       = "";
+  document.getElementById("btn-next-step").textContent  = "⏸ Pausar";
+  document.getElementById("btn-next-step").disabled     = true;
+  document.getElementById("btn-reset-sched").disabled   = true;
+  document.getElementById("avg-turnaround").textContent = "-";
+  document.getElementById("avg-waiting").textContent    = "-";
+  document.getElementById("avg-response").textContent   = "-";
+  document.getElementById("cpu-utilization").textContent = "-";
+  document.getElementById("metrics-body").innerHTML     = "";
 
   resetCanvases();
 }
@@ -407,4 +439,3 @@ document.getElementById("btn-next-step").addEventListener("click", function() {
 document.getElementById("btn-reset-sched").addEventListener("click", function() {
   resetSched();
 });
-

@@ -1,3 +1,20 @@
+.report-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  padding: 20px;
+}
+#visualizer-container{
+  display: grid;
+  grid-template: 
+  "controls controls controls controls"
+  "table gantt gantt gantt"
+  "state state state state"
+}
+
 /* Inicia estilos de las tabs*/
 .tabs-nav {
   padding: 10px 20px 0 0;
@@ -42,13 +59,22 @@
 }
 /* Finaliza estilos de las tabs*/
 /* Tabla de procesos */
+.table-wrapper {
+  grid-area: table;
+  width: fit-content;
+}
+.tech-table {
+  width: auto;
+  min-width: 400px;
+}
 .tech-table th,
 .tech-table td {
   text-align: center;
 }
 
 .tech-table input {
-  width: 100%;
+  width: 100px;
+  padding: 2px 4px;
   box-sizing: border-box;
   text-align: center;
   font-size: 1.05rem;
@@ -64,6 +90,7 @@
 }
 
 #scheduling-container {
+  grid-area: state;
   padding-top: 60px;
   display: flex;
   flex-direction: column;
@@ -74,6 +101,7 @@
 
 /* Controles superiores */
 #sched-controls {
+  grid-area: controls;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -109,7 +137,7 @@
     background-color: var(--accent);
     color: #000;
 }
-#btn-run-sched.running { color: #fff;background: #f15454; border-color: #c00; }
+#btn-run-sched.running { color: #ff002c; background: transparent; border-color: #ff002c; }
 
 #sched-algorithm {
   padding: 4px 8px;
@@ -135,14 +163,14 @@
 }
 
 .sched-panel {
-  border: 2px solid #000;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 8px;
-  background: #f5f5f5;
+  background: var(--card-bg);
 }
 
 .sched-panel h3 {
-  color: var(--bg-report);
+  color: var(--text-color);
   font-size: 1.4rem;
   font-weight: bold;
   margin-bottom: 6px;
@@ -187,10 +215,13 @@
 
 /* Gantt */
 #gantt-wrapper {
-  border: 2px solid #000;
+  width: 100%;
+  grid-area: gantt;
+  background-color: var(--card-bg);
+  height: fit-content;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
-  padding: 8px;
-  background: #f5f5f5;
+  padding: 20px;
   overflow-x: scroll;
 }
 
@@ -239,7 +270,10 @@
   text-align: left;
   padding-left: 2px;
 }
-
+#metrics-wrapper,
+#metrics-table {
+  width: 100%;
+}
 #metrics-table td.has-value {
   cursor: pointer;
 }
@@ -304,6 +338,7 @@
 }
 
 #btn-next-step,
+#btn-add-proceso,
 #btn-reset-sched {
   padding: 8px 16px;
   color: var(--accent);
@@ -325,7 +360,7 @@
     background-color: var(--accent);
     color: #000;
 }
-#btn-reset-sched:not(:disabled):hover { background: #f15454; color: #fff; }
+#btn-reset-sched:not(:disabled):hover { color: #fff; }
 
 #gantt-scroll {
   overflow-x: auto;
@@ -342,5 +377,6 @@
 }
 
 #queue-canvas, #running-canvas {
+  color: #fff;
   display: block;
 }
