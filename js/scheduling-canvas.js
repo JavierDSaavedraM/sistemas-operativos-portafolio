@@ -299,7 +299,7 @@ function animateQueue(readyProcs) {
 
     queueCtx.clearRect(0, 0, queueCanvas.width, queueCanvas.height);
 
-    queueCtx.fillStyle    = "#555";
+    queueCtx.fillStyle    = "#fff";
     queueCtx.font         = "12px Arial";
     queueCtx.textAlign    = "left";
     queueCtx.textBaseline = "middle";

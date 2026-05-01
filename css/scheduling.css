@@ -7,12 +7,20 @@
   gap: 40px;
   padding: 20px;
 }
-#visualizer-container{
+#visualizer-container {
   display: grid;
-  grid-template: 
-  "controls controls controls controls"
-  "table gantt gantt gantt"
-  "state state state state"
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "controls controls"
+    "table    state";
+  gap: 20px;
+}
+
+.tabs-container {
+  grid-area: table;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* Inicia estilos de las tabs*/
@@ -62,7 +70,6 @@
 /* Finaliza estilos de las tabs*/
 /* Tabla de procesos */
 .table-wrapper {
-  grid-area: table;
   width: fit-content;
 }
 .tech-table {
@@ -92,13 +99,11 @@
 }
 
 #scheduling-container {
-  grid-area: state;
-  padding-top: 60px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  height: 100%;
   container-type: inline-size;
+  grid-area: state;
+  flex-direction: column;
+  gap: 16px;
 }
 
 /* Controles superiores */
@@ -218,13 +223,13 @@
 /* Gantt */
 #gantt-wrapper {
   width: 100%;
-  grid-area: gantt;
   background-color: var(--card-bg);
   height: fit-content;
   border: 2px solid var(--border-color);
   border-radius: 5px;
   padding: 20px;
   overflow-x: scroll;
+  align-self: start;
 }
 
 #gantt-wrapper h3 {
