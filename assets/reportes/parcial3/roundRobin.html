@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz: Vizualizador de algoritmo FCSC</title>
+    <title>Quiz: Vizualizador de Algoritmo Round Robin</title>
     <link rel="stylesheet" href="../../../css/style.css">
     <link rel="stylesheet" href="../../../css/reporte_style.css">
     <link rel="stylesheet" href="../../../css/scheduling.css">
@@ -46,10 +46,10 @@
 
     <main class="report-container">
       <header id="intro" class="report-header">
-        <span class="entry-type">Laboratorio en Clase #18</span>
-        <h1>Quiz Vizualizador de algoritmo FCSC</h1>
+        <span class="entry-type">Laboratorio en Clase #21</span>
+        <h1>Quiz: Vizualizador de Algoritmo RoundRobin</h1>
         <div class="meta-data">
-          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 16 de abril, 2026</p>
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 27 de abril, 2026</p>
           <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
           <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
         </div>
@@ -63,48 +63,125 @@
           <div id="sched-controls-left">
             <button id="btn-run-sched">▶ Correr FCFS</button>
           </div>
-          <div id="sched-controls-right">
-            <label>Velocidad:</label>
-            <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
-            <span id="sched-speed-label">1000ms</span>
-          </div>
+            <div id="sched-controls-right">
+              <label>Velocidad:</label>
+              <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
+              <span id="sched-speed-label">1000ms</span>
+            </div>
         </div>
         <div class="tabs-container" id="casos-quiz"> 
           <nav class="tabs-nav">
             <button class="tab-btn" data-tab="tab-caso1">Caso 1</button>
             <button class="tab-btn" data-tab="tab-caso2">Caso 2</button>
-            <button class="tab-btn" data-tab="tab-caso3">Simulador Libre</button>
+            <button class="tab-btn" data-tab="tab-caso3">Caso 3</button>
+            <button class="tab-btn" data-tab="tab-caso4">Caso 4</button>
+            <button class="tab-btn" data-tab="tab-caso5">Caso 5</button>
+            <button class="tab-btn" data-tab="tab-caso6">Caso 6</button>
+            <button class="tab-btn" data-tab="tab-caso7">Simulador Libre</button>
           </nav>
           <div class="tab-panel" id="tab-caso1">
+            <p style="font-weight: bold;">Quantum: 2ms</p>
             <div class="table-wrapper">
               <table class="tech-table" id="tabla-caso1">
                 <thead>
                   <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
                 </thead>
                 <tbody>
-                  <tr> <td>P1</td> <td>0</td> <td>5</td> </tr>
-                  <tr> <td>P2</td> <td>2</td> <td>4</td> </tr>
-                  <tr> <td>P3</td> <td>4</td> <td>2</td> </tr>
+                  <tr> <td>P1</td> <td>0</td> <td>4</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>3</td> </tr>
+                  <tr> <td>P3</td> <td>0</td> <td>2</td> </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="tab-panel" id="tab-caso2">
+            <p style="font-weight: bold;">Quantum: 2ms</p>
             <div class="table-wrapper">
               <table class="tech-table" id="tabla-caso2">
                 <thead>
                   <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
                 </thead>
                 <tbody>
-                  <tr> <td>P1</td> <td>0</td> <td>3</td> </tr>
-                  <tr> <td>P2</td> <td>0</td> <td>2</td> </tr>
-                  <tr> <td>P3</td> <td>1</td> <td>4</td> </tr>
-                  <tr> <td>P4</td> <td>3</td> <td>2</td> </tr>
+                  <tr> <td>P1</td> <td>0</td> <td>5</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>0</td> <td>2</td> </tr>
+                  <tr> <td>P4</td> <td>0</td> <td>1</td> </tr>
                 </tbody>
               </table>
             </div>
           </div>
           <div class="tab-panel" id="tab-caso3">
+            <p style="font-weight: bold;">Quantum: 2ms</p>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso3">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>5</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>0</td> <td>9</td> </tr>
+                  <tr> <td>P4</td> <td>0</td> <td>7</td> </tr>
+                  <tr> <td>P5</td> <td>0</td> <td>10</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso4">
+            <p style="font-weight: bold;">Quantum: 100ms</p>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso4">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>250</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>170</td> </tr>
+                  <tr> <td>P3</td> <td>0</td> <td>75</td> </tr>
+                  <tr> <td>P4</td> <td>0</td> <td>100</td> </tr>
+                  <tr> <td>P5</td> <td>0</td> <td>325</td> </tr>
+                  <tr> <td>P6</td> <td>0</td> <td>50</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso5">
+            <p style="font-weight: bold;">Quantum: 4ms</p>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso5">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>10</td> </tr>
+                  <tr> <td>P2</td> <td>2</td> <td>8</td> </tr>
+                  <tr> <td>P3</td> <td>4</td> <td>6</td> </tr>
+                  <tr> <td>P4</td> <td>6</td> <td>4</td> </tr>
+                  <tr> <td>P5</td> <td>8</td> <td>2</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso6">
+            <p style="font-weight: bold;">Quantum: 3ms</p>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso6">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>9</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>6</td> </tr>
+                  <tr> <td>P3</td> <td>3</td> <td>12</td> </tr>
+                  <tr> <td>P4</td> <td>5</td> <td>3</td> </tr>
+                  <tr> <td>P5</td> <td>8</td> <td>5</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso7">
+            <p style="font-weight: bold;">Quantum:</p>
+            <input style="width: 50px;" type="number" class="quantum" min="0" value="0">
             <div class="table-wrapper">
               <table class="tech-table" id="tabla-procesos">
                 <thead>
@@ -196,23 +273,12 @@
       <!-- Tooltip -->
       <div id="metrics-tooltip" class="hidden"></div>
 
-      <section id="descargas">
-        <h2>Codigo en C</h2>
-        <div class="download-box">
-          <div class="icon"><i class="fas fa-file-archive"></i></div>
-          <div class="info">
-            <h4>scheduling.c.</h4>
-            <p>Codigo en C que resuleve el algoritmo FCFS</p>
-          </div>
-          <a href="../../zipFiles/scheduling.c" class="dl-btn">Descargar</a>
-        </div>
-      </section>
       <nav class="post-navigation">
-        <a href="../parcial2/lab-17.html" class="nav-btn next">
+        <a href="./priority.html" class="nav-btn next">
           <i class="fas fa-chevron-left"></i>
           <div class="nav-text">
             <span>Anterior</span>
-            <strong>Laboratorio en clase #17: Procesos cron y creaci&oacute;n de respaldos autom&aacute;ticos.</strong>
+            <strong>Algoritmo Priority</strong>
           </div>
         </a>
         <div class="nav-spacer"></div>
@@ -233,7 +299,7 @@
       }
     </script>
     <script src="../../../js/scheduling-canvas.js" ></script>
-    <script src="../../../js/FCFS.js" ></script>
+    <script src="../../../js/roundRobin.js" ></script>
   </body>
 
 </html>
