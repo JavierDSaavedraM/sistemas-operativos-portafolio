@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz: Vizualizador de Algoritmo Multilevel Feedback Queue</title>
+    <link rel="stylesheet" href="../../../css/style.css">
+    <link rel="stylesheet" href="../../../css/reporte_style.css">
+    <link rel="stylesheet" href="../../../css/scheduling.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  </head>
+
+  <body>
+    <nav class="app-header">
+
+      <div class="app-branding">
+        <div class="mini-avatar"></div>
+        <div class="brand-text">
+          <h3>Javier D Saavedra</h3>
+          <p>Portafolio OS</p>
+        </div>
+      </div>
+
+      <div class="app-menu">
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('todo')">
+          <i class="fas fa-home"></i> Inicio
+        </a>
+
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial1')">
+          <i class="fas fa-folder"></i> Parcial 1
+        </a>
+
+        <a href="../../../index.html" class="app-btn" onclick="guardarFiltro('parcial2')">
+          <i class="fas fa-folder"></i> Parcial 2
+        </a>
+
+        <a href="../../../index.html" class="app-btn active" onclick="guardarFiltro('parcial3')">
+          <i class="fas fa-folder"></i> Parcial 3
+        </a>
+      </div>
+    </nav>
+
+    <a href="../../../index.html" class="back-btn" onclick="guardarFiltro('todo')">
+      <i class="fas fa-arrow-left"></i> Volver al Portafolio
+    </a>
+
+    <main class="report-container">
+      <header id="intro" class="report-header">
+        <span class="entry-type">Laboratorio en Clase #22</span>
+        <h1>Vizualizador de Algoritmo Highest Response Ratio Next (HRRN)</h1>
+        <div class="meta-data">
+          <p><i class="far fa-calendar-alt"></i> <strong>Fecha:</strong> 29 de abril, 2026</p>
+          <p><i class="fas fa-user"></i> <strong>Autor:</strong> Javier Djorkaef Saavedra Mendiola</p>
+          <p><i class="fas fa-tag"></i> <strong>Tema:</strong> CPU, Scheduling</p>
+        </div>
+      </header>
+
+      <hr class="divider"></hr>
+
+      <section id="visualizer-container">
+        <!-- Controles superiores -->
+        <div id="sched-controls">
+          <div id="sched-controls-left">
+            <button id="btn-run-sched">▶ Correr FCFS</button>
+          </div>
+          <div id="sched-controls-right">
+            <label>Velocidad:</label>
+            <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
+            <span id="sched-speed-label">1000ms</span>
+          </div>
+        </div>
+        <div class="tabs-container" id="casos-quiz"> 
+          <nav class="tabs-nav">
+            <button class="tab-btn" data-tab="tab-caso1">Caso 1</button>
+            <button class="tab-btn" data-tab="tab-caso2">Caso 2</button>
+            <button class="tab-btn" data-tab="tab-caso3">Caso 3</button>
+            <button class="tab-btn" data-tab="tab-caso4">Caso 4</button>
+            <button class="tab-btn" data-tab="tab-caso5">Caso 5</button>
+            <button class="tab-btn" data-tab="tab-caso6">Simulador Libre</button>
+          </nav>
+          <div class="tab-panel" id="tab-caso1">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-caso1">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th></tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr> <td>Q1</td><td>FCFS</td><td></td> </tr>
+                  <tr> <td>Q2</td><td>SJN</td><td></td> </tr>
+                  <tr> <td>Q3</td><td>RR</td><td>5</td> </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso1">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>10</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>5</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>8</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso2">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-caso2">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th></tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr> <td>Q1</td><td>RR</td><td>2</td> </tr>
+                  <tr> <td>Q2</td><td>RR</td><td>7</td> </tr>
+                  <tr> <td>Q3</td><td>HRRN</td><td></td> </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso2">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>6</td> </tr>
+                  <tr> <td>P2</td> <td>0</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>1</td> <td>7</td> </tr>
+                  <tr> <td>P4</td> <td>2</td> <td>3</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso3">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-caso3">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th> </tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr> <td>Q1</td><td>RR</td><td>6</td> </tr>
+                  <tr> <td>Q2</td><td>SRT</td><td></td> </tr>
+                  <tr> <td>Q3</td><td>HRRN</td><td></td> </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso3">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>3</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>5</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>7</td> </tr>
+                  <tr> <td>P4</td> <td>2</td> <td>4</td> </tr>
+                  <tr> <td>P5</td> <td>3</td> <td>6</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso4">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-caso4">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th> </tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr> <td>Q1</td><td>HRRN</td><td></td> </tr>
+                  <tr> <td>Q2</td><td>RR</td><td>3</td> </tr>
+                  <tr> <td>Q3</td><td>SRT</td><td></td> </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso4">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>8</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>4</td> </tr>
+                  <tr> <td>P3</td> <td>2</td> <td>6</td> </tr>
+                  <tr> <td>P4</td> <td>3</td> <td>3</td> </tr>
+                  <tr> <td>P5</td> <td>4</td> <td>5</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso5">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-caso5">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th> </tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr> <td>Q1</td><td>HRRN</td><td></td> </tr>
+                  <tr> <td>Q2</td><td>RR</td><td>7</td> </tr>
+                  <tr> <td>Q3</td><td>SJN</td><td></td> </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-caso4">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> </tr>
+                </thead>
+                <tbody>
+                  <tr> <td>P1</td> <td>0</td> <td>7</td> </tr>
+                  <tr> <td>P2</td> <td>1</td> <td>3</td> </tr>
+                  <tr> <td>P3</td> <td>1</td> <td>8</td> </tr>
+                  <tr> <td>P4</td> <td>2</td> <td>5</td> </tr>
+                  <tr> <td>P5</td> <td>3</td> <td>4</td> </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-caso6">
+            <div class="table-wrapper">
+              <table class="tech-table" id="mlfq-table">
+                <thead>
+                  <tr> <th>No. Queue</th> <th>Algoritmo</th> <th>Quantum</th> <th>Prioridad</th> <th></th> </tr>
+                </thead>
+                <tbody id="mlfq-tbody">
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <select class="mlfq-alg">
+                        <option value="fcfs">FCFS</option>
+                        <option value="sjf">SJF</option>
+                        <option value="hrrn">HRRN</option>
+                        <option value="rr" selected>Round Robin</option>
+                        <option value="srtf">SRTF</option>
+                        <option value="priority_p">Priority</option>
+                      </select>
+                    </td>
+                    <td>
+                      <div class="mlfq-quantum-group">
+                        <input type="number" class="mlfq-quantum" min="1" value="2">
+                      </div>
+                    </td>
+                    <td>
+                      <span class="queue-priority-badge priority-high">Mayor prioridad</span>
+                    </td>
+                    <td>
+                      <button class="btn-remove-queue">X</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <button id="btn-add-queue">+ Queue</button>
+            </div>
+            <div class="table-wrapper">
+              <table class="tech-table" id="tabla-procesos">
+                <thead>
+                  <tr> <th>PID</th> <th>Arrival</th> <th>Burst</th> <th></th> </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>P1</td>
+                    <td><input type="number" class="arrival" min="0" value="0"></td>
+                    <td><input type="number" class="burst" min="0" value="0"></td>
+                    <td><button class="btn-remove-row">X</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button id="btn-add-proceso">+ Proceso</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="scheduling-container">
+          <!-- Diagrama de Gantt -->
+          <div id="gantt-wrapper">
+            <h3>Diagrama de Gantt</h3>
+            <div id="gantt-scroll">
+              <canvas id="gantt-canvas"></canvas>
+            </div>
+          </div>
+          <!-- Cola de listos + ejecucion + contexto -->
+          <div id="sched-state">
+            <div class="sched-panel" id="panel-ready">
+              <h3>Cola de Listos</h3>
+              <div id="queue-wrapper">
+                <canvas id="queue-canvas"></canvas>
+              </div>
+            </div>
+            <div class="sched-panel" id="panel-running">
+              <h3>En Ejecución</h3>
+              <canvas id="running-canvas"></canvas>
+            </div>
+          </div>
+          <div id="sched-step-controls">
+            <button id="btn-next-step" disabled>▶ Iniciar</button>
+            <button id="btn-reset-sched" disabled>↺ Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tabla de métricas -->
+      <section class="table-wrapper" id="metrics-wrapper">
+        <!-- Botón siguiente paso -->
+        <table class="tech-table" id="metrics-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>Arrival</th>
+              <th>Burst</th>
+              <th>Completion</th>
+              <th>Turnaround</th>
+              <th>Waiting</th>
+              <th>Response</th>
+            </tr>
+          </thead>
+          <tbody id="metrics-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Promedios y CPU Utilization -->
+      <section id="sched-summary">
+        <div class="summary-item">
+          <span class="summary-label">Avg Turnaround</span>
+          <span class="summary-value" id="avg-turnaround">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Avg Waiting</span>
+          <span class="summary-value" id="avg-waiting">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Avg Response</span>
+          <span class="summary-value" id="avg-response">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">CPU Utilization</span>
+          <span class="summary-value" id="cpu-utilization">-</span>
+        </div>
+      </section>
+
+      <!-- Tooltip -->
+      <div id="metrics-tooltip" class="hidden"></div>
+
+      <nav class="post-navigation">
+        <a href="./priority.html" class="nav-btn next">
+          <i class="fas fa-chevron-left"></i>
+          <div class="nav-text">
+            <span>Anterior</span>
+            <strong>Algoritmo Priority</strong>
+          </div>
+        </a>
+        <div class="nav-spacer"></div>
+
+        <a href="./SJN.html" class="nav-btn next">
+          <div class="nav-text">
+            <span>Siguiente</span>
+            <strong>Quiz: Vizualizador de Algoritmo SJF</strong>
+          </div>
+          <i class="fas fa-chevron-right"></i>
+        </a>
+      </nav>
+    </main>
+
+    <script>
+      function guardarFiltro(filtro) {
+        localStorage.setItem('filtroActual', filtro);
+      }
+    </script>
+    <script src="../../../js/scheduling-canvas.js" ></script>
+    <script src="../../../js/MLFQ.js" ></script>
+  </body>
+
+</html>
