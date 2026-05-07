@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="canonical" href="https://html5-templates.com/" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="js/windows.js"></script>	
+    <link rel="stylesheet" type="text/css" href="css/base-template.css" />
+    <link rel="stylesheet" type="text/css" href="css/input-window.css" />
+    <link rel="stylesheet" type="text/css" href="css/scheduling.css" />
+    <link rel="stylesheet" type="text/css" href="css/scheduling.css" />
+    <link rel="stylesheet" type="text/css" href="css/memory.css" />
+    <link rel="stylesheet" href="css/threads.css">
+    <title>Proyecto Final de Sistemas Operativos</title>
+  </head>
+  <body>
+    <div id="desktop">
+      <div class="window" data-title="Bienvenida">
+        <h1>Proyecto Final de Sistemas Operativos</h1>
+        <p>Simulador Visual que represente de manera gráfica el funcionamiento de <strong>procesos</strong>, <strong>planificación de cpu</strong>, y <strong>paginación de memoria</strong> en los sistemas operativos.</p>
+        <p>Diego Emilio Muñiz Ramirez - 621784</p>
+        <p>Javier Djorkaef Saavedra Mendiola - 624198</p>
+        <p>Salvador Ricardo Lozano Rodriguez - 641686</p>
+        <hr />
+        <p><strong>C&oacute;digo de Honor:</strong> Nosotros damos nuestar palabra que hemos realizado esto con integridad acad&eacute;mica</p>
+      </div>
+      <!-- Inicio Ventana para la entrada de datos-->
+      <div class="window" data-title="Datos"> 
+        <div class="tabs-container" id="input-datos">
+          <div class="tabs-nav">
+            <button class="tab-btn" data-tab="tab-procesos">Procesos</button>
+            <button class="tab-btn" data-tab="tab-memoria">Memoria</button>
+            <button class="tab-btn" data-tab="tab-archivos">Archivos</button>
+          </div>
+          <div class="tab-panel" id="tab-procesos">
+            <h2>Configuracion de Procesos</h2>
+            <div id="table-wrapper">
+              <table id="tabla-procesos">
+                <thead>
+                  <tr>
+                    <th>PID</th>
+                    <th>Arrival</th>
+                    <th>Burst</th>
+                    <th>Priority</th>
+                    <th>Pages</th>
+                    <th>Tipo</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>P1</td>
+                    <td><input type="number" class="arrival" min="0" value="0"></td>
+                    <td><input type="number" class="burst" min="1" value="0"></td>
+                    <td><input type="number" class="priority" min="1" value="0"></td>
+                    <td><input type="number" class="pages" min="2" value="0"></td>
+                    <td><select class="proc-type"><option value="thread">T</option><option value="fork">F</option></select></td>
+                    <td><button class="btn-remove-row">X</button></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button id="btn-add-proceso">+ Proceso</button>
+            </div>
+          </div>
+          <div class="tab-panel" id="tab-memoria">
+            <h2>Configuracion de Memoria</h2>
+            <form id="form-memoria">
+              <div class="input-form" id="input-memoria">
+                <label>Memoria Total (KB):</label>
+                <input type="number" class="mem-total" min="1" value="64">
+              </div>
+              <div class="input-form" id="input-pagesize">
+                <label>Tama&ntilde;o de P&aacute;gina:</label>
+                <input type="number" class="mem-pagesize" min="1" value="4">
+              </div>
+              <div class="input-form" id="input-frames">
+                <label>Numero de Frames:</label>
+                <input type="number" class="mem-frames" min="1" value="16">
+              </div>
+            </form>
+          </div>
+          <div class="tab-panel" id="tab-archivos">
+            <h2>Cargar un archivo de texto</h2>
+            <form id="form-archivos">
+              <div class="input-form" id="input-archivo-procesos">
+                <label>Formato: <em>PID,Arrival,Burst,Priority,Pages</em></label>
+                <input type="file" id="file-procesos" accept=".txt">
+              </div>
+              <div class="input-form" id="input-archivo-memoria">
+                <label>Formato: <em>Memoria=X PageSize=X Frames=X</em></label>
+                <input type="file" id="file-memoria" accept=".txt">
+              </div>
+            </form>
+            <div id="file-status">
+              <p id="status-procesos" class="status-msg hidden">✓ procesos.txt cargado correctamente</p>
+              <p id="status-memoria"  class="status-msg hidden">✓ memoria.txt cargado correctamente</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Ventana para la entrada de datos-->
+      <!-- Inicio Ventana para los diagramas de los procesos-->
+      <div class="window closed" data-title="Diagrama de estados Procesos">
+        <div id="states-layout">
+          <div id="states-left">
+            <div id="states-controls">
+              <button id="btn-start-states">▶ Iniciar</button>
+              <button id="btn-reset-states">↺ Reset</button>
+              <span id="current-pid-state">Proceso: Ninguno</span>
+            </div>
+            <div id="state-diagram">
+              <canvas id="states-canvas"></canvas>
+            </div>
+            <div id="states-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:#aaaadd"></span>New</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#80c8f0"></span>Ready</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#80d0a0"></span>Running</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#f0c080"></span>Waiting</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#f08080"></span>Terminated</div>
+            </div>
+          </div>
+          <div id="states-right">
+            <h3>Estado de Procesos</h3>
+            <table id="states-table">
+              <thead>
+                <tr><th>PID</th><th>Estado</th></tr>
+              </thead>
+              <tbody id="states-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Ventana para los diagramas de los procesos-->
+      <!-- Inicio Ventana para Scheduling--> 
+      <div class="window closed" data-title="Scheduling / CPU">
+        <div class="tabs-container" id="scheduling-container">
+          <!-- Controles superiores -->
+          <div id="sched-controls">
+            <div id="sched-controls-left">
+              <button id="btn-run-sched">▶ Correr</button>
+              <select id="sched-algorithm">
+                <optgroup label="Non-Preemptive">
+                  <option value="fcfs">FCFS</option>
+                  <option value="sjf">SJF</option>
+                  <option value="hrrn">HRRN</option>
+                </optgroup>
+                <optgroup label="Preemptive">
+                  <option value="rr">Round Robin</option>
+                  <option value="srtf">SRTF</option>
+                  <option value="priority_p">Priority (Preemptive)</option>
+                  <option value="mlq">Multilevel Queue</option>
+                  <option value="mlfq">Multilevel Feedback Queue</option>
+                </optgroup>
+              </select>
+              <div id="quantum-group" class="hidden">
+                <label>Quantum:</label>
+                <input type="number" id="sched-quantum" min="1" value="2">
+              </div>
+            </div>
+            <div id="sched-controls-right">
+              <label>Velocidad:</label>
+              <input type="range" id="sched-speed" min="100" max="2000" value="1000" step="100">
+              <span id="sched-speed-label">1000ms</span>
+            </div>
+          </div>
+
+          <!-- Cola de listos + ejecucion + contexto -->
+          <div id="sched-state">
+            <div class="sched-panel" id="panel-ready">
+              <h3>Cola de Listos</h3>
+              <div id="queue-wrapper">
+                <canvas id="queue-canvas"></canvas>
+              </div>
+            </div>
+            <div class="sched-panel" id="panel-running">
+              <h3>En Ejecución</h3>
+              <canvas id="running-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Diagrama de Gantt -->
+          <div id="gantt-wrapper">
+            <h3>Diagrama de Gantt</h3>
+            <div id="gantt-scroll">
+              <canvas id="gantt-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- Tabla de métricas -->
+          <div id="metrics-wrapper">
+            <table id="metrics-table">
+              <thead>
+                <tr>
+                  <th>PID</th>
+                  <th>Arrival</th>
+                  <th>Burst</th>
+                  <th>Completion</th>
+                  <th>Turnaround</th>
+                  <th>Waiting</th>
+                  <th>Response</th>
+                </tr>
+              </thead>
+              <tbody id="metrics-body"></tbody>
+            </table>
+          </div>
+
+          <!-- Promedios y CPU Utilization -->
+          <div id="sched-summary">
+            <div class="summary-item">
+              <span class="summary-label">Avg Turnaround</span>
+              <span class="summary-value" id="avg-turnaround">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Waiting</span>
+              <span class="summary-value" id="avg-waiting">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Response</span>
+              <span class="summary-value" id="avg-response">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">CPU Utilization</span>
+              <span class="summary-value" id="cpu-utilization">-</span>
+            </div>
+          </div>
+
+          <!-- Tooltip -->
+          <div id="metrics-tooltip" class="hidden"></div>
+
+          <!-- Botón siguiente paso -->
+          <div id="sched-step-controls">
+            <button id="btn-next-step" disabled>▶ Iniciar</button>
+            <button id="btn-reset-sched" disabled>↺ Reset</button>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Ventana para Scheduling-->
+      <!-- Inicio Ventana para Memoria y Paginacion-->
+      <div class="window closed" data-title="Memoria y Paginación">
+        <div class="tabs-container" id="memory-tabs">
+          <div class="tabs-nav">
+            <button class="tab-btn" data-tab="tab-mem-principal">Memoria Principal</button>
+            <button class="tab-btn" data-tab="tab-mem-tabla">Tabla de Páginas</button>
+            <button class="tab-btn" data-tab="tab-mem-reemplazo">Reemplazo</button>
+          </div>
+
+          <!-- TAB 1: Memoria Principal -->
+          <div class="tab-panel" id="tab-mem-principal">
+            <div id="mem-controls">
+              <button id="btn-run-memory">▶ Correr</button>
+              <button id="btn-reset-memory" disabled>↺ Reset</button>
+              <span id="mem-status">Frames libres: - / -</span>
+            </div>
+            <div id="mem-grid-wrapper">
+              <canvas id="mem-canvas"></canvas>
+            </div>
+            <div id="mem-summary">
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Frames Ocupados</span>
+                <span class="mem-summary-value" id="mem-used">-</span>
+              </div>
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Frames Libres</span>
+                <span class="mem-summary-value" id="mem-free">-</span>
+              </div>
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Fragmentación Interna</span>
+                <span class="mem-summary-value" id="mem-fragmentation">-</span>
+              </div>
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Page Faults</span>
+                <span class="mem-summary-value" id="mem-page-faults">0</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 2: Tabla de Páginas -->
+          <div class="tab-panel" id="tab-mem-tabla">
+            <div id="mem-tabla-controls">
+              <label>Proceso:</label>
+              <select id="mem-pid-select">
+                <option value="">-- Seleccionar --</option>
+              </select>
+            </div>
+            <table id="mem-page-table">
+              <thead>
+                <tr>
+                  <th>Página</th>
+                  <th>Frame</th>
+                  <th>Valid</th>
+                  <th>Dirty</th>
+                </tr>
+              </thead>
+              <tbody id="mem-page-table-body"></tbody>
+            </table>
+          </div>
+
+          <!-- TAB 3: Reemplazo -->
+          <div class="tab-panel" id="tab-mem-reemplazo">
+            <div id="reemplazo-controls">
+              <label>Algoritmo:</label>
+              <select id="replace-algorithm">
+                <option value="fifo">FIFO</option>
+                <option value="lru">LRU</option>
+                <option value="optimal">Óptimo</option>
+                <option value="clock">Clock</option>
+                <option value="second">Segunda Oportunidad</option>
+              </select>
+              <button id="btn-run-replace">▶ Correr</button>
+              <button id="btn-reset-replace" disabled>↺ Reset</button>
+            </div>
+            <div id="reemplazo-speed-control">
+              <label>Velocidad:</label>
+              <input type="range" id="replace-speed" min="100" max="2000" value="1000" step="100">
+              <span id="replace-speed-label">1000ms</span>
+            </div>
+            <div id="replace-canvas-wrapper">
+              <canvas id="replace-canvas"></canvas>
+            </div>
+            <div id="replace-summary">
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Page Faults</span>
+                <span class="mem-summary-value" id="replace-faults">0</span>
+              </div>
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Page Hits</span>
+                <span class="mem-summary-value" id="replace-hits">0</span>
+              </div>
+              <div class="mem-summary-item">
+                <span class="mem-summary-label">Fault Rate</span>
+                <span class="mem-summary-value" id="replace-rate">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Fin Ventana para Memoria-->
+      <!-- Inicio Ventana para Concurrencia-->
+      <div class="window closed" data-title="Threads y Paralelismo">
+        <div id="thread-controls">
+          <button id="btn-run-threads">▶ Correr</button>
+          <button id="btn-pause-threads" disabled>⏸ Pausar</button>
+          <button id="btn-reset-threads" disabled>↺ Reset</button>
+          <label>Cores:</label>
+          <input type="number" id="thread-cores" min="1" max="10" value="2">
+          <label>Algoritmo:</label>
+          <select id="thread-algorithm">
+            <option value="fcfs">FCFS</option>
+            <option value="sjf">SJF</option>
+            <option value="rr">Round Robin</option>
+            <option value="priority">Priority</option>
+            <option value="srtf">SRTF</option>
+          </select>
+          <div id="thread-quantum-group">
+            <label>Quantum:</label>
+            <input type="number" id="thread-quantum" min="1" value="2">
+          </div>
+          <label>Velocidad:</label>
+          <input type="range" id="thread-speed" min="100" max="2000" value="1000" step="100">
+          <span id="thread-speed-label">1000ms</span>
+        </div>
+
+        <div id="thread-legend">
+          <div class="legend-item">
+            <div class="legend-block legend-thread"></div>
+            <span>Thread (memoria compartida)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-block legend-fork"></div>
+            <span>Fork (memoria propia)</span>
+          </div>
+        </div>
+
+
+        <!-- Grid de cores -->
+        <div id="cores-section">
+          <h3>Cores Activos</h3>
+          <div id="cores-grid"></div>
+        </div>
+
+        <!-- Gantt Multicore -->
+        <div id="thread-gantt-section">
+          <h3>Diagrama de Gantt Multicore</h3>
+          <div id="thread-gantt-scroll">
+            <canvas id="thread-gantt-canvas"></canvas>
+          </div>
+        </div>
+
+        <div id="thread-metrics-wrapper">
+          <table id="thread-metrics-table">
+            <thead>
+              <tr>
+                <th>Thread</th>
+                <th>Tipo</th>
+                <th>Arrival</th>
+                <th>Burst</th>
+                <th>Completion</th>
+                <th>Turnaround</th>
+                <th>Waiting</th>
+                <th>Response</th>
+              </tr>
+            </thead>
+            <tbody id="thread-metrics-body"></tbody>
+          </table>
+          <div id="thread-summary">
+            <div class="summary-item">
+              <span class="summary-label">Avg Turnaround</span>
+              <span class="summary-value" id="t-avg-turnaround">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Waiting</span>
+              <span class="summary-value" id="t-avg-waiting">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Avg Response</span>
+              <span class="summary-value" id="t-avg-response">-</span>
+            </div>
+          </div>
+          <div id="thread-tooltip" class="hidden"></div>
+        </div>
+
+      </div>
+
+      <div id="taskbar">
+      </div>
+
+      <div id="icons">
+        <a class="openWindow" data-id="0">Bienvenida</a>
+        <a class="openWindow" data-id="1">Entrada de datos</a>
+        <a class="openWindow" data-id="2">Diagrama de estados Procesos</a>
+        <a class="openWindow" data-id="3">Scheduling / CPU</a>
+        <a class="openWindow" data-id="4">Memoria y Paginaci&oacute;n</a>
+        <a class="openWindow" data-id="5">Threads y Paralelismo</a>
+      </div>
+      <a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink">&copy; HTML5-Templates.com</a>	
+      <!-- You can use this template freely if you leave a visible link to HTML5-Templates.com -->
+    </div>
+    <script src="js/input.js"></script>	
+    <script src="js/scheduling-canvas.js"></script>	
+    <script src="js/memory-canvas.js"></script>	
+    <script src="js/threads-canvas.js"></script>
+    <script src="js/states-canvas.js"></script>	
+    <script src="js/scheduling.js"></script>	
+    <script src="js/memory.js"></script>	
+    <script src="js/threads.js"></script>
+  </body>
+</html>

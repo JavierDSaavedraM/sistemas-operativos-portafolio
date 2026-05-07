@@ -1,0 +1,166 @@
+#window4 { top: 20px; left: 240px; }
+#window4 .wincontent { width: 700px; height: 540px; overflow-y: auto; }
+
+#mem-controls, #reemplazo-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+#mem-controls button, #reemplazo-controls button {
+  padding: 6px 14px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  background: #8888d6;
+  color: #fff;
+}
+
+#mem-controls button:disabled,
+#reemplazo-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#mem-status {
+  font-size: 12px;
+  color: #555;
+}
+
+#mem-grid-wrapper, #replace-canvas {
+  overflow-x: auto;
+  display: block;
+  margin-bottom: 10px;
+}
+
+#mem-canvas, #replace-canvas {
+  display: block;
+}
+
+#mem-summary, #replace-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.mem-summary-item {
+  flex: 1;
+  border: 2px solid #000;
+  border-radius: 5px;
+  padding: 6px 10px;
+  background: #f5f5f5;
+  text-align: center;
+  min-width: 100px;
+}
+
+.mem-summary-label {
+  display: block;
+  font-size: 11px;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.mem-summary-value {
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Tabla de páginas */
+#mem-page-table, #replace-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+#mem-page-table th, #mem-page-table td,
+#replace-table th, #replace-table td {
+  border: 1px solid #999;
+  padding: 4px 8px;
+  text-align: center;
+}
+
+#mem-page-table th, #replace-table th {
+  background: #b7b7e0;
+  font-weight: bold;
+}
+
+.valid-bit {
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.valid   { background: #80d0a0; }
+.invalid { background: #f08080; }
+
+.fault-row { background: #fff0f0; }
+
+/* Secuencia de referencias */
+#reemplazo-references {
+  margin-bottom: 10px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.ref-chip {
+  display: inline-block;
+  padding: 3px 8px;
+  margin: 2px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  font-size: 12px;
+  background: #ddd;
+}
+
+.ref-chip-active {
+  background: #8888d6;
+  color: #fff;
+  border-color: #000;
+  font-weight: bold;
+}
+
+#reemplazo-speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+#mem-tabla-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+#mem-pid-select {
+  padding: 4px 8px;
+  border: 2px solid #000;
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+#replace-canvas-wrapper {
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#replace-canvas {
+  display: block;
+  margin: 0 auto;
+}
