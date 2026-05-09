@@ -1,0 +1,48 @@
+#window6 { top: 20px; left: 240px; }
+#window6 .wincontent { width: 760px; height: 520px; overflow-y: auto; }
+
+#analysis-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#analysis-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#analysis-controls button {
+  padding: 6px 14px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  background: #8888d6;
+  color: #fff;
+}
+
+#analysis-controls button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+#analysis-status {
+  font-size: 12px;
+  color: #555;
+}
+
+#analysis-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+#chart-tat, #chart-wt,
+#chart-rt,  #chart-cpu {
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #333;
+}

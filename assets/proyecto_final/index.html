@@ -14,7 +14,8 @@
     <link rel="stylesheet" type="text/css" href="css/process.css" />
     <link rel="stylesheet" type="text/css" href="css/scheduling.css" />
     <link rel="stylesheet" type="text/css" href="css/memory.css" />
-    <link rel="stylesheet" href="css/threads.css">
+    <link rel="stylesheet" type="text/css" href="css/threads.css"/>
+    <link rel="stylesheet" type="text/css" href="css/comparacion.css"/>
     <title>Proyecto Final de Sistemas Operativos</title>
   </head>
   <body>
@@ -399,8 +400,6 @@
             <span>Fork (memoria propia)</span>
           </div>
         </div>
-
-
         <!-- Grid de cores -->
         <div id="cores-section">
           <h3>Cores Activos</h3>
@@ -447,11 +446,27 @@
           </div>
           <div id="thread-tooltip" class="hidden"></div>
         </div>
-
       </div>
-
-      <div id="taskbar">
+      <!-- FIN Ventana para Concurrencia-->
+      <!-- Inicio Ventana para Comparacion-->
+      <div class="window closed" data-title="Análisis de Algoritmos">
+        <div id="analysis-container">
+          <div id="analysis-controls">
+            <button id="btn-run-analysis">▶ Analizar</button>
+            <button id="btn-reset-analysis" disabled>↺ Reset</button>
+            <span id="analysis-status"></span>
+          </div>
+          <div id="analysis-charts">
+            <div id="chart-tat"></div>
+            <div id="chart-wt"></div>
+            <div id="chart-rt"></div>
+            <div id="chart-cpu"></div>
+          </div>
+        </div>
       </div>
+      <!-- Inicio Ventana para Comparacion-->
+
+      <div id="taskbar"> </div>
 
       <div id="icons">
         <a class="openWindow" data-id="0">Bienvenida</a>
@@ -460,10 +475,12 @@
         <a class="openWindow" data-id="5">Threads y Paralelismo</a>
         <a class="openWindow" data-id="2">Diagrama de estados Procesos</a>
         <a class="openWindow" data-id="4">Memoria y Paginaci&oacute;n</a>
+        <a class="openWindow" data-id="6">Comparacion Algoritmos</a>
       </div>
       <a href="https://html5-templates.com/" rel="nofollow" target="_blank" id="templateLink">&copy; HTML5-Templates.com</a>	
       <!-- You can use this template freely if you leave a visible link to HTML5-Templates.com -->
     </div>
+    <script src="https://code.highcharts.com/12/highcharts.js"></script>
     <script src="js/input.js"></script>	
     <script src="js/scheduling-canvas.js"></script>	
     <script src="js/memory-canvas.js"></script>	
@@ -472,5 +489,6 @@
     <script src="js/scheduling.js"></script>	
     <script src="js/memory.js"></script>	
     <script src="js/threads.js"></script>
+    <script src="js/comparacion.js"></script>
   </body>
 </html>
