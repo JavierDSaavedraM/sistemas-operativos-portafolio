@@ -182,7 +182,7 @@ function runMulticoreScheduler() {
         pid     : t.pid,
         tid     : t.tid,
         label   : t.label,
-        isFork  : t.isFork,  // agregar esto
+        isFork  : t.isFork,  
         start   : time,
         end     : time + runTime
       });
@@ -336,6 +336,7 @@ function updateCoresGrid(timeline, step) {
 // CONTROLES
 // ============================================================
 document.addEventListener("DOMContentLoaded", function() {
+  initMLFQConfig();
   var btnRun = document.getElementById("btn-run-threads");
   if (btnRun) {
     btnRun.addEventListener("click", function() {
@@ -555,4 +556,124 @@ function renderThreadSummary(timeline, upToStep) {
   document.getElementById("t-avg-turnaround").textContent = (sumTAT / done.length).toFixed(2);
   document.getElementById("t-avg-waiting").textContent    = (sumWT  / done.length).toFixed(2);
   document.getElementById("t-avg-response").textContent   = (sumRT  / done.length).toFixed(2);
+}
+
+// ============================================================
+// MLFQ CONFIG
+// ============================================================
+var MLFQ_AGING_INTERVAL = 10;
+var mlfqConfig = { queues: [] };
+
+function initMLFQConfig() {
+    var algSelect = document.getElementById("sched-algorithm");
+    if (algSelect) {
+        algSelect.addEventListener("change", function() {
+            var cfg = document.getElementById("mlfq-config");
+            var qg  = document.getElementById("quantum-group");
+            if (this.value === "mlfq") {
+                cfg.classList.remove("hidden");
+                qg.classList.add("hidden");
+                if (mlfqConfig.queues.length === 0) {
+                    addMLFQRow({ algorithm: "rr",   quantum: 2 });
+                    addMLFQRow({ algorithm: "rr",   quantum: 4 });
+                    addMLFQRow({ algorithm: "fcfs",  quantum: 8 });
+                }
+            } else {
+                cfg.classList.add("hidden");
+            }
+        });
+    }
+
+    var addBtn = document.getElementById("btn-add-queue");
+    if (addBtn) {
+        addBtn.addEventListener("click", function() {
+            var rows = document.querySelectorAll("#mlfq-tbody tr");
+            if (rows.length >= 5) {
+                alert("Máximo 5 colas permitidas.");
+                return;
+            }
+            addMLFQRow({ algorithm: "rr", quantum: 2 });
+        });
+    }
+
+    document.getElementById("mlfq-tbody").addEventListener("click", function(e) {
+        if (e.target.classList.contains("btn-remove-queue")) {
+            var rows = document.querySelectorAll("#mlfq-tbody tr");
+            if (rows.length <= 1) {
+                alert("Debe haber al menos una cola.");
+                return;
+            }
+            e.target.closest("tr").remove();
+            updateMLFQBadges();
+        }
+    });
+
+    document.getElementById("mlfq-tbody").addEventListener("change", function(e) {
+        if (e.target.classList.contains("mlfq-alg")) {
+            var row    = e.target.closest("tr");
+            var qGroup = row.querySelector(".mlfq-qg");
+            qGroup.style.display = e.target.value === "rr" ? "" : "none";
+        }
+    });
+}
+
+function addMLFQRow(config) {
+    var tbody = document.getElementById("mlfq-tbody");
+    var index = tbody.querySelectorAll("tr").length;
+    var isRR  = config.algorithm === "rr";
+
+    var tr = document.createElement("tr");
+    tr.innerHTML =
+        '<td>' + (index + 1) + '</td>' +
+        '<td>' +
+            '<select class="mlfq-alg">' +
+                '<option value="fcfs"'       + (config.algorithm === "fcfs"       ? " selected" : "") + '>FCFS</option>'        +
+                '<option value="sjf"'        + (config.algorithm === "sjf"        ? " selected" : "") + '>SJF</option>'         +
+                '<option value="hrrn"'       + (config.algorithm === "hrrn"       ? " selected" : "") + '>HRRN</option>'        +
+                '<option value="rr"'         + (config.algorithm === "rr"         ? " selected" : "") + '>Round Robin</option>' +
+                '<option value="srtf"'       + (config.algorithm === "srtf"       ? " selected" : "") + '>SRTF</option>'        +
+                '<option value="priority_p"' + (config.algorithm === "priority_p" ? " selected" : "") + '>Priority</option>'    +
+            '</select>' +
+        '</td>' +
+        '<td>' +
+            '<div class="mlfq-qg" style="' + (!isRR ? "display:none" : "") + '">' +
+                '<input type="number" class="mlfq-quantum" min="1" value="' + (config.quantum || 2) + '">' +
+            '</div>' +
+        '</td>' +
+        '<td><span class="queue-priority-badge"></span></td>' +
+        '<td><button class="btn-remove-queue">X</button></td>';
+
+    tbody.appendChild(tr);
+    updateMLFQBadges();
+}
+
+function updateMLFQBadges() {
+    var rows  = document.querySelectorAll("#mlfq-tbody tr");
+    var total = rows.length;
+    rows.forEach(function(row, i) {
+        row.cells[0].textContent = i + 1;
+        var badge = row.querySelector(".queue-priority-badge");
+        if (!badge) return;
+        if (i === 0) {
+            badge.className   = "queue-priority-badge priority-high";
+            badge.textContent = "Mayor prioridad";
+        } else if (i === total - 1) {
+            badge.className   = "queue-priority-badge priority-low";
+            badge.textContent = "Menor prioridad";
+        } else {
+            badge.className   = "queue-priority-badge priority-mid";
+            badge.textContent = "Prioridad " + (i + 1);
+        }
+    });
+}
+
+function readMLFQConfig() {
+    mlfqConfig.queues = [];
+    var rows = document.querySelectorAll("#mlfq-tbody tr");
+    rows.forEach(function(row) {
+        var alg    = row.querySelector(".mlfq-alg").value;
+        var qInput = row.querySelector(".mlfq-quantum");
+        var quantum = qInput ? parseInt(qInput.value) || 2 : 2;
+        mlfqConfig.queues.push({ algorithm: alg, quantum: quantum });
+    });
 }

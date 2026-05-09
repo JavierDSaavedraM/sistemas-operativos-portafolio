@@ -1,5 +1,5 @@
 #window1 {  top: 150px; left: 10px;}
-#window1 .wincontent { min-width: 330px; min-height: 380px; overflow-y: auto; overflow-x: hidden;}
+#window1 .wincontent { min-width: 500px; min-height: 380px; overflow-y: auto; overflow-x: hidden;}
 /* Inicia estilos de las tabs*/
 .tabs-nav {
   display: flex;

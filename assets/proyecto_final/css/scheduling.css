@@ -7,6 +7,7 @@
   gap: 12px;
   height: 100%;
   container-type: inline-size;
+  overflow-y: auto;
 }
 
 /* Controles superiores */
@@ -137,6 +138,7 @@
 
 /* Gantt */
 #gantt-wrapper {
+  min-height: 100px;
   border: 2px solid #000;
   border-radius: 5px;
   padding: 8px;
@@ -192,6 +194,7 @@
 
 /* Tabla de métricas */
 #metrics-wrapper {
+  min-height: 150px;
   overflow-x: auto;
 }
 

@@ -181,9 +181,9 @@ input,select{vertical-align:middle}
 }
 
   /*Demo styles BEGIN*/
-#window0 {  top: 20px;	left: 440px;}
+#window0 {  top: 20px;	left: 200px;}
 #window4 {  top: 20px; left: 240px;}
-#window0 .wincontent {	width: 660px; height: 300px;	}
+#window0 .wincontent {	min-width: 660px; min-height: 500px;	}
 
 @media screen and (max-width:960px){
   #window0 {	left: 10px;	}

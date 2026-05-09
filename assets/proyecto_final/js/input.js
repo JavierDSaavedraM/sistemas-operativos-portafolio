@@ -59,7 +59,7 @@ function renderTabla() {
       '<td><input type="number" class="burst"    value="' + p.burst    + '"></td>' +
       '<td><input type="number" class="priority" value="' + p.priority + '"></td>' +
       '<td><input type="number" class="pages"    value="' + p.pages    + '"></td>' +
-      '<td><select class="proc-type"><option value="thread">T</option><option value="fork">F</option></select></td>' +
+      '<td><select class="proc-type"><option value="thread">Thread</option><option value="fork">Fork</option></select></td>' +
       '<td><button class="btn-remove-row">X</button></td>';
     tbody.appendChild(tr);
     // Restaurar valor del select despues de insertar
