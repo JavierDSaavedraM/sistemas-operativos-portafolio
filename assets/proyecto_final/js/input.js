@@ -101,12 +101,12 @@ function syncFromTabla() {
     simData.processes.push({
       pid     : index + 1,
       arrival : parseInt(tr.querySelector(".arrival").value)  || 0,
-      burst   : parseInt(tr.querySelector(".burst").value)    || 1,
-      priority: parseInt(tr.querySelector(".priority").value) || 1,
-      pages   : parseInt(tr.querySelector(".pages").value)    || 1,
+      burst   : parseInt(tr.querySelector(".burst").value)    || 0,
+      priority: parseInt(tr.querySelector(".priority").value) || 0,
+      pages   : parseInt(tr.querySelector(".pages").value)    || 0,
       type    : type,
-      forks   : type === "fork"   ? countInput : 1,
-      threads : type === "thread" ? countInput : 1
+      forks   : type === "fork"   ? countInput : 0,
+      threads : type === "thread" ? countInput : 0
     });
   });
 }
@@ -120,12 +120,12 @@ document.getElementById("btn-add-proceso").addEventListener("click", function() 
   simData.processes.push({
     pid     : nextPID,
     arrival : 0,
-    burst   : 1,
-    priority: 1,
-    pages   : 1,
+    burst   : 0,
+    priority: 0,
+    pages   : 0,
     type    : "thread",
-    forks   : 1,
-    threads : 1
+    forks   : 0,
+    threads : 0
   });
   renderTabla();
 });

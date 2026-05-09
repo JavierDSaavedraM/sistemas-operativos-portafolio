@@ -1,3 +1,3 @@
-Memoria=64
-PageSize=4
-Frames=16
+Memoria=32
+PageSize=1
+Frames=2
