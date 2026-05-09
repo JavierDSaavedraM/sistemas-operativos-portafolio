@@ -218,23 +218,29 @@ function calcPriorityP_metrics(procs) {
 }
 
 function calcMLQ_metrics(procs) {
-    // MLQ es non-preemptive por cola, equivale a FCFS agrupado por prioridad
     var queues = {};
     procs.forEach(function(p) {
         if (!queues[p.priority]) queues[p.priority] = [];
         queues[p.priority].push(p);
     });
+
     var levels = Object.keys(queues).map(Number).sort(function(a,b){ return a-b; });
-    var allProcs = [];
-    var time = 0;
+    var time   = 0;
+    var sumTAT = 0, sumWT = 0, sumRT = 0, busy = 0;
+
     levels.forEach(function(level) {
-        queues[level].sort(function(a,b){ return a.arrival - b.arrival; });
-        queues[level].forEach(function(p) {
-            allProcs.push(Object.assign({}, p, { arrival: Math.max(p.arrival, time) }));
-            time = Math.max(time, p.arrival) + p.burst;
+        var queue = queues[level].slice().sort(function(a,b){ return a.arrival - b.arrival; });
+        queue.forEach(function(p) {
+            if (time < p.arrival) time = p.arrival;
+            sumRT  += time - p.arrival;  // usando arrival original
+            time   += p.burst;
+            busy   += p.burst;
+            sumTAT += time - p.arrival;  // usando arrival original
+            sumWT  += time - p.arrival - p.burst;
         });
     });
-    return calcFCFS_metrics(allProcs);
+
+    return { sumTAT: sumTAT, sumWT: sumWT, sumRT: sumRT, busy: busy, end: time };
 }
 
 function calcMLFQ_metrics(procs, quantum) {

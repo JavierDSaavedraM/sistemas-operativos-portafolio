@@ -221,6 +221,8 @@
 
 #thread-tooltip.hidden { display: none; }
 
+#mlfq-config.hidden {display: none;}
+
 #mlfq-config {
   border: 2px solid #000;
   border-radius: 5px;

@@ -1,5 +1,5 @@
 #window1 {  top: 150px; left: 10px;}
-#window1 .wincontent { min-width: 500px; min-height: 380px; overflow-y: auto; overflow-x: hidden;}
+#window1 .wincontent { min-width: 600px; min-height: 380px; overflow-y: auto; overflow-x: hidden;}
 /* Inicia estilos de las tabs*/
 .tabs-nav {
   display: flex;
@@ -158,4 +158,24 @@ form {
 
 }
 
+.fork-thread-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
 
+.fork-thread-label {
+  font-size: 11px;
+  color: #555;
+  min-width: 48px;
+}
+
+.fork-thread-count {
+  width: 45px;
+  padding: 2px 4px;
+  border: 1px solid #999;
+  border-radius: 3px;
+  font-size: 12px;
+  text-align: center;
+}

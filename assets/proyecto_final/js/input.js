@@ -52,18 +52,41 @@ function renderTabla() {
   var tbody = document.querySelector("#tabla-procesos tbody");
   tbody.innerHTML = "";
   simData.processes.forEach(function(p) {
+    var isFork     = (p.type || "thread") === "fork";
+    var inputLabel = isFork ? "Forks:" : "Threads:";
+    var inputVal   = isFork ? (p.forks || 1) : (p.pages || 1);
+
     var tr = document.createElement("tr");
     tr.innerHTML =
       '<td>P' + p.pid + '</td>' +
-      '<td><input type="number" class="arrival"  value="' + p.arrival  + '"></td>' +
-      '<td><input type="number" class="burst"    value="' + p.burst    + '"></td>' +
-      '<td><input type="number" class="priority" value="' + p.priority + '"></td>' +
-      '<td><input type="number" class="pages"    value="' + p.pages    + '"></td>' +
-      '<td><select class="proc-type"><option value="thread">Thread</option><option value="fork">Fork</option></select></td>' +
+      '<td><input type="number" class="arrival"  value="' + p.arrival  + '" min="0"></td>' +
+      '<td><input type="number" class="burst"    value="' + p.burst    + '" min="1"></td>' +
+      '<td><input type="number" class="priority" value="' + p.priority + '" min="1"></td>' +
+      '<td><input type="number" class="pages"    value="' + p.pages    + '" min="1"></td>' +
+      '<td>' +
+      '<select class="proc-type">' +
+      '<option value="thread"' + (!isFork ? " selected" : "") + '>Thread</option>' +
+      '<option value="fork"'   + ( isFork ? " selected" : "") + '>Fork</option>'   +
+      '</select>' +
+      '</td>' +
+      '<td class="fork-thread-cell">' +
+      '<input type="number" class="fork-thread-count" min="1" max="5" value="' + inputVal + '">' +
+      '</td>' +
       '<td><button class="btn-remove-row">X</button></td>';
+
     tbody.appendChild(tr);
-    // Restaurar valor del select despues de insertar
-    tr.querySelector(".proc-type").value = p.type || "thread";
+
+    // Listener para cambiar label cuando cambia el select
+    var select = tr.querySelector(".proc-type");
+    var label  = tr.querySelector(".fork-thread-label");
+    var input  = tr.querySelector(".fork-thread-count");
+
+    select.addEventListener("change", function() {
+      var isForkNow  = this.value === "fork";
+      label.textContent = isForkNow ? "Forks:" : "Threads:";
+      input.value       = 1;
+      syncFromTabla();
+    });
   });
 }
 
@@ -73,13 +96,17 @@ function syncFromTabla() {
   var rows = document.querySelectorAll("#tabla-procesos tbody tr");
   simData.processes = [];
   rows.forEach(function(tr, index) {
+    var type       = tr.querySelector(".proc-type").value || "thread";
+    var countInput = parseInt(tr.querySelector(".fork-thread-count").value) || 1;
     simData.processes.push({
-      pid:      index + 1,
-      arrival:  parseInt(tr.querySelector(".arrival").value)  || 0,
-      burst:    parseInt(tr.querySelector(".burst").value)    || 0,
-      priority: parseInt(tr.querySelector(".priority").value) || 0,
-      pages:    parseInt(tr.querySelector(".pages").value)    || 0,
-      type: tr.querySelector(".proc-type").value || "thread"
+      pid     : index + 1,
+      arrival : parseInt(tr.querySelector(".arrival").value)  || 0,
+      burst   : parseInt(tr.querySelector(".burst").value)    || 1,
+      priority: parseInt(tr.querySelector(".priority").value) || 1,
+      pages   : parseInt(tr.querySelector(".pages").value)    || 1,
+      type    : type,
+      forks   : type === "fork"   ? countInput : 1,
+      threads : type === "thread" ? countInput : 1
     });
   });
 }
@@ -90,7 +117,16 @@ document.getElementById("btn-add-proceso").addEventListener("click", function() 
   var nextPID = simData.processes.length > 0
     ? simData.processes[simData.processes.length - 1].pid + 1
     : 1;
-  simData.processes.push({ pid: nextPID, arrival: 0, burst: 0, priority: 0, pages: 0, type: "thread" });
+  simData.processes.push({
+    pid     : nextPID,
+    arrival : 0,
+    burst   : 1,
+    priority: 1,
+    pages   : 1,
+    type    : "thread",
+    forks   : 1,
+    threads : 1
+  });
   renderTabla();
 });
 
@@ -137,9 +173,6 @@ function validateSimData() {
   var errors   = [];
 
   simData.processes.forEach(function(p) {
-    if (p.burst === 1)    warnings.push("P" + p.pid + ": Burst en valor default (1).");
-    if (p.priority === 1) warnings.push("P" + p.pid + ": Priority en valor default (1).");
-    if (p.pages === 1)    warnings.push("P" + p.pid + ": Pages en valor default (1).");
     if (p.arrival < 0)    errors.push("P" + p.pid + ": Arrival no puede ser negativo.");
     if (p.burst < 1)      errors.push("P" + p.pid + ": Burst debe ser >= 1.");
     if (p.priority < 1)   errors.push("P" + p.pid + ": Priority debe ser >= 1.");

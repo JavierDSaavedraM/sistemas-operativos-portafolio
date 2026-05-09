@@ -20,10 +20,12 @@ function generateThreadsAndForks() {
   var nextPID = Math.max.apply(null, simData.processes.map(function(p) { return p.pid; })) + 1;
 
   simData.processes.forEach(function(p) {
-    var numThreads  = p.pages || 1;
-    var burstThread = Math.round((p.burst / numThreads) * 100) / 100;
+    var procType = p.type || "thread";
 
-    if (p.type === "fork") {
+    if (procType === "fork") {
+      var numForks    = p.forks || 1;
+      var burstThread = Math.round((p.burst / numForks) * 100) / 100;
+
       // Proceso original
       var original = {
         pid     : p.pid,
@@ -35,7 +37,7 @@ function generateThreadsAndForks() {
         memory  : { frames: [], pageSize: simData.memory ? simData.memory.pageSize : 4 },
         threads : []
       };
-      for (var t = 0; t < numThreads; t++) {
+      for (var t = 0; t < numForks; t++) {
         original.threads.push({
           id       : t + 1,
           label    : "P" + p.pid + "-T" + (t + 1),
@@ -48,7 +50,7 @@ function generateThreadsAndForks() {
       }
       threadState.processes.push(original);
 
-      // Proceso fork - PID nuevo, memoria separada
+      // Proceso fork hijo - PID nuevo, memoria separada
       var fork = {
         pid     : nextPID,
         label   : "F" + p.pid + "-" + nextPID,
@@ -59,10 +61,10 @@ function generateThreadsAndForks() {
         memory  : { frames: [], pageSize: simData.memory ? simData.memory.pageSize : 4 },
         threads : []
       };
-      for (var tf = 0; tf < numThreads; tf++) {
+      for (var tf = 0; tf < numForks; tf++) {
         fork.threads.push({
           id       : tf + 1,
-          label    : "P" + nextPID + "-T" + (tf + 1),
+          label    : "F" + p.pid + "-" + nextPID + "-T" + (tf + 1),
           burst    : burstThread,
           remaining: burstThread,
           arrival  : p.arrival,
@@ -74,7 +76,9 @@ function generateThreadsAndForks() {
       nextPID++;
 
     } else {
-      // Thread normal - comparte memoria del proceso padre
+      var numThreads  = p.threads || p.pages || 1;
+      var burstThread = Math.round((p.burst / numThreads) * 100) / 100;
+
       var proc = {
         pid     : p.pid,
         label   : "P" + p.pid,
@@ -82,7 +86,7 @@ function generateThreadsAndForks() {
         arrival : p.arrival,
         burst   : p.burst,
         priority: p.priority,
-        memory  : null,   // comparte memoria del padre
+        memory  : null,
         threads : []
       };
       for (var th = 0; th < numThreads; th++) {
